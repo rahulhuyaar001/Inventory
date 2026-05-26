@@ -185,7 +185,7 @@
                                 <th class="p-4 font-semibold text-center text-emerald-800 dark:text-emerald-400">Godown Stock</th>
                                 <th class="p-4 font-semibold text-center text-amber-800 dark:text-amber-400">Office Stock</th>
                                 <th class="p-4 font-semibold text-center text-indigo-800 dark:text-indigo-400">Total Qty</th>
-                                <th class="p-4 font-semibold text-center">Manage</th>
+                                <th class="p-4 font-semibold text-center w-24">Manage</th>
                             </tr>
                         </thead>
                         <tbody id="inventoryBody" class="text-sm"></tbody>
@@ -287,6 +287,43 @@
         </div>
     </div>
 
+    <div id="editMasterModal" class="hidden fixed inset-0 bg-slate-900/60 dark:bg-slate-900/80 z-[10000] items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-[28rem] max-w-full border dark:border-slate-700">
+            <h3 class="text-xl font-bold mb-4 border-b dark:border-slate-700 pb-3">✏️ Edit Master Item</h3>
+            <input type="hidden" id="editMasterId">
+            <div class="space-y-3">
+                <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Name</label><input type="text" id="editMasterName" class="w-full border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none dark:text-white"></div>
+                <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Category</label><input type="text" id="editMasterCategory" class="w-full border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none dark:text-white"></div>
+                <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Image URL</label><input type="text" id="editMasterImage" class="w-full border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none dark:text-white"></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Godown Stock</label><input type="number" id="editMasterGodown" class="w-full border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none dark:text-white"></div>
+                    <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Office Stock</label><input type="number" id="editMasterOffice" class="w-full border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none dark:text-white"></div>
+                </div>
+            </div>
+            <div class="flex justify-end gap-3 mt-6">
+                <button onclick="closeEditMasterModal()" class="px-5 py-2 text-sm text-slate-700 bg-slate-200 dark:bg-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 rounded-lg transition font-bold">Cancel</button>
+                <button onclick="saveEditMaster()" class="px-5 py-2 text-sm bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg transition shadow-md">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="editHistoryModal" class="hidden fixed inset-0 bg-slate-900/60 dark:bg-slate-900/80 z-[10000] items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-[28rem] max-w-full border dark:border-slate-700">
+            <h3 class="text-xl font-bold mb-4 border-b dark:border-slate-700 pb-3">✏️ Edit Transfer/Sales Log</h3>
+            <input type="hidden" id="editHistoryId">
+            <p id="editHistoryItemName" class="text-sm font-bold text-slate-500 dark:text-slate-400 mb-3"></p>
+            <div class="space-y-3">
+                <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Quantity</label><input type="number" id="editHistoryQty" class="w-full border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none dark:text-white"></div>
+                <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Platform / Ref</label><input type="text" id="editHistoryPlatform" class="w-full border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none dark:text-white"></div>
+                <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Remarks</label><input type="text" id="editHistoryComment" class="w-full border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none dark:text-white"></div>
+            </div>
+            <div class="flex justify-end gap-3 mt-6">
+                <button onclick="closeEditHistoryModal()" class="px-5 py-2 text-sm text-slate-700 bg-slate-200 dark:bg-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 rounded-lg transition font-bold">Cancel</button>
+                <button onclick="saveEditHistory()" class="px-5 py-2 text-sm bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg transition shadow-md">Save Logs</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let inventory = [];
         let historyLog = [];
@@ -352,20 +389,13 @@
                 let items = Array.from(list.getElementsByTagName("li")).filter(li => li.style.display !== "none" && li.innerText !== "No products found");
                 
                 if (e.key === "ArrowDown") {
-                    currentFocus++;
-                    addActive(items);
-                    e.preventDefault(); 
+                    currentFocus++; addActive(items); e.preventDefault(); 
                 } else if (e.key === "ArrowUp") {
-                    currentFocus--;
-                    addActive(items);
-                    e.preventDefault();
+                    currentFocus--; addActive(items); e.preventDefault();
                 } else if (e.key === "Enter") {
                     e.preventDefault();
-                    if (currentFocus > -1) {
-                        if (items[currentFocus]) items[currentFocus].click();
-                    } else if (items.length > 0) {
-                        items[0].click();
-                    }
+                    if (currentFocus > -1) { if (items[currentFocus]) items[currentFocus].click(); } 
+                    else if (items.length > 0) { items[0].click(); }
                 }
             });
 
@@ -379,22 +409,15 @@
             }
 
             function removeActive(items) {
-                for (let i = 0; i < items.length; i++) {
-                    items[i].classList.remove("keyboard-focus");
-                }
+                for (let i = 0; i < items.length; i++) { items[i].classList.remove("keyboard-focus"); }
             }
         }
 
-        setupKeyboardNav('whSelect', 'whList');
-        setupKeyboardNav('slSelect', 'slList');
+        setupKeyboardNav('whSelect', 'whList'); setupKeyboardNav('slSelect', 'slList');
 
         /* --- FAST ENTRY UX LOGIC --- */
-        ['whQty', 'whPlatform', 'whComment'].forEach(id => {
-            document.getElementById(id).addEventListener('keypress', function(e) { if(e.key === 'Enter') addTowhBatch(); });
-        });
-        ['slQty', 'slPlatform', 'slComment'].forEach(id => {
-            document.getElementById(id).addEventListener('keypress', function(e) { if(e.key === 'Enter') addToSlBatch(); });
-        });
+        ['whQty', 'whPlatform', 'whComment'].forEach(id => { document.getElementById(id).addEventListener('keypress', function(e) { if(e.key === 'Enter') addTowhBatch(); }); });
+        ['slQty', 'slPlatform', 'slComment'].forEach(id => { document.getElementById(id).addEventListener('keypress', function(e) { if(e.key === 'Enter') addToSlBatch(); }); });
 
         // DATE TIME FORMATS
         function formatToIndianDate(val) { return (!val || !val.includes('T')) ? val : new Date(val).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' }); }
@@ -412,12 +435,8 @@
                 
                 inventory = (data.inventory || []).map(item => ({ 
                     id: item.id || Date.now().toString() + Math.random().toString(36).substr(2, 5),
-                    name: item.name, 
-                    category: item.category || 'General', 
-                    image: item.image || '',
-                    godownQty: parseInt(item.godownQty) || 0, 
-                    officeQty: parseInt(item.officeQty) || 0, 
-                    createdAt: item.createdAt || Date.now()
+                    name: item.name, category: item.category || 'General', image: item.image || '',
+                    godownQty: parseInt(item.godownQty) || 0, officeQty: parseInt(item.officeQty) || 0, createdAt: item.createdAt || Date.now()
                 }));
                 historyLog = (data.historyLog || []).map(log => ({ ...log, dateString: formatToIndianDate(log.dateString), timeString: formatToIndianTime(log.timeString) }));
                 
@@ -425,63 +444,34 @@
                 setTimeout(() => { document.getElementById('syncStatus').innerText = ""; }, 2000);
                 saveAndRender(false); 
             } catch (error) {
-                document.getElementById('syncStatus').innerText = "⚠️ Offline Mode";
-                saveAndRender(false);
+                document.getElementById('syncStatus').innerText = "⚠️ Offline Mode"; saveAndRender(false);
             }
         }
 
-        // NO-CORS INTEGRATION BYPASS (Guarantees data entry directly inside the Google Sheet rows)
         function persistData() {
             if (GOOGLE_SHEET_URL === "" || GOOGLE_SHEET_URL.includes("PASTE_YOUR_URL")) return;
             document.getElementById('syncStatus').innerText = "(Syncing...)";
-            
-            const syncPayload = {
-               inventory: inventory,
-               historyLog: historyLog
-            };
-
-            // Using simple cross-origin text submission inside a silent no-cors transport envelope
-            fetch(GOOGLE_SHEET_URL, { 
-                method: 'POST', 
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify(syncPayload)
-            })
+            const syncPayload = { inventory: inventory, historyLog: historyLog };
+            fetch(GOOGLE_SHEET_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(syncPayload) })
             .then(() => {
-                document.getElementById('syncStatus').innerText = "✅ Saved to Sheet";
-                setTimeout(() => { document.getElementById('syncStatus').innerText = ""; }, 1500);
-            })
-            .catch(e => {
-                document.getElementById('syncStatus').innerText = "⚠️ Sync Error";
-            });
+                document.getElementById('syncStatus').innerText = "✅ Saved to Sheet"; setTimeout(() => { document.getElementById('syncStatus').innerText = ""; }, 1500);
+            }).catch(e => { document.getElementById('syncStatus').innerText = "⚠️ Sync Error"; });
         }
 
         function extractCategories() {
             uniqueCategories = [...new Set(inventory.map(i => i.category || 'General'))].sort();
-            
-            // Populate Viewer Categories
-            const viewCat = document.getElementById('viewerCategory');
-            const currentViewVal = viewCat.value;
-            viewCat.innerHTML = '<option value="ALL">All Categories</option>';
-            uniqueCategories.forEach(cat => viewCat.innerHTML += `<option value="${cat}">${cat}</option>`);
+            const viewCat = document.getElementById('viewerCategory'); const currentViewVal = viewCat.value;
+            viewCat.innerHTML = '<option value="ALL">All Categories</option>'; uniqueCategories.forEach(cat => viewCat.innerHTML += `<option value="${cat}">${cat}</option>`);
             if(uniqueCategories.includes(currentViewVal)) viewCat.value = currentViewVal;
 
-            // Populate Export Categories
-            const exportCat = document.getElementById('exportCategory');
-            exportCat.innerHTML = '<option value="ALL">All Categories</option>';
+            const exportCat = document.getElementById('exportCategory'); exportCat.innerHTML = '<option value="ALL">All Categories</option>';
             uniqueCategories.forEach(cat => exportCat.innerHTML += `<option value="${cat}">${cat}</option>`);
         }
 
         function saveAndRender(triggerSave = true) {
             inventory.sort((a, b) => a.createdAt - b.createdAt);
             if (triggerSave) persistData(); 
-            
-            extractCategories();
-            renderTable(); 
-            renderCustomDropdowns(); 
-            renderHistory(); 
-            updateDashboard();
-            renderViewerTable(); 
+            extractCategories(); renderTable(); renderCustomDropdowns(); renderHistory(); updateDashboard(); renderViewerTable(); 
         }
 
         function updateDashboard() {
@@ -493,7 +483,6 @@
             
             const todayStr = getFormattedRealTime().dateString;
             let salesToday = 0, transfersToday = 0, returnsToday = 0;
-            
             historyLog.forEach(log => {
                 if (log.dateString === todayStr) {
                     if (log.action === 'SALE') salesToday += log.qty;
@@ -525,19 +514,10 @@
             slList.innerHTML = html.replace(/TARGET_ID/g, 'slSelect').replace(/LIST_ID/g, 'slList');
         }
 
-        function openDropdown(listId) {
-            const list = document.getElementById(listId); list.classList.remove('hidden'); list.classList.add('flex');
-            Array.from(list.getElementsByTagName('li')).forEach(li => { li.style.display = 'flex'; });
-        }
-
-        function selectDropdownItem(inputId, listId, itemName) {
-            document.getElementById(inputId).value = itemName; document.getElementById(listId).classList.add('hidden');
-            document.getElementById(inputId === 'whSelect' ? 'whQty' : 'slQty').focus();
-        }
-
+        function openDropdown(listId) { const list = document.getElementById(listId); list.classList.remove('hidden'); list.classList.add('flex'); Array.from(list.getElementsByTagName('li')).forEach(li => { li.style.display = 'flex'; }); }
+        function selectDropdownItem(inputId, listId, itemName) { document.getElementById(inputId).value = itemName; document.getElementById(listId).classList.add('hidden'); document.getElementById(inputId === 'whSelect' ? 'whQty' : 'slQty').focus(); }
         function filterDropdown(inputId, listId) {
-            const query = document.getElementById(inputId).value.toLowerCase().trim(); const list = document.getElementById(listId);
-            let hasVisible = false;
+            const query = document.getElementById(inputId).value.toLowerCase().trim(); const list = document.getElementById(listId); let hasVisible = false;
             Array.from(list.getElementsByTagName('li')).forEach(li => {
                 if(li.innerText === 'No products found') return;
                 if (li.getAttribute('data-name').includes(query)) { li.style.display = 'flex'; hasVisible = true; } else { li.style.display = 'none'; }
@@ -551,129 +531,67 @@
         });
 
         function addTowhBatch() {
-            const name = document.getElementById('whSelect').value.trim();
-            const qty = parseInt(document.getElementById('whQty').value);
-            const action = document.getElementById('warehouseAction').value;
-            const platform = document.getElementById('whPlatform').value.trim();
-            const comment = document.getElementById('whComment').value.trim();
-
-            if (!name || isNaN(qty) || qty <= 0) return;
-            const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase());
-            if (!item) return alert("Product not found.");
-
+            const name = document.getElementById('whSelect').value.trim(); const qty = parseInt(document.getElementById('whQty').value); const action = document.getElementById('warehouseAction').value; const platform = document.getElementById('whPlatform').value.trim(); const comment = document.getElementById('whComment').value.trim();
+            if (!name || isNaN(qty) || qty <= 0) return; const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase()); if (!item) return alert("Product not found.");
             let actionText = action === 'MFR_RECEIVE' ? 'Mfr ➔ Godown' : action === 'GODOWN_TO_OFFICE' ? 'Godown ➔ Office' : 'Office ➔ Godown';
             if (action === 'GODOWN_TO_OFFICE' && item.godownQty < qty) return alert(`Insufficient Godown Stock. Only ${item.godownQty} available.`);
             if (action === 'OFFICE_RETURN' && item.officeQty < qty) return alert(`Insufficient Office Stock. Only ${item.officeQty} available.`);
-
             pendingWh.push({ id: item.id, name: item.name, action, actionText, qty, platform, comment });
-            
-            document.getElementById('whSelect').value = ''; document.getElementById('whQty').value = ''; 
-            document.getElementById('whPlatform').value = ''; document.getElementById('whComment').value = '';
-            document.getElementById('whSelect').focus(); 
-            
-            renderWhBatch();
+            document.getElementById('whSelect').value = ''; document.getElementById('whQty').value = ''; document.getElementById('whPlatform').value = ''; document.getElementById('whComment').value = ''; document.getElementById('whSelect').focus(); renderWhBatch();
         }
-
         function removeWhBatch(index) { pendingWh.splice(index, 1); renderWhBatch(); }
-
         function renderWhBatch() {
             const container = document.getElementById('whBatchContainer'); const btn = document.getElementById('btnSubmitWh'); container.innerHTML = '';
-            if(pendingWh.length === 0) { container.innerHTML = '<div class="text-slate-400 text-sm text-center mt-6">No pending operations.</div>'; btn.style.display = 'none'; return; }
-            btn.style.display = 'block';
-            pendingWh.forEach((p, idx) => {
-                container.innerHTML += `
-                    <div class="flex justify-between items-center bg-white dark:bg-slate-700 p-2 border-l-4 border-l-emerald-500 mb-1 rounded shadow-sm">
-                        <div class="flex flex-col"><span class="font-bold text-sm dark:text-white">${p.name}</span><span class="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold">${p.actionText}</span></div>
-                        <div class="flex items-center gap-3"><span class="font-bold font-mono dark:text-slate-200">${p.qty} Units</span><button onclick="removeWhBatch(${idx})" class="text-red-400 hover:text-red-600">✖</button></div>
-                    </div>`;
-            });
+            if(pendingWh.length === 0) { container.innerHTML = '<div class="text-slate-400 text-sm text-center mt-6">No pending operations.</div>'; btn.style.display = 'none'; return; } btn.style.display = 'block';
+            pendingWh.forEach((p, idx) => { container.innerHTML += `<div class="flex justify-between items-center bg-white dark:bg-slate-700 p-2 border-l-4 border-l-emerald-500 mb-1 rounded shadow-sm"><div class="flex flex-col"><span class="font-bold text-sm dark:text-white">${p.name}</span><span class="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold">${p.actionText}</span></div><div class="flex items-center gap-3"><span class="font-bold font-mono dark:text-slate-200">${p.qty} Units</span><button onclick="removeWhBatch(${idx})" class="text-red-400 hover:text-red-600">✖</button></div></div>`; });
         }
-
         function submitWhBatch() {
-            if(pendingWh.length === 0) return;
-            const { dateString, timeString } = getFormattedRealTime();
+            if(pendingWh.length === 0) return; const { dateString, timeString } = getFormattedRealTime();
             pendingWh.forEach(p => {
                 const item = inventory.find(i => i.id === p.id);
                 if(item) {
-                    if (p.action === 'MFR_RECEIVE') item.godownQty += p.qty;
-                    else if (p.action === 'GODOWN_TO_OFFICE') { item.godownQty -= p.qty; item.officeQty += p.qty; }
-                    else if (p.action === 'OFFICE_RETURN') { item.officeQty -= p.qty; item.godownQty += p.qty; }
+                    if (p.action === 'MFR_RECEIVE') item.godownQty += p.qty; else if (p.action === 'GODOWN_TO_OFFICE') { item.godownQty -= p.qty; item.officeQty += p.qty; } else if (p.action === 'OFFICE_RETURN') { item.officeQty -= p.qty; item.godownQty += p.qty; }
                     historyLog.unshift({ id: Date.now().toString() + Math.random().toString(36).substr(2), dateString, timeString, name: item.name, action: p.action, actionText: p.actionText, qty: p.qty, platform: p.platform, comment: p.comment });
                 }
-            });
-            pendingWh = []; renderWhBatch(); saveAndRender(true);
+            }); pendingWh = []; renderWhBatch(); saveAndRender(true);
         }
 
         function addToSlBatch() {
-            const name = document.getElementById('slSelect').value.trim();
-            const qty = parseInt(document.getElementById('slQty').value);
-            const action = document.getElementById('salesAction').value;
-            const platform = document.getElementById('slPlatform').value.trim();
-            const comment = document.getElementById('slComment').value.trim();
-
-            if (!name || isNaN(qty) || qty <= 0) return;
-            const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase());
-            if (!item) return alert("Product not found.");
-
+            const name = document.getElementById('slSelect').value.trim(); const qty = parseInt(document.getElementById('slQty').value); const action = document.getElementById('salesAction').value; const platform = document.getElementById('slPlatform').value.trim(); const comment = document.getElementById('slComment').value.trim();
+            if (!name || isNaN(qty) || qty <= 0) return; const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase()); if (!item) return alert("Product not found.");
             let actionText = action === 'SALE' ? 'Sale (Office Out)' : 'Cust. Return (Office In)';
             if (action === 'SALE' && item.officeQty < qty) return alert(`Insufficient Office Stock! You only have ${item.officeQty} ready for dispatch.`);
-
             pendingSl.push({ id: item.id, name: item.name, action, actionText, qty, platform, comment });
-            
-            document.getElementById('slSelect').value = ''; document.getElementById('slQty').value = ''; 
-            document.getElementById('slPlatform').value = ''; document.getElementById('slComment').value = '';
-            document.getElementById('slSelect').focus();
-            
-            renderSlBatch();
+            document.getElementById('slSelect').value = ''; document.getElementById('slQty').value = ''; document.getElementById('slPlatform').value = ''; document.getElementById('slComment').value = ''; document.getElementById('slSelect').focus(); renderSlBatch();
         }
-
         function removeSlBatch(index) { pendingSl.splice(index, 1); renderSlBatch(); }
-
         function renderSlBatch() {
             const container = document.getElementById('slBatchContainer'); const btn = document.getElementById('btnSubmitSl'); container.innerHTML = '';
-            if(pendingSl.length === 0) { container.innerHTML = '<div class="text-slate-400 text-sm text-center mt-6">No pending sales.</div>'; btn.style.display = 'none'; return; }
-            btn.style.display = 'block';
-            pendingSl.forEach((p, idx) => {
-                const colors = p.action === 'SALE' ? 'border-l-blue-500 text-blue-600 dark:text-blue-400' : 'border-l-rose-500 text-rose-600 dark:text-rose-400';
-                container.innerHTML += `
-                    <div class="flex justify-between items-center bg-white dark:bg-slate-700 p-2 border-l-4 ${colors.split(' ')[0]} mb-1 rounded shadow-sm">
-                        <div class="flex flex-col"><span class="font-bold text-sm dark:text-white">${p.name}</span><span class="text-[11px] ${colors.split(' ')[1]} font-bold">${p.actionText}</span></div>
-                        <div class="flex items-center gap-3"><span class="font-bold font-mono dark:text-slate-200">${p.qty} Units</span><button onclick="removeSlBatch(${idx})" class="text-red-400 hover:text-red-600">✖</button></div>
-                    </div>`;
-            });
+            if(pendingSl.length === 0) { container.innerHTML = '<div class="text-slate-400 text-sm text-center mt-6">No pending sales.</div>'; btn.style.display = 'none'; return; } btn.style.display = 'block';
+            pendingSl.forEach((p, idx) => { const colors = p.action === 'SALE' ? 'border-l-blue-500 text-blue-600 dark:text-blue-400' : 'border-l-rose-500 text-rose-600 dark:text-rose-400';
+                container.innerHTML += `<div class="flex justify-between items-center bg-white dark:bg-slate-700 p-2 border-l-4 ${colors.split(' ')[0]} mb-1 rounded shadow-sm"><div class="flex flex-col"><span class="font-bold text-sm dark:text-white">${p.name}</span><span class="text-[11px] ${colors.split(' ')[1]} font-bold">${p.actionText}</span></div><div class="flex items-center gap-3"><span class="font-bold font-mono dark:text-slate-200">${p.qty} Units</span><button onclick="removeSlBatch(${idx})" class="text-red-400 hover:text-red-600">✖</button></div></div>`; });
         }
-
         function submitSlBatch() {
-            if(pendingSl.length === 0) return;
-            const { dateString, timeString } = getFormattedRealTime();
+            if(pendingSl.length === 0) return; const { dateString, timeString } = getFormattedRealTime();
             pendingSl.forEach(p => {
                 const item = inventory.find(i => i.id === p.id);
                 if(item) {
-                    if (p.action === 'SALE' && item.officeQty >= p.qty) item.officeQty -= p.qty;
-                    else if (p.action === 'CUST_RETURN') item.officeQty += p.qty;
+                    if (p.action === 'SALE' && item.officeQty >= p.qty) item.officeQty -= p.qty; else if (p.action === 'CUST_RETURN') item.officeQty += p.qty;
                     historyLog.unshift({ id: Date.now().toString() + Math.random().toString(36).substr(2), dateString, timeString, name: item.name, action: p.action, actionText: p.actionText, qty: p.qty, platform: p.platform, comment: p.comment });
                 }
-            });
-            pendingSl = []; renderSlBatch(); saveAndRender(true);
+            }); pendingSl = []; renderSlBatch(); saveAndRender(true);
         }
 
         function renderHistory() {
-            const whContainer = document.getElementById('whHistoryContainer');
-            const slContainer = document.getElementById('slHistoryContainer');
-            
+            const whContainer = document.getElementById('whHistoryContainer'); const slContainer = document.getElementById('slHistoryContainer');
             const whLogs = historyLog.filter(l => ['MFR_RECEIVE', 'GODOWN_TO_OFFICE', 'OFFICE_RETURN'].includes(l.action));
             const slLogs = historyLog.filter(l => ['SALE', 'CUST_RETURN'].includes(l.action));
-
-            whContainer.innerHTML = buildHistoryHTML(whLogs, 'wh');
-            slContainer.innerHTML = buildHistoryHTML(slLogs, 'sl');
+            whContainer.innerHTML = buildHistoryHTML(whLogs, 'wh'); slContainer.innerHTML = buildHistoryHTML(slLogs, 'sl');
         }
 
         function buildHistoryHTML(logsArray, type) {
             if (!logsArray.length) return '<div class="text-center text-slate-400 mt-10">No records found.</div>';
-            
-            const grouped = {}; logsArray.forEach(l => { if(!grouped[l.dateString]) grouped[l.dateString] = []; grouped[l.dateString].push(l); });
-            let html = '';
-            
+            const grouped = {}; logsArray.forEach(l => { if(!grouped[l.dateString]) grouped[l.dateString] = []; grouped[l.dateString].push(l); }); let html = '';
             for (let date in grouped) {
                 html += `<div class="mb-5 date-group"><span class="text-xs font-bold bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-1 rounded-full uppercase tracking-wide">${date}</span><div class="mt-3 grid grid-cols-1 gap-3">`;
                 grouped[date].forEach(log => {
@@ -684,7 +602,10 @@
                     <div class="log-item p-3 border ${border} bg-white dark:bg-slate-800 rounded-lg shadow-sm">
                         <div class="flex justify-between items-start mb-1">
                             <span class="text-xs font-black text-slate-700 dark:text-slate-300 uppercase px-2 py-0.5 bg-slate-100 dark:bg-slate-700 rounded">${log.actionText}</span>
-                            <span class="text-[10px] text-slate-400">${log.timeString}</span>
+                            <div class="flex gap-2">
+                                <button onclick="openEditHistoryModal('${log.id}')" class="text-indigo-500 hover:text-indigo-700 text-xs no-print" title="Edit">✏️</button>
+                                <span class="text-[10px] text-slate-400">${log.timeString}</span>
+                            </div>
                         </div>
                         <div class="font-bold text-sm text-slate-800 dark:text-slate-100 truncate mb-2">${log.name}</div>
                         <div class="flex justify-between items-end">
@@ -697,58 +618,43 @@
                     </div>`;
                 });
                 html += `</div></div>`;
-            }
-            return html;
+            } return html;
         }
 
         function addMasterProduct() {
-            const namesInput = document.getElementById('newNames').value; 
-            const categoryInput = document.getElementById('newCategory').value.trim() || 'General';
-            const imgInput = document.getElementById('newImage').value.trim();
+            const namesInput = document.getElementById('newNames').value; const categoryInput = document.getElementById('newCategory').value.trim() || 'General'; const imgInput = document.getElementById('newImage').value.trim();
             if (!namesInput.trim()) return;
-            
             namesInput.split(',').map(n => n.trim()).filter(n => n !== "").forEach((name, index) => {
                 if (!inventory.some(item => item.name.toLowerCase() === name.toLowerCase())) {
-                    inventory.push({ 
-                        id: Date.now().toString() + index + Math.random().toString(36).substr(2, 5), 
-                        name: name, 
-                        category: categoryInput, 
-                        image: imgInput,
-                        godownQty: 0, 
-                        officeQty: 0, 
-                        createdAt: new Date().getTime() + index 
-                    });
+                    inventory.push({ id: Date.now().toString() + index + Math.random().toString(36).substr(2, 5), name: name, category: categoryInput, image: imgInput, godownQty: 0, officeQty: 0, createdAt: new Date().getTime() + index });
                 }
-            });
-            document.getElementById('newNames').value = ''; 
-            document.getElementById('newImage').value = ''; 
-            saveAndRender(true);
+            }); document.getElementById('newNames').value = ''; document.getElementById('newImage').value = ''; saveAndRender(true);
         }
 
-        // Hyperlink rendering generator block
         function renderTable() {
             const tbody = document.getElementById('inventoryBody'); tbody.innerHTML = '';
             if (inventory.length === 0) return tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400">Master Catalog empty. Import or Add manually.</td></tr>`;
 
             inventory.forEach(item => {
                 const totalQty = item.godownQty + item.officeQty;
-                
-                // Hyperlink binding system based on user provided URL
                 let nameDisplayHTML = `<div class="font-bold dark:text-slate-100">${item.name}</div>`;
-                if(item.image && item.image.trim() !== '') {
-                    nameDisplayHTML = `<a href="${item.image}" target="_blank" class="font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1">🔗 ${item.name}</a>`;
-                }
+                if(item.image && item.image.trim() !== '') { nameDisplayHTML = `<a href="${item.image}" target="_blank" class="font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1">🔗 ${item.name}</a>`; }
+
+                // --- Low Stock Color Logic ---
+                let bgGodown = item.godownQty <= 10 ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" : "bg-emerald-50/30 dark:bg-emerald-900/10 text-emerald-700 dark:text-emerald-400 border-x border-slate-100 dark:border-slate-700";
+                let bgOffice = item.officeQty <= 10 ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" : "bg-amber-50/30 dark:bg-amber-900/10 text-amber-700 dark:text-amber-400 border-r border-slate-100 dark:border-slate-700";
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 border-b dark:border-slate-700 bg-white dark:bg-transparent group transition-colors">
                         <td class="p-3"><div class="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded inline-block border dark:border-slate-600">${item.category}</div></td>
-                        <td class="p-3">
-                            ${nameDisplayHTML}
-                        </td>
-                        <td class="p-3 text-center bg-emerald-50/30 dark:bg-emerald-900/10 border-x border-slate-100 dark:border-slate-700 font-mono font-bold text-emerald-700 dark:text-emerald-400 text-lg">${item.godownQty}</td>
-                        <td class="p-3 text-center bg-amber-50/30 dark:bg-amber-900/10 border-r border-slate-100 dark:border-slate-700 font-mono font-bold text-amber-700 dark:text-amber-400 text-lg">${item.officeQty}</td>
+                        <td class="p-3">${nameDisplayHTML}</td>
+                        <td class="p-3 text-center font-mono font-bold text-lg transition-colors duration-300 ${bgGodown}">${item.godownQty}</td>
+                        <td class="p-3 text-center font-mono font-bold text-lg transition-colors duration-300 ${bgOffice}">${item.officeQty}</td>
                         <td class="p-3 text-center font-black font-mono text-indigo-900 dark:text-indigo-300 text-lg">${totalQty}</td>
-                        <td class="p-3 text-center no-print"><button onclick="deleteItem('${item.id}')" class="bg-slate-200 dark:bg-slate-700 hover:bg-red-100 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 p-1 rounded opacity-0 group-hover:opacity-100 transition text-xs font-bold">DEL</button></td>
+                        <td class="p-3 text-center no-print opacity-0 group-hover:opacity-100 transition flex justify-center gap-2">
+                            <button onclick="openEditMasterModal('${item.id}')" class="bg-indigo-100 dark:bg-indigo-900/50 hover:bg-indigo-200 dark:hover:bg-indigo-800 text-indigo-600 dark:text-indigo-400 p-1.5 rounded text-xs font-bold" title="Edit">✏️</button>
+                            <button onclick="deleteItem('${item.id}')" class="bg-red-100 dark:bg-red-900/50 hover:bg-red-200 dark:hover:bg-red-800 text-red-600 dark:text-red-400 p-1.5 rounded text-xs font-bold" title="Delete">🗑️</button>
+                        </td>
                     </tr>`;
             });
         }
@@ -756,78 +662,49 @@
         function filterTable() { 
             const q = document.getElementById('searchInput').value.toLowerCase(); 
             document.querySelectorAll('#inventoryBody tr').forEach(row => { 
-                if(row.cells.length > 1) {
-                    const text = row.innerText.toLowerCase();
-                    row.style.display = text.includes(q) ? '' : 'none'; 
-                }
+                if(row.cells.length > 1) { const text = row.innerText.toLowerCase(); row.style.display = text.includes(q) ? '' : 'none'; }
             }); 
         }
 
         /* ================= STOCK VIEWER LOGIC ================= */
         function renderViewerTable() {
-            const viewSearch = document.getElementById('viewerSearch').value.toLowerCase();
-            const viewCategory = document.getElementById('viewerCategory').value;
-            const viewStatus = document.getElementById('viewerStatus').value;
-            const viewSort = document.getElementById('viewerSort').value;
-            
+            const viewSearch = document.getElementById('viewerSearch').value.toLowerCase(); const viewCategory = document.getElementById('viewerCategory').value; const viewStatus = document.getElementById('viewerStatus').value; const viewSort = document.getElementById('viewerSort').value;
             let filtered = inventory.filter(item => {
                 const totalQty = item.godownQty + item.officeQty;
-                let matchSearch = item.name.toLowerCase().includes(viewSearch);
-                let matchCategory = viewCategory === 'ALL' ? true : (item.category || 'General') === viewCategory;
-                let matchStatus = true;
-                
-                if (viewStatus === 'INSTOCK') matchStatus = totalQty > 10;
-                else if (viewStatus === 'LOWSTOCK') matchStatus = totalQty > 0 && totalQty <= 10;
-                else if (viewStatus === 'OUTOFSTOCK') matchStatus = totalQty === 0;
-
+                let matchSearch = item.name.toLowerCase().includes(viewSearch); let matchCategory = viewCategory === 'ALL' ? true : (item.category || 'General') === viewCategory; let matchStatus = true;
+                if (viewStatus === 'INSTOCK') matchStatus = totalQty > 10; else if (viewStatus === 'LOWSTOCK') matchStatus = totalQty > 0 && totalQty <= 10; else if (viewStatus === 'OUTOFSTOCK') matchStatus = totalQty === 0;
                 return matchSearch && matchCategory && matchStatus;
             });
 
             filtered.sort((a, b) => {
-                let totalA = a.godownQty + a.officeQty;
-                let totalB = b.godownQty + b.officeQty;
-                if (viewSort === 'NAME_ASC') return a.name.localeCompare(b.name);
-                if (viewSort === 'NAME_DESC') return b.name.localeCompare(a.name);
-                if (viewSort === 'STOCK_DESC') return totalB - totalA;
-                if (viewSort === 'STOCK_ASC') return totalA - totalB;
-                return 0;
+                let totalA = a.godownQty + a.officeQty; let totalB = b.godownQty + b.officeQty;
+                if (viewSort === 'NAME_ASC') return a.name.localeCompare(b.name); if (viewSort === 'NAME_DESC') return b.name.localeCompare(a.name); if (viewSort === 'STOCK_DESC') return totalB - totalA; if (viewSort === 'STOCK_ASC') return totalA - totalB; return 0;
             });
 
-            const tbody = document.getElementById('viewerBody');
-            tbody.innerHTML = '';
-            document.getElementById('viewerResultCount').innerText = filtered.length;
-
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400">No products match your filters.</td></tr>`;
-                return;
-            }
+            const tbody = document.getElementById('viewerBody'); tbody.innerHTML = ''; document.getElementById('viewerResultCount').innerText = filtered.length;
+            if (filtered.length === 0) { tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400">No products match your filters.</td></tr>`; return; }
 
             filtered.forEach(item => {
                 const totalQty = item.godownQty + item.officeQty;
-                
                 let statusBadge = '';
-                if (totalQty === 0) {
-                    statusBadge = `<span class="bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400 px-2.5 py-1 rounded-full text-xs font-bold border border-red-200 dark:border-red-800">🔴 Out of Stock</span>`;
-                } else if (totalQty <= 10) {
-                    statusBadge = `<span class="bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400 px-2.5 py-1 rounded-full text-xs font-bold border border-orange-200 dark:border-orange-800">🟠 Low Stock</span>`;
-                } else {
-                    statusBadge = `<span class="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400 px-2.5 py-1 rounded-full text-xs font-bold border border-emerald-200 dark:border-emerald-800">🟢 In Stock</span>`;
-                }
+                if (totalQty === 0) { statusBadge = `<span class="bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400 px-2.5 py-1 rounded-full text-xs font-bold border border-red-200 dark:border-red-800">🔴 Out of Stock</span>`; } 
+                else if (totalQty <= 10) { statusBadge = `<span class="bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400 px-2.5 py-1 rounded-full text-xs font-bold border border-orange-200 dark:border-orange-800">🟠 Low Stock</span>`; } 
+                else { statusBadge = `<span class="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400 px-2.5 py-1 rounded-full text-xs font-bold border border-emerald-200 dark:border-emerald-800">🟢 In Stock</span>`; }
 
                 let nameDisplayHTML = `<div class="font-bold text-base dark:text-slate-100">${item.name}</div>`;
-                if(item.image && item.image.trim() !== '') {
-                    nameDisplayHTML = `<a href="${item.image}" target="_blank" class="font-bold text-base text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1">🔗 ${item.name}</a>`;
-                }
+                if(item.image && item.image.trim() !== '') { nameDisplayHTML = `<a href="${item.image}" target="_blank" class="font-bold text-base text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1">🔗 ${item.name}</a>`; }
+
+                // --- Low Stock Color Logic for Viewer ---
+                let colGodown = item.godownQty <= 10 ? "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20" : "text-emerald-700 dark:text-emerald-400";
+                let colOffice = item.officeQty <= 10 ? "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20" : "text-amber-700 dark:text-amber-400";
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 border-b dark:border-slate-700 bg-white dark:bg-transparent transition-colors">
                         <td class="p-4"><div class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">${item.category}</div></td>
-                        <td class="p-4">
-                            ${nameDisplayHTML}
-                        </td>
+                        <td class="p-4">${nameDisplayHTML}</td>
                         <td class="p-4 text-center">${statusBadge}</td>
-                        <td class="p-4 text-center font-mono font-bold text-emerald-700 dark:text-emerald-400 text-lg">${item.godownQty}</td>
-                        <td class="p-4 text-center font-mono font-bold text-amber-700 dark:text-amber-400 text-lg">${item.officeQty}</td>
+                        <td class="p-4 text-center font-mono font-bold text-lg ${colGodown}">${item.godownQty}</td>
+                        <td class="p-4 text-center font-mono font-bold text-lg ${colOffice}">${item.officeQty}</td>
                         <td class="p-4 text-center font-black font-mono text-indigo-900 dark:text-indigo-300 text-xl bg-slate-50 dark:bg-slate-800/50">${totalQty}</td>
                     </tr>`;
             });
@@ -837,9 +714,7 @@
             const query = document.getElementById(inputId).value.toLowerCase();
             document.getElementById(containerId).querySelectorAll('.date-group').forEach(group => {
                 let hasVisible = false;
-                group.querySelectorAll('.log-item').forEach(item => { 
-                    if (item.innerText.toLowerCase().includes(query)) { item.style.display = ''; hasVisible = true; } else { item.style.display = 'none'; } 
-                });
+                group.querySelectorAll('.log-item').forEach(item => { if (item.innerText.toLowerCase().includes(query)) { item.style.display = ''; hasVisible = true; } else { item.style.display = 'none'; } });
                 group.style.display = hasVisible ? '' : 'none';
             });
         }
@@ -848,89 +723,45 @@
         function clearHistory() { if(confirm("Clear ALL activity logs?")) { historyLog = []; saveAndRender(true); } }
         function clearAllBackendData() { if (prompt("Type 'YES' to confirm full reset:") === 'YES') { inventory = []; historyLog = []; saveAndRender(true); alert("Reset Complete."); } }
         
-        function toggleFullScreen(cardId) {
-            document.getElementById(cardId).classList.toggle('fullscreen-card'); const btn = event.target;
-            btn.innerText = btn.innerText.includes('Close') ? '⛶ Fullscreen' : '✖ Close Fullscreen';
-        }
+        function toggleFullScreen(cardId) { document.getElementById(cardId).classList.toggle('fullscreen-card'); const btn = event.target; btn.innerText = btn.innerText.includes('Close') ? '⛶ Fullscreen' : '✖ Close Fullscreen'; }
 
         /* ================= EXPORT MODAL LOGIC ================= */
-        function openExportModal() {
-            document.getElementById('exportModal').classList.remove('hidden');
-            document.getElementById('exportModal').classList.add('flex');
-        }
-
-        function closeExportModal() {
-            document.getElementById('exportModal').classList.add('hidden');
-            document.getElementById('exportModal').classList.remove('flex');
-        }
-
+        function openExportModal() { document.getElementById('exportModal').classList.remove('hidden'); document.getElementById('exportModal').classList.add('flex'); }
+        function closeExportModal() { document.getElementById('exportModal').classList.add('hidden'); document.getElementById('exportModal').classList.remove('flex'); }
         function executeExport() {
-            const catFilter = document.getElementById('exportCategory').value;
-            const startDateStr = document.getElementById('exportStartDate').value;
-            const endDateStr = document.getElementById('exportEndDate').value;
-
-            let filteredInv = inventory;
-            if (catFilter !== 'ALL') { filteredInv = inventory.filter(i => (i.category || 'General') === catFilter); }
-
+            const catFilter = document.getElementById('exportCategory').value; const startDateStr = document.getElementById('exportStartDate').value; const endDateStr = document.getElementById('exportEndDate').value;
+            let filteredInv = inventory; if (catFilter !== 'ALL') { filteredInv = inventory.filter(i => (i.category || 'General') === catFilter); }
             let filteredHist = historyLog;
             if (startDateStr || endDateStr) {
-                const startDate = startDateStr ? new Date(startDateStr) : null;
-                const endDate = endDateStr ? new Date(endDateStr) : null;
+                const startDate = startDateStr ? new Date(startDateStr) : null; const endDate = endDateStr ? new Date(endDateStr) : null;
                 filteredHist = historyLog.filter(h => {
-                    if(!h.dateString) return false;
-                    const parts = h.dateString.split(' ');
-                    if(parts.length < 3) return true;
+                    if(!h.dateString) return false; const parts = h.dateString.split(' '); if(parts.length < 3) return true;
                     const months = {"Jan":0,"Feb":1,"Mar":2,"Apr":3,"May":4,"Jun":5,"Jul":6,"Aug":7,"Sep":8,"Oct":9,"Nov":10,"Dec":11};
                     const logDate = new Date(parts[2], months[parts[1]], parts[0]);
-                    
-                    let valid = true;
-                    if (startDate && logDate < startDate) valid = false;
-                    if (endDate && logDate > endDate) valid = false;
-                    return valid;
+                    let valid = true; if (startDate && logDate < startDate) valid = false; if (endDate && logDate > endDate) valid = false; return valid;
                 });
             }
-
             if(filteredInv.length === 0 && filteredHist.length === 0) return alert("No data found for the selected filters!");
-
             const invData = filteredInv.map(i => ({ "Product ID": i.id, "Category": i.category || "General", "Item Name": i.name, "Image Link": i.image || "", "Godown Stock": i.godownQty, "Office Stock": i.officeQty, "Total Qty": i.godownQty + i.officeQty }));
             const histData = filteredHist.map(h => ({ "Log ID": h.id, "Date": h.dateString, "Time": h.timeString, "Type of Transfer": h.actionText, "Item Name": h.name, "Quantity": h.qty, "Platform / Ref": h.platform || "", "Remarks": h.comment || "" }));
-
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(invData), "Inventory");
-            if (histData.length > 0) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(histData), "History Log");
-            
-            let filename = "HNN_StockPro_Export.xlsx";
-            if(catFilter !== 'ALL') filename = `HNN_StockPro_${catFilter}.xlsx`;
-            
-            XLSX.writeFile(wb, filename);
-            closeExportModal();
+            const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(invData), "Inventory"); if (histData.length > 0) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(histData), "History Log");
+            let filename = "HNN_StockPro_Export.xlsx"; if(catFilter !== 'ALL') filename = `HNN_StockPro_${catFilter}.xlsx`;
+            XLSX.writeFile(wb, filename); closeExportModal();
         }
 
         function importAllDataExcel(event) {
-            const file = event.target.files[0]; if (!file) return;
-            const reader = new FileReader();
+            const file = event.target.files[0]; if (!file) return; const reader = new FileReader();
             reader.onload = function(e) {
-                const workbook = XLSX.read(new Uint8Array(e.target.result), {type: 'array'});
-                let addedInv = 0, addedHist = 0;
-
+                const workbook = XLSX.read(new Uint8Array(e.target.result), {type: 'array'}); let addedInv = 0, addedHist = 0;
                 if (workbook.SheetNames.includes("Inventory")) {
                     XLSX.utils.sheet_to_json(workbook.Sheets["Inventory"]).forEach(row => {
                         const name = row["Item Name"];
                         if (name && !inventory.some(item => item.name.toLowerCase() === name.toLowerCase())) {
-                            inventory.push({ 
-                                id: row["Product ID"] || Date.now().toString() + Math.random().toString(36).substr(2, 5), 
-                                name: name, 
-                                category: row["Category"] || 'General', 
-                                image: row["Image Link"] || '',
-                                godownQty: parseInt(row["Godown Stock"]) || 0, 
-                                officeQty: parseInt(row["Office Stock"]) || 0, 
-                                createdAt: new Date().getTime() + addedInv 
-                            });
+                            inventory.push({ id: row["Product ID"] || Date.now().toString() + Math.random().toString(36).substr(2, 5), name: name, category: row["Category"] || 'General', image: row["Image Link"] || '', godownQty: parseInt(row["Godown Stock"]) || 0, officeQty: parseInt(row["Office Stock"]) || 0, createdAt: new Date().getTime() + addedInv });
                             addedInv++;
                         }
                     });
                 }
-
                 if (workbook.SheetNames.includes("History Log")) {
                     XLSX.utils.sheet_to_json(workbook.Sheets["History Log"]).forEach(row => {
                         if (row["Item Name"] && row["Type of Transfer"]) {
@@ -942,10 +773,35 @@
                         }
                     });
                 }
-                
-                alert(`Import Complete!\nNew Products: ${addedInv}\nNew Logs: ${addedHist}`);
-                document.getElementById('importExcelGlobal').value = ''; saveAndRender(true);
+                alert(`Import Complete!\nNew Products: ${addedInv}\nNew Logs: ${addedHist}`); document.getElementById('importExcelGlobal').value = ''; saveAndRender(true);
             }; reader.readAsArrayBuffer(file);
+        }
+
+        /* ================= EDIT MODAL LOGIC ================= */
+        // Edit Master Modal Methods
+        function openEditMasterModal(id) {
+            const item = inventory.find(i => i.id === id); if(!item) return;
+            document.getElementById('editMasterId').value = item.id; document.getElementById('editMasterName').value = item.name; document.getElementById('editMasterCategory').value = item.category || 'General'; document.getElementById('editMasterImage').value = item.image || ''; document.getElementById('editMasterGodown').value = item.godownQty; document.getElementById('editMasterOffice').value = item.officeQty;
+            document.getElementById('editMasterModal').classList.remove('hidden'); document.getElementById('editMasterModal').classList.add('flex');
+        }
+        function closeEditMasterModal() { document.getElementById('editMasterModal').classList.add('hidden'); document.getElementById('editMasterModal').classList.remove('flex'); }
+        function saveEditMaster() {
+            const id = document.getElementById('editMasterId').value; const item = inventory.find(i => i.id === id); if(!item) return;
+            item.name = document.getElementById('editMasterName').value.trim(); item.category = document.getElementById('editMasterCategory').value.trim(); item.image = document.getElementById('editMasterImage').value.trim(); item.godownQty = parseInt(document.getElementById('editMasterGodown').value) || 0; item.officeQty = parseInt(document.getElementById('editMasterOffice').value) || 0;
+            closeEditMasterModal(); saveAndRender(true);
+        }
+
+        // Edit History Modal Methods
+        function openEditHistoryModal(id) {
+            const log = historyLog.find(h => h.id === id); if(!log) return;
+            document.getElementById('editHistoryId').value = log.id; document.getElementById('editHistoryItemName').innerText = `Item: ${log.name} (${log.actionText})`; document.getElementById('editHistoryQty').value = log.qty; document.getElementById('editHistoryPlatform').value = log.platform || ''; document.getElementById('editHistoryComment').value = log.comment || '';
+            document.getElementById('editHistoryModal').classList.remove('hidden'); document.getElementById('editHistoryModal').classList.add('flex');
+        }
+        function closeEditHistoryModal() { document.getElementById('editHistoryModal').classList.add('hidden'); document.getElementById('editHistoryModal').classList.remove('flex'); }
+        function saveEditHistory() {
+            const id = document.getElementById('editHistoryId').value; const log = historyLog.find(h => h.id === id); if(!log) return;
+            log.qty = parseInt(document.getElementById('editHistoryQty').value) || 0; log.platform = document.getElementById('editHistoryPlatform').value.trim(); log.comment = document.getElementById('editHistoryComment').value.trim();
+            closeEditHistoryModal(); saveAndRender(true);
         }
 
         window.onload = loadData;
