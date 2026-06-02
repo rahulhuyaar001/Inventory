@@ -88,6 +88,7 @@
                     <div class="flex flex-col gap-3 shrink-0">
                         <select id="warehouseAction" class="w-full border border-emerald-300 dark:border-emerald-700 p-2.5 rounded-lg text-sm bg-emerald-50 dark:bg-emerald-900/30 outline-none focus:ring-2 focus:ring-emerald-500 font-bold text-emerald-800 dark:text-emerald-300">
                             <option value="MFR_RECEIVE">📥 Type: Manufacturer ➔ Godown</option>
+                            <option value="MFR_RETURN">📤 Type: Godown ➔ Manufacturer (Return)</option>
                             <option value="GODOWN_TO_OFFICE">🚚 Type: Godown ➔ Office</option>
                             <option value="OFFICE_RETURN">🔙 Type: Office ➔ Godown</option>
                         </select>
@@ -533,9 +534,13 @@
         function addTowhBatch() {
             const name = document.getElementById('whSelect').value.trim(); const qty = parseInt(document.getElementById('whQty').value); const action = document.getElementById('warehouseAction').value; const platform = document.getElementById('whPlatform').value.trim(); const comment = document.getElementById('whComment').value.trim();
             if (!name || isNaN(qty) || qty <= 0) return; const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase()); if (!item) return alert("Product not found.");
-            let actionText = action === 'MFR_RECEIVE' ? 'Mfr ➔ Godown' : action === 'GODOWN_TO_OFFICE' ? 'Godown ➔ Office' : 'Office ➔ Godown';
+            
+            let actionText = action === 'MFR_RECEIVE' ? 'Mfr ➔ Godown' : action === 'MFR_RETURN' ? 'Godown ➔ Mfr (Return)' : action === 'GODOWN_TO_OFFICE' ? 'Godown ➔ Office' : 'Office ➔ Godown';
+            
             if (action === 'GODOWN_TO_OFFICE' && item.godownQty < qty) return alert(`Insufficient Godown Stock. Only ${item.godownQty} available.`);
             if (action === 'OFFICE_RETURN' && item.officeQty < qty) return alert(`Insufficient Office Stock. Only ${item.officeQty} available.`);
+            if (action === 'MFR_RETURN' && item.godownQty < qty) return alert(`Insufficient Godown Stock. Only ${item.godownQty} available to return.`);
+            
             pendingWh.push({ id: item.id, name: item.name, action, actionText, qty, platform, comment });
             document.getElementById('whSelect').value = ''; document.getElementById('whQty').value = ''; document.getElementById('whPlatform').value = ''; document.getElementById('whComment').value = ''; document.getElementById('whSelect').focus(); renderWhBatch();
         }
@@ -550,7 +555,10 @@
             pendingWh.forEach(p => {
                 const item = inventory.find(i => i.id === p.id);
                 if(item) {
-                    if (p.action === 'MFR_RECEIVE') item.godownQty += p.qty; else if (p.action === 'GODOWN_TO_OFFICE') { item.godownQty -= p.qty; item.officeQty += p.qty; } else if (p.action === 'OFFICE_RETURN') { item.officeQty -= p.qty; item.godownQty += p.qty; }
+                    if (p.action === 'MFR_RECEIVE') item.godownQty += p.qty; 
+                    else if (p.action === 'MFR_RETURN') item.godownQty -= p.qty;
+                    else if (p.action === 'GODOWN_TO_OFFICE') { item.godownQty -= p.qty; item.officeQty += p.qty; } 
+                    else if (p.action === 'OFFICE_RETURN') { item.officeQty -= p.qty; item.godownQty += p.qty; }
                     historyLog.unshift({ id: Date.now().toString() + Math.random().toString(36).substr(2), dateString, timeString, name: item.name, action: p.action, actionText: p.actionText, qty: p.qty, platform: p.platform, comment: p.comment });
                 }
             }); pendingWh = []; renderWhBatch(); saveAndRender(true);
@@ -584,7 +592,7 @@
 
         function renderHistory() {
             const whContainer = document.getElementById('whHistoryContainer'); const slContainer = document.getElementById('slHistoryContainer');
-            const whLogs = historyLog.filter(l => ['MFR_RECEIVE', 'GODOWN_TO_OFFICE', 'OFFICE_RETURN'].includes(l.action));
+            const whLogs = historyLog.filter(l => ['MFR_RECEIVE', 'MFR_RETURN', 'GODOWN_TO_OFFICE', 'OFFICE_RETURN'].includes(l.action));
             const slLogs = historyLog.filter(l => ['SALE', 'CUST_RETURN'].includes(l.action));
             whContainer.innerHTML = buildHistoryHTML(whLogs, 'wh'); slContainer.innerHTML = buildHistoryHTML(slLogs, 'sl');
         }
