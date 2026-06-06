@@ -3,516 +3,710 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StockPro | Multi-Location</title>
+    <title>DOZY StockPro | Liquid Glass</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
-            theme: { extend: {} }
+            theme: { 
+                extend: {
+                    colors: {
+                        retro: {
+                            base: '#f4f0eb',
+                            dark: '#1a1c23',
+                            teal: '#14b8a6',    // Vibrant Teal
+                            rose: '#f43f5e',    // Sunset Rose
+                            mustard: '#f59e0b', // Golden Mustard
+                            slate: '#6366f1'    // Indigo Slate
+                        }
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards',
+                        'blob': 'blob 15s infinite alternate cubic-bezier(0.4, 0, 0.2, 1)',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    }
+                } 
+            }
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; }
-        @media print { .no-print { display: none; } }
-        .fullscreen-card {
-            position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important;
-            z-index: 9999 !important; border-radius: 0 !important; margin: 0 !important; max-width: none !important;
-            border: none !important; padding: 2rem !important; overflow-y: auto !important;
+        /* --- LIQUID GLASS & ANIMATED BACKGROUND STYLES --- */
+        body {
+            background-color: #f4f0eb;
+            color: #334155;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            overflow-x: hidden;
         }
-        .dropdown-item { cursor: pointer; transition: all 0.2s; }
-        /* Keyboard Focus Highlight Style */
-        .keyboard-focus { background-color: #e2e8f0 !important; }
-        .dark .keyboard-focus { background-color: #475569 !important; }
-        /* Tab Active State */
-        .tab-active { background-color: #4f46e5 !important; color: white !important; border-color: #4f46e5 !important; }
+        .dark body {
+            background-color: #111827;
+            color: #e2e8f0;
+        }
+
+        /* Animated Floating Blobs */
+        .bg-blobs { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; filter: blur(60px); opacity: 0.6; }
+        .dark .bg-blobs { opacity: 0.3; }
+        .blob-1 { position: absolute; top: -10%; left: -10%; width: 50vw; height: 50vw; background: #c084fc; border-radius: 50%; mix-blend-mode: multiply; animation: blob 18s infinite alternate; }
+        .blob-2 { position: absolute; top: 40%; right: -20%; width: 60vw; height: 60vw; background: #60a5fa; border-radius: 50%; mix-blend-mode: multiply; animation: blob 22s infinite alternate-reverse; }
+        .blob-3 { position: absolute; bottom: -20%; left: 20%; width: 40vw; height: 40vw; background: #f472b6; border-radius: 50%; mix-blend-mode: multiply; animation: blob 20s infinite alternate; }
+        .dark .blob-1 { background: #7e22ce; mix-blend-mode: screen; }
+        .dark .blob-2 { background: #1d4ed8; mix-blend-mode: screen; }
+        .dark .blob-3 { background: #be185d; mix-blend-mode: screen; }
+
+        /* The Premium Glass Panel */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.05), 
+                inset 1px 1px 0px rgba(255, 255, 255, 0.8);
+            border-radius: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .dark .glass-panel {
+            background: rgba(17, 24, 39, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.3), 
+                inset 1px 1px 0px rgba(255, 255, 255, 0.05);
+        }
+
+        /* Smooth Liquid Hover Effect */
+        .liquid-hover:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1);
+            border-color: rgba(255,255,255,0.9);
+        }
+        .dark .liquid-hover:hover {
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        /* Glass Input Fields */
+        .glass-input {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.03), inset -2px -2px 5px rgba(255,255,255,0.8);
+            border-radius: 1rem;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.9);
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2), inset 2px 2px 5px rgba(0,0,0,0.03);
+            transform: scale(1.01);
+        }
+        .dark .glass-input {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.4), inset -1px -1px 3px rgba(255,255,255,0.02);
+            color: #f8fafc;
+        }
+        .dark .glass-input:focus {
+            background: rgba(0, 0, 0, 0.45);
+            border-color: #818cf8;
+            box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
+        }
+
+        /* Elegant Buttons */
+        .glass-btn {
+            background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.4));
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 2px 4px 10px rgba(0,0,0,0.05), inset 1px 1px 2px rgba(255,255,255,1);
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .glass-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 2px 8px 15px rgba(0,0,0,0.08), inset 1px 1px 2px rgba(255,255,255,1);
+        }
+        .glass-btn:active { transform: translateY(1px) scale(0.98); }
+        
+        .dark .glass-btn {
+            background: linear-gradient(135deg, rgba(55,65,81,0.8), rgba(31,41,55,0.6));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 2px 4px 10px rgba(0,0,0,0.3), inset 1px 1px 2px rgba(255,255,255,0.05);
+            color: #f1f5f9;
+        }
+
+        /* Soft Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.3); border-radius: 10px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); }
+
+        @media print { .no-print { display: none; } }
+        
+        /* FULLSCREEN FIX */
+        .fullscreen-card {
+            position: fixed !important; 
+            inset: 0 !important; 
+            width: 100% !important; 
+            height: 100% !important;
+            z-index: 9999 !important; 
+            border-radius: 0 !important; 
+            margin: 0 !important; 
+            max-width: 100% !important; 
+            max-height: 100% !important;
+            padding: 2rem !important; 
+            overflow-y: auto !important;
+            box-sizing: border-box !important;
+        }
+        
+        .keyboard-focus { background-color: rgba(99, 102, 241, 0.15) !important; transform: scale(1.02); }
+        .dark .keyboard-focus { background-color: rgba(255, 255, 255, 0.1) !important; }
+        .tab-active { background-color: #6366f1 !important; color: white !important; box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2), 0 4px 10px rgba(99,102,241,0.4) !important; }
+        
+        /* Modal Overlay Transition */
+        .modal-overlay { transition: opacity 0.3s ease, backdrop-filter 0.3s ease; }
     </style>
 </head>
-<body class="bg-slate-100 dark:bg-slate-900 min-h-screen font-sans text-slate-800 dark:text-slate-200 transition-colors duration-300">
+<body class="min-h-screen transition-colors duration-500 selection:bg-retro-slate selection:text-white">
 
-    <nav class="bg-slate-900 dark:bg-black text-white p-4 shadow-md no-print border-b border-slate-800 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-3 w-full md:w-auto justify-between">
-                <div class="flex items-center gap-3">
-                    <span class="text-2xl">📦</span>
-                    <h1 class="text-xl font-bold tracking-wide">HNN GROUP <span class="text-indigo-400">StockPro</span> <span id="syncStatus" class="text-xs text-slate-400 ml-2 font-normal"></span></h1>
-                </div>
-                <button onclick="toggleTheme()" class="md:hidden bg-slate-800 p-2 rounded-lg border border-slate-700 text-sm hover:bg-slate-700">🌗</button>
-            </div>
-            
-            <div class="flex bg-slate-800 rounded-lg p-1 border border-slate-700 w-full md:w-auto overflow-hidden">
-                <button onclick="switchView('admin')" id="tabAdmin" class="flex-1 md:flex-none px-4 py-1.5 rounded-md text-sm font-bold transition tab-active">⚙️ Admin Panel</button>
-                <button onclick="switchView('viewer')" id="tabViewer" class="flex-1 md:flex-none px-4 py-1.5 rounded-md text-sm font-bold text-slate-300 hover:text-white transition">👁️ Stock Viewer</button>
-            </div>
-
-            <div class="flex flex-wrap gap-2 justify-center md:justify-end w-full md:w-auto items-center" id="adminControls">
-                <button onclick="toggleTheme()" class="hidden md:block bg-slate-800 p-2 rounded-lg border border-slate-700 text-sm hover:bg-slate-700 transition" title="Toggle Dark Mode">🌗</button>
-                <div class="h-6 w-px bg-slate-700 hidden md:block mx-1"></div>
-                <input type="file" id="importExcelGlobal" accept=".xlsx, .xls" class="hidden" onchange="importAllDataExcel(event)">
-                <button onclick="document.getElementById('importExcelGlobal').click()" class="bg-emerald-600 hover:bg-emerald-500 px-3 py-1.5 rounded text-sm font-bold transition shadow-lg">📥 Import</button>
-                <button onclick="openExportModal()" class="bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 rounded text-sm font-bold transition shadow-lg">📤 Export</button>
-                <button onclick="clearHistory()" class="bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-sm transition">Clear Logs</button>
-                <button onclick="clearAllBackendData()" class="bg-red-700 hover:bg-red-600 px-3 py-1.5 rounded text-sm font-bold transition shadow-lg">🚨 Reset</button>
-            </div>
-        </div>
-    </nav>
-
-    <div class="max-w-7xl mx-auto p-4 md:p-6">
-        
-        <div id="adminView" class="space-y-6 block">
-            <div id="kpiDashboard" class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-all duration-300 no-print flex flex-col">
-                <div class="flex justify-between items-center mb-4 shrink-0 border-b border-slate-100 dark:border-slate-700 pb-3">
-                    <h2 class="text-xl font-bold flex items-center gap-2">📊 Network Analytics</h2>
-                    <button onclick="toggleFullScreen('kpiDashboard')" class="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 border border-slate-200 dark:border-slate-600 px-2 py-1 rounded text-xs font-bold transition">⛶ Fullscreen</button>
-                </div>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-xl border border-slate-200 dark:border-slate-600 shadow-sm border-l-4 border-l-blue-500"><div><p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-bold uppercase">Products</p><h3 class="text-xl sm:text-2xl font-bold dark:text-white" id="kpi-products">...</h3></div></div>
-                    <div class="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-xl border border-slate-200 dark:border-slate-600 shadow-sm border-l-4 border-l-indigo-500"><div><p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-bold uppercase">Global Stock</p><h3 class="text-xl sm:text-2xl font-bold dark:text-white" id="kpi-units">0</h3></div></div>
-                    <div class="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-xl border border-emerald-200 dark:border-emerald-800 shadow-sm border-l-4 border-l-emerald-500"><div><p class="text-[10px] sm:text-xs text-emerald-700 dark:text-emerald-400 font-bold uppercase">Godown Stock</p><h3 class="text-xl sm:text-2xl font-bold text-emerald-900 dark:text-emerald-300" id="kpi-godown">0</h3></div></div>
-                    <div class="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-xl border border-amber-200 dark:border-amber-800 shadow-sm border-l-4 border-l-amber-500"><div><p class="text-[10px] sm:text-xs text-amber-700 dark:text-amber-400 font-bold uppercase">Office Stock</p><h3 class="text-xl sm:text-2xl font-bold text-amber-900 dark:text-amber-300" id="kpi-office">0</h3></div></div>
-                    <div class="bg-teal-50 dark:bg-teal-900/20 p-4 rounded-xl border border-teal-200 dark:border-teal-800 shadow-sm border-l-4 border-l-teal-500"><div><p class="text-[10px] sm:text-xs text-teal-700 dark:text-teal-400 font-bold uppercase">Today's Sales</p><h3 class="text-xl sm:text-2xl font-bold text-teal-900 dark:text-teal-300" id="kpi-sales">0</h3></div></div>
-                    <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-xl border border-purple-200 dark:border-purple-800 shadow-sm border-l-4 border-l-purple-500"><div><p class="text-[10px] sm:text-xs text-purple-700 dark:text-purple-400 font-bold uppercase">Today Transfers</p><h3 class="text-xl sm:text-2xl font-bold text-purple-900 dark:text-purple-300" id="kpi-transfers">0</h3></div></div>
-                    <div class="bg-rose-50 dark:bg-rose-900/20 p-4 rounded-xl border border-rose-200 dark:border-rose-800 shadow-sm border-l-4 border-l-rose-500"><div><p class="text-[10px] sm:text-xs text-rose-700 dark:text-rose-400 font-bold uppercase">Cust. Returns</p><h3 class="text-xl sm:text-2xl font-bold text-rose-900 dark:text-rose-300" id="kpi-returns">0</h3></div></div>
-                    <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-xl border border-red-200 dark:border-red-800 shadow-sm border-l-4 border-l-red-500"><div><p class="text-[10px] sm:text-xs text-red-700 dark:text-red-400 font-bold uppercase">Out of Stock</p><h3 class="text-xl sm:text-2xl font-bold text-red-900 dark:text-red-300" id="kpi-oos">0</h3></div></div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 no-print">
-                <div id="warehouseCard" class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-emerald-100 dark:border-emerald-900 shadow-sm flex flex-col h-[36rem] transition-all duration-300">
-                    <div class="flex justify-between items-center mb-3 shrink-0">
-                        <div><h2 class="text-lg font-bold text-emerald-800 dark:text-emerald-400">🏭 Internal Transfers</h2><span class="text-xs text-slate-400">Mfr Receiving & Godown/Office</span></div>
-                        <button onclick="toggleFullScreen('warehouseCard')" class="bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 px-2 py-1 rounded text-xs font-bold transition shadow-sm">⛶ Fullscreen</button>
-                    </div>
-                    <div class="flex flex-col gap-3 shrink-0">
-                        <select id="warehouseAction" class="w-full border border-emerald-300 dark:border-emerald-700 p-2.5 rounded-lg text-sm bg-emerald-50 dark:bg-emerald-900/30 outline-none focus:ring-2 focus:ring-emerald-500 font-bold text-emerald-800 dark:text-emerald-300">
-                            <option value="MFR_RECEIVE">📥 Type: Manufacturer ➔ Godown</option>
-                            <option value="MFR_RETURN">📤 Type: Godown ➔ Manufacturer (Return)</option>
-                            <option value="GODOWN_TO_OFFICE">🚚 Type: Godown ➔ Office</option>
-                            <option value="OFFICE_RETURN">🔙 Type: Office ➔ Godown</option>
-                        </select>
-
-                        <div class="relative w-full" id="whDropdownContainer">
-                            <input type="text" id="whSelect" placeholder="Search product... (Use Arrow Keys & Enter)" autocomplete="off" onfocus="openDropdown('whList')" oninput="filterDropdown('whSelect', 'whList')" onclick="openDropdown('whList')" class="w-full border border-slate-300 dark:border-slate-600 p-2.5 rounded-lg text-sm bg-white dark:bg-slate-700 outline-none focus:ring-2 focus:ring-emerald-400 dark:text-white">
-                            <ul id="whList" class="hidden absolute z-50 w-full mt-1 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg shadow-xl max-h-48 overflow-y-auto py-1 custom-scrollbar flex-col"></ul>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <input type="number" id="whQty" placeholder="Qty" class="w-24 border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-white dark:bg-slate-700 outline-none focus:ring-2 focus:ring-emerald-400 dark:text-white">
-                            <input type="text" id="whPlatform" placeholder="Ref/Challan No." class="w-1/3 border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-white dark:bg-slate-700 outline-none focus:ring-2 focus:ring-emerald-400 dark:text-white">
-                            <input type="text" id="whComment" placeholder="Remarks" class="flex-1 border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-white dark:bg-slate-700 outline-none focus:ring-2 focus:ring-emerald-400 dark:text-white">
-                        </div>
-                        <button onclick="addTowhBatch()" class="w-full bg-emerald-100 dark:bg-emerald-600/30 hover:bg-emerald-200 dark:hover:bg-emerald-500/50 text-emerald-700 dark:text-emerald-300 font-bold px-4 py-2 rounded-lg text-sm transition border border-emerald-200 dark:border-emerald-600/50">Add to Batch (Enter ↵)</button>
-                    </div>
-                    <div class="flex-1 overflow-y-auto mt-3 border border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 rounded-lg p-2 custom-scrollbar" id="whBatchContainer"></div>
-                    <button onclick="submitWhBatch()" id="btnSubmitWh" class="mt-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-lg text-sm transition shadow-md hidden shrink-0 uppercase tracking-wide">✅ Execute Transfers</button>
-                </div>
-
-                <div id="salesCard" class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-blue-100 dark:border-blue-900 shadow-sm flex flex-col h-[36rem] transition-all duration-300">
-                    <div class="flex justify-between items-center mb-3 shrink-0">
-                        <div><h2 class="text-lg font-bold text-blue-800 dark:text-blue-400">🛒 Sales & Returns</h2><span class="text-xs text-slate-400">Customer Dispatches</span></div>
-                        <button onclick="toggleFullScreen('salesCard')" class="bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 px-2 py-1 rounded text-xs font-bold transition shadow-sm">⛶ Fullscreen</button>
-                    </div>
-                    <div class="flex flex-col gap-3 shrink-0">
-                        <select id="salesAction" class="w-full border border-blue-300 dark:border-blue-700 p-2.5 rounded-lg text-sm bg-blue-50 dark:bg-blue-900/30 outline-none focus:ring-2 focus:ring-blue-500 font-bold text-blue-800 dark:text-blue-300">
-                            <option value="SALE">📤 Type: Sale Dispatch (Office Out)</option>
-                            <option value="CUST_RETURN">🔄 Type: Customer Return (Office In)</option>
-                        </select>
-
-                        <div class="relative w-full" id="slDropdownContainer">
-                            <input type="text" id="slSelect" placeholder="Search product... (Use Arrow Keys & Enter)" autocomplete="off" onfocus="openDropdown('slList')" oninput="filterDropdown('slSelect', 'slList')" onclick="openDropdown('slList')" class="w-full border border-slate-300 dark:border-slate-600 p-2.5 rounded-lg text-sm bg-white dark:bg-slate-700 outline-none focus:ring-2 focus:ring-blue-400 dark:text-white">
-                            <ul id="slList" class="hidden absolute z-50 w-full mt-1 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg shadow-xl max-h-48 overflow-y-auto py-1 custom-scrollbar flex-col"></ul>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <input type="number" id="slQty" placeholder="Qty" class="w-24 border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-white dark:bg-slate-700 outline-none focus:ring-2 focus:ring-blue-400 dark:text-white">
-                            <input type="text" id="slPlatform" placeholder="Platform" class="w-1/3 border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-white dark:bg-slate-700 outline-none focus:ring-2 focus:ring-blue-400 dark:text-white">
-                            <input type="text" id="slComment" placeholder="Order ID" class="flex-1 border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-white dark:bg-slate-700 outline-none focus:ring-2 focus:ring-blue-400 dark:text-white">
-                        </div>
-                        <button onclick="addToSlBatch()" class="w-full bg-blue-100 dark:bg-blue-600/30 hover:bg-blue-200 dark:hover:bg-blue-500/50 text-blue-700 dark:text-blue-300 font-bold px-4 py-2 rounded-lg text-sm transition border border-blue-200 dark:border-blue-600/50">Add to Batch (Enter ↵)</button>
-                    </div>
-                    <div class="flex-1 overflow-y-auto mt-3 border border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 rounded-lg p-2 custom-scrollbar" id="slBatchContainer"></div>
-                    <button onclick="submitSlBatch()" id="btnSubmitSl" class="mt-3 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg text-sm transition shadow-md hidden shrink-0 uppercase tracking-wide">✅ Execute Sales</button>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                <div id="whHistoryCard" class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-emerald-100 dark:border-emerald-900 h-[35rem] flex flex-col transition-all duration-300">
-                    <div class="p-4 border-b border-emerald-100 dark:border-emerald-900/50 bg-emerald-50 dark:bg-emerald-900/20 flex flex-col gap-3 shrink-0">
-                        <div class="flex justify-between items-center">
-                            <h2 class="text-lg font-bold text-emerald-800 dark:text-emerald-400 flex items-center gap-2">📝 Transfer History</h2>
-                            <button onclick="toggleFullScreen('whHistoryCard')" class="bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 px-2 py-1 rounded text-xs font-bold transition shadow-sm">⛶</button>
-                        </div>
-                        <input type="text" id="whFilter" onkeyup="filterHistory('whFilter', 'whHistoryContainer')" placeholder="Filter transfers..." class="w-full border border-emerald-200 dark:border-emerald-700 p-2 rounded-lg text-sm bg-white dark:bg-slate-700 outline-none focus:ring-2 focus:ring-emerald-400 dark:text-white">
-                    </div>
-                    <div id="whHistoryContainer" class="flex-1 overflow-y-auto p-4 bg-slate-50 dark:bg-slate-900/50 custom-scrollbar"></div>
-                </div>
-
-                <div id="slHistoryCard" class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-blue-100 dark:border-blue-900 h-[35rem] flex flex-col transition-all duration-300">
-                    <div class="p-4 border-b border-blue-100 dark:border-blue-900/50 bg-blue-50 dark:bg-blue-900/20 flex flex-col gap-3 shrink-0">
-                        <div class="flex justify-between items-center">
-                            <h2 class="text-lg font-bold text-blue-800 dark:text-blue-400 flex items-center gap-2">📝 Sales History</h2>
-                            <button onclick="toggleFullScreen('slHistoryCard')" class="bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 px-2 py-1 rounded text-xs font-bold transition shadow-sm">⛶</button>
-                        </div>
-                        <input type="text" id="slFilter" onkeyup="filterHistory('slFilter', 'slHistoryContainer')" placeholder="Filter sales..." class="w-full border border-blue-200 dark:border-blue-700 p-2 rounded-lg text-sm bg-white dark:bg-slate-700 outline-none focus:ring-2 focus:ring-blue-400 dark:text-white">
-                    </div>
-                    <div id="slHistoryContainer" class="flex-1 overflow-y-auto p-4 bg-slate-50 dark:bg-slate-900/50 custom-scrollbar"></div>
-                </div>
-            </div>
-
-            <div id="masterCard" class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden no-print flex flex-col transition-all duration-300 mb-10">
-                <div class="p-5 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 shrink-0">
-                    <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-between lg:justify-start">
-                        <h2 class="text-xl font-bold">Master Stock Overview</h2>
-                        <button onclick="toggleFullScreen('masterCard')" class="bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-2 py-1 rounded text-xs font-bold transition shadow-sm">⛶ Fullscreen</button>
-                    </div>
-                    <div class="flex flex-col gap-3 w-full lg:w-auto">
-                        <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Filter items or category..." class="border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-white dark:bg-slate-700 outline-none focus:ring-2 focus:ring-indigo-400 dark:text-white">
-                        <div class="flex flex-wrap md:flex-nowrap gap-2 bg-white dark:bg-slate-700 p-1 rounded-lg border border-slate-300 dark:border-slate-600 w-full">
-                            <input type="text" id="newCategory" placeholder="📁 Category..." class="p-1.5 text-sm w-full md:w-28 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-600 outline-none bg-transparent dark:text-white">
-                            <input type="text" id="newNames" placeholder="📝 Product name..." class="p-1.5 text-sm flex-1 outline-none bg-transparent dark:text-white">
-                            <input type="text" id="newImage" placeholder="🔗 Image URL link..." class="p-1.5 text-sm flex-1 outline-none bg-transparent dark:text-white" onkeypress="if(event.key === 'Enter') addMasterProduct()">
-                            <button onclick="addMasterProduct()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-1.5 rounded-md text-sm transition font-bold w-full md:w-auto">Add</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="overflow-x-auto max-h-[30rem] custom-scrollbar overflow-y-auto flex-1">
-                    <table class="w-full text-left border-collapse">
-                        <thead class="sticky top-0 bg-slate-100 dark:bg-slate-700 z-10 shadow-sm border-b-2 border-slate-200 dark:border-slate-600">
-                            <tr class="text-slate-600 dark:text-slate-300 uppercase text-xs tracking-wider">
-                                <th class="p-4 font-semibold">Category</th>
-                                <th class="p-4 font-semibold">Item Name (Click to view image)</th>
-                                <th class="p-4 font-semibold text-center text-emerald-800 dark:text-emerald-400">Godown Stock</th>
-                                <th class="p-4 font-semibold text-center text-amber-800 dark:text-amber-400">Office Stock</th>
-                                <th class="p-4 font-semibold text-center text-indigo-800 dark:text-indigo-400">Total Qty</th>
-                                <th class="p-4 font-semibold text-center w-24">Manage</th>
-                            </tr>
-                        </thead>
-                        <tbody id="inventoryBody" class="text-sm"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-
-        <div id="viewerView" class="hidden space-y-6">
-            
-            <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-indigo-100 dark:border-indigo-900 shadow-sm no-print">
-                <div class="flex items-center gap-2 mb-4 border-b border-slate-100 dark:border-slate-700 pb-3">
-                    <h2 class="text-xl font-bold text-indigo-800 dark:text-indigo-400">🔍 Advanced Filter & Search</h2>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1 uppercase tracking-wide">Search Name</label>
-                        <input type="text" id="viewerSearch" oninput="renderViewerTable()" placeholder="Type product name..." class="w-full border border-slate-300 dark:border-slate-600 p-2.5 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none focus:ring-2 focus:ring-indigo-400 dark:text-white transition">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1 uppercase tracking-wide">Category</label>
-                        <select id="viewerCategory" onchange="renderViewerTable()" class="w-full border border-slate-300 dark:border-slate-600 p-2.5 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none focus:ring-2 focus:ring-indigo-400 dark:text-white transition cursor-pointer">
-                            <option value="ALL">All Categories</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1 uppercase tracking-wide">Stock Status</label>
-                        <select id="viewerStatus" onchange="renderViewerTable()" class="w-full border border-slate-300 dark:border-slate-600 p-2.5 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none focus:ring-2 focus:ring-indigo-400 dark:text-white transition cursor-pointer">
-                            <option value="ALL">All Items</option>
-                            <option value="INSTOCK">🟢 In Stock (>10)</option>
-                            <option value="LOWSTOCK">🟠 Low Stock (1 to 10)</option>
-                            <option value="OUTOFSTOCK">🔴 Out of Stock (0)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1 uppercase tracking-wide">Sort By</label>
-                        <select id="viewerSort" onchange="renderViewerTable()" class="w-full border border-slate-300 dark:border-slate-600 p-2.5 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none focus:ring-2 focus:ring-indigo-400 dark:text-white transition cursor-pointer">
-                            <option value="NAME_ASC">Name (A to Z)</option>
-                            <option value="NAME_DESC">Name (Z to A)</option>
-                            <option value="STOCK_DESC">Total Stock (High to Low)</option>
-                            <option value="STOCK_ASC">Total Stock (Low to High)</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div id="viewerTableCard" class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col transition-all duration-300">
-                <div class="p-4 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 flex justify-between items-center shrink-0">
-                    <h3 class="text-lg font-bold">Live Inventory Results (<span id="viewerResultCount" class="text-indigo-600 dark:text-indigo-400">0</span>)</h3>
-                    <button onclick="toggleFullScreen('viewerTableCard')" class="bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-2 py-1 rounded text-xs font-bold transition shadow-sm">⛶ Fullscreen</button>
-                </div>
-                <div class="overflow-x-auto h-[45rem] max-h-[70vh] custom-scrollbar overflow-y-auto flex-1">
-                    <table class="w-full text-left border-collapse">
-                        <thead class="sticky top-0 bg-slate-100 dark:bg-slate-700 z-10 shadow-sm border-b-2 border-slate-200 dark:border-slate-600">
-                            <tr class="text-slate-600 dark:text-slate-300 uppercase text-xs tracking-wider">
-                                <th class="p-4 font-semibold w-1/6">Category</th>
-                                <th class="p-4 font-semibold w-1/3">Item Name (Click to view image)</th>
-                                <th class="p-4 font-semibold text-center w-1/6">Status</th>
-                                <th class="p-4 font-semibold text-center text-emerald-800 dark:text-emerald-400">Godown</th>
-                                <th class="p-4 font-semibold text-center text-amber-800 dark:text-amber-400">Office</th>
-                                <th class="p-4 font-semibold text-center text-indigo-800 dark:text-indigo-400">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody id="viewerBody" class="text-sm"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
+    <!-- LIQUID BACKGROUND BLOBS -->
+    <div class="bg-blobs">
+        <div class="blob-1"></div>
+        <div class="blob-2"></div>
+        <div class="blob-3"></div>
     </div>
 
-    <div id="exportModal" class="hidden fixed inset-0 bg-slate-900/60 dark:bg-slate-900/80 z-[10000] items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-[28rem] max-w-full border dark:border-slate-700">
-            <h3 class="text-xl font-bold mb-4 border-b dark:border-slate-700 pb-3">📤 Export Data Filter</h3>
-            
-            <div class="mb-5">
-                <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Select Category</label>
-                <select id="exportCategory" class="w-full border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm outline-none bg-slate-50 dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-indigo-400">
-                    <option value="ALL">All Categories</option>
-                </select>
-            </div>
-
-            <div class="mb-5 grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Start Date</label>
-                    <input type="date" id="exportStartDate" class="w-full border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm outline-none bg-slate-50 dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-indigo-400">
+    <!-- LOGIN OVERLAY -->
+    <div id="loginOverlay" class="fixed inset-0 z-[10000] flex items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/10 dark:bg-black/20">
+        <div class="glass-panel p-10 max-w-sm w-full animate-fade-in-up">
+            <div class="text-center mb-8">
+                <div class="inline-block p-4 rounded-full bg-white/50 dark:bg-white/10 shadow-inner mb-4">
+                    <span class="text-5xl block animate-bounce" style="animation-duration: 3s;">📦</span>
                 </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">End Date</label>
-                    <input type="date" id="exportEndDate" class="w-full border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm outline-none bg-slate-50 dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-indigo-400">
-                </div>
+                <h2 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-retro-slate to-retro-rose tracking-tight">DOZY StockPro</h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 uppercase tracking-[0.2em] font-bold">Secure Gateway</p>
             </div>
             
-            <div class="flex justify-end gap-3 mt-8">
-                <button onclick="closeExportModal()" class="px-5 py-2 text-sm text-slate-700 dark:text-slate-200 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 rounded-lg transition font-bold">Cancel</button>
-                <button onclick="executeExport()" class="px-5 py-2 text-sm bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg transition shadow-md">Download Excel</button>
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-widest ml-1">Select Identity</label>
+                    <select id="loginRole" class="glass-input w-full p-3.5 font-bold text-slate-700 dark:text-slate-200 cursor-pointer shadow-sm">
+                        <option value="office">🏢 Office</option>
+                        <option value="admin">⚙️ Admin(Rahul)</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-widest ml-1">Passcode</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" class="glass-input w-full p-3.5 font-bold tracking-[0.3em] text-center text-slate-700 dark:text-slate-200 shadow-sm" onkeypress="if(event.key === 'Enter') attemptLogin()">
+                    <p id="loginError" class="text-retro-rose text-xs mt-2 hidden font-bold text-center animate-pulse">⚠️ Access Denied</p>
+                </div>
+                
+                <button onclick="attemptLogin()" class="w-full bg-gradient-to-r from-retro-slate to-indigo-500 hover:from-indigo-500 hover:to-retro-slate text-white font-bold py-3.5 rounded-xl transition-all duration-300 shadow-[0_8px_20px_-6px_rgba(99,102,241,0.5)] transform hover:-translate-y-1 uppercase tracking-widest text-sm mt-2">Initialize Session</button>
             </div>
         </div>
     </div>
 
-    <div id="editMasterModal" class="hidden fixed inset-0 bg-slate-900/60 dark:bg-slate-900/80 z-[10000] items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-[28rem] max-w-full border dark:border-slate-700">
-            <h3 class="text-xl font-bold mb-4 border-b dark:border-slate-700 pb-3">✏️ Edit Master Item</h3>
+    <!-- MAIN APP CONTAINER -->
+    <div id="mainApp" class="hidden">
+        <!-- Floating Nav Bar -->
+        <div class="p-4 md:p-6 no-print sticky top-0 z-50">
+            <nav class="glass-panel px-6 py-4 flex flex-col xl:flex-row justify-between items-center gap-5">
+                <div class="flex items-center gap-4 w-full xl:w-auto justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-white/50 dark:bg-white/10 rounded-xl shadow-inner">
+                            <span class="text-xl">📦</span>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-extrabold tracking-tight text-slate-800 dark:text-slate-100">DOZY <span class="text-transparent bg-clip-text bg-gradient-to-r from-retro-slate to-retro-teal">Pro</span></h1>
+                            <div class="flex items-center gap-2 mt-0.5">
+                                <span id="userRoleBadge" class="text-[9px] bg-gradient-to-r from-retro-mustard to-orange-400 text-white px-2 py-0.5 rounded-full uppercase tracking-widest shadow-sm font-bold"></span>
+                                <span id="syncStatus" class="text-[10px] text-slate-500 dark:text-slate-400 font-medium italic"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="toggleTheme()" class="xl:hidden glass-btn p-2.5 rounded-xl text-sm shadow-sm">🌗</button>
+                </div>
+                
+                <div class="flex glass-input rounded-2xl p-1.5 w-full xl:w-auto overflow-hidden shadow-sm">
+                    <button onclick="switchView('admin')" id="tabAdmin" class="flex-1 xl:flex-none px-6 py-2 rounded-xl text-sm font-bold transition-all duration-300 tab-active">Control Panel</button>
+                    <button onclick="switchView('viewer')" id="tabViewer" class="flex-1 xl:flex-none px-6 py-2 rounded-xl text-sm font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-all duration-300">Live Radar</button>
+                </div>
+
+                <div class="flex flex-wrap gap-2 justify-center xl:justify-end w-full xl:w-auto items-center" id="adminControls">
+                    <button onclick="toggleTheme()" class="hidden xl:block glass-btn p-2.5 rounded-xl text-sm shadow-sm" title="Toggle Theme">🌗</button>
+                    <div class="h-8 w-px bg-slate-300 dark:bg-slate-700 hidden xl:block mx-2"></div>
+                    
+                    <div id="adminOnlyControls" class="flex gap-2">
+                        <input type="file" id="importExcelGlobal" accept=".xlsx, .xls" class="hidden" onchange="importAllDataExcel(event)">
+                        <button onclick="document.getElementById('importExcelGlobal').click()" class="bg-gradient-to-r from-retro-teal to-emerald-400 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all transform hover:-translate-y-1 shadow-[0_5px_15px_-5px_rgba(20,184,166,0.5)] uppercase tracking-wide">📥 Import</button>
+                        <button onclick="openExportModal()" class="bg-gradient-to-r from-retro-slate to-indigo-400 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all transform hover:-translate-y-1 shadow-[0_5px_15px_-5px_rgba(99,102,241,0.5)] uppercase tracking-wide">📤 Export</button>
+                        <button onclick="clearHistory()" class="glass-btn px-4 py-2 rounded-xl text-xs font-bold transition-all uppercase tracking-wide hidden md:block text-slate-600 dark:text-slate-300">Clean Logs</button>
+                        <button onclick="clearAllBackendData()" class="bg-gradient-to-r from-retro-rose to-red-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all transform hover:-translate-y-1 shadow-[0_5px_15px_-5px_rgba(244,63,94,0.5)] uppercase tracking-wide">🚨 Reset</button>
+                    </div>
+                    
+                    <button onclick="logout()" class="glass-btn hover:text-retro-rose dark:hover:text-retro-rose px-4 py-2 rounded-xl text-xs font-bold transition-all uppercase tracking-wide ml-2">🚪 Disconnect</button>
+                </div>
+            </nav>
+        </div>
+
+        <div class="max-w-7xl mx-auto p-4 md:p-6 pt-0">
+            
+            <div id="adminView" class="space-y-8 block animate-fade-in-up">
+                <!-- Liquid KPI Dashboard -->
+                <div id="kpiDashboard" class="glass-panel liquid-hover p-6 no-print flex flex-col admin-only-section">
+                    <div class="flex justify-between items-center mb-6 shrink-0 border-b border-slate-200/50 dark:border-slate-700/50 pb-4">
+                        <h2 class="text-xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight flex items-center gap-2">
+                            <span class="p-1.5 bg-white/50 dark:bg-white/10 rounded-lg">📊</span> Neural Analytics
+                        </h2>
+                        <button onclick="toggleFullScreen('kpiDashboard')" class="glass-btn px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-sm">⛶ Expand</button>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+                        <div class="glass-input p-5 border-l-4 border-l-retro-slate flex flex-col justify-center transition-transform hover:scale-105">
+                            <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest mb-1">Catalog Size</p>
+                            <h3 class="text-2xl sm:text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-slate-700 to-slate-900 dark:from-white dark:to-slate-300" id="kpi-products">...</h3>
+                        </div>
+                        <div class="glass-input p-5 border-l-4 border-l-retro-slate flex flex-col justify-center transition-transform hover:scale-105">
+                            <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest mb-1">Global Units</p>
+                            <h3 class="text-2xl sm:text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-slate-700 to-slate-900 dark:from-white dark:to-slate-300" id="kpi-units">0</h3>
+                        </div>
+                        <div class="glass-input p-5 border-l-4 border-l-retro-teal flex flex-col justify-center transition-transform hover:scale-105">
+                            <p class="text-[10px] sm:text-xs text-retro-teal font-bold uppercase tracking-widest mb-1">Godown Vault</p>
+                            <h3 class="text-2xl sm:text-3xl font-black text-retro-teal drop-shadow-sm" id="kpi-godown">0</h3>
+                        </div>
+                        <div class="glass-input p-5 border-l-4 border-l-retro-mustard flex flex-col justify-center transition-transform hover:scale-105">
+                            <p class="text-[10px] sm:text-xs text-retro-mustard font-bold uppercase tracking-widest mb-1">Office Floor</p>
+                            <h3 class="text-2xl sm:text-3xl font-black text-retro-mustard drop-shadow-sm" id="kpi-office">0</h3>
+                        </div>
+                        <div class="glass-input p-5 border-l-4 border-l-retro-slate/60 flex flex-col justify-center transition-transform hover:scale-105 opacity-90">
+                            <p class="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-widest mb-1">Daily Dispatches</p>
+                            <h3 class="text-xl sm:text-2xl font-black text-slate-600 dark:text-slate-300" id="kpi-sales">0</h3>
+                        </div>
+                        <div class="glass-input p-5 border-l-4 border-l-retro-teal/60 flex flex-col justify-center transition-transform hover:scale-105 opacity-90">
+                            <p class="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-widest mb-1">Internal Moves</p>
+                            <h3 class="text-xl sm:text-2xl font-black text-slate-600 dark:text-slate-300" id="kpi-transfers">0</h3>
+                        </div>
+                        <div class="glass-input p-5 border-l-4 border-l-retro-rose/60 flex flex-col justify-center transition-transform hover:scale-105 opacity-90">
+                            <p class="text-[10px] sm:text-xs text-retro-rose/80 font-bold uppercase tracking-widest mb-1">Inbound Returns</p>
+                            <h3 class="text-xl sm:text-2xl font-black text-retro-rose" id="kpi-returns">0</h3>
+                        </div>
+                        <div class="glass-input p-5 border-l-4 border-l-retro-rose flex flex-col justify-center transition-transform hover:scale-105 shadow-[0_0_15px_rgba(244,63,94,0.1)]">
+                            <p class="text-[10px] sm:text-xs text-retro-rose font-bold uppercase tracking-widest mb-1">Critical Depletion</p>
+                            <h3 class="text-2xl sm:text-3xl font-black text-retro-rose drop-shadow-md" id="kpi-oos">0</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transaction Cards -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 no-print">
+                    <!-- Logistics -->
+                    <div id="warehouseCard" class="glass-panel liquid-hover p-6 flex flex-col h-[38rem]">
+                        <div class="flex justify-between items-center mb-5 shrink-0 border-b border-slate-200/50 dark:border-slate-700/50 pb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-retro-teal/10 rounded-lg"><span class="text-xl">🏭</span></div>
+                                <div><h2 class="text-lg font-extrabold text-retro-teal tracking-tight">Logistics Core</h2><span class="text-[9px] text-slate-500 uppercase tracking-widest font-black">Stock Movements</span></div>
+                            </div>
+                            <button onclick="toggleFullScreen('warehouseCard')" class="glass-btn px-2 py-1 rounded-lg text-[10px] font-bold">⛶</button>
+                        </div>
+                        <div class="flex flex-col gap-4 shrink-0">
+                            <select id="warehouseAction" class="glass-input w-full p-3.5 text-sm font-bold text-retro-teal cursor-pointer shadow-sm">
+                                <!-- JS injected -->
+                            </select>
+
+                            <div class="relative w-full" id="whDropdownContainer">
+                                <input type="text" id="whSelect" placeholder="Search product parameter... (Arrows & Enter)" autocomplete="off" onfocus="openDropdown('whList')" oninput="filterDropdown('whSelect', 'whList')" onclick="openDropdown('whList')" class="glass-input w-full p-3.5 text-sm shadow-sm">
+                                <ul id="whList" class="hidden absolute z-50 w-full mt-2 glass-panel shadow-[0_20px_40px_-10px_rgba(0,0,0,0.2)] max-h-56 overflow-y-auto py-2 custom-scrollbar flex-col text-slate-700 dark:text-slate-200 font-medium"></ul>
+                            </div>
+
+                            <div class="flex gap-3">
+                                <input type="number" id="whQty" placeholder="Qty" class="glass-input w-24 p-3.5 text-sm font-mono text-center font-bold shadow-sm">
+                                <input type="text" id="whPlatform" placeholder="Ref/Challan" class="glass-input w-1/3 p-3.5 text-sm shadow-sm">
+                                <input type="text" id="whComment" placeholder="Annotations" class="glass-input flex-1 p-3.5 text-sm shadow-sm">
+                            </div>
+                            <button onclick="addTowhBatch()" class="glass-btn hover:border-retro-teal hover:text-retro-teal font-bold px-4 py-3 rounded-xl text-xs uppercase tracking-widest shadow-sm">Queue Transfer ↵</button>
+                        </div>
+                        <div class="flex-1 overflow-y-auto mt-5 glass-input bg-opacity-20 dark:bg-opacity-10 p-3 custom-scrollbar rounded-xl border-dashed" id="whBatchContainer"></div>
+                        <button onclick="submitWhBatch()" id="btnSubmitWh" class="mt-4 bg-gradient-to-r from-retro-teal to-emerald-400 hover:from-emerald-400 hover:to-retro-teal text-white font-black py-4 rounded-xl text-xs transition-all shadow-[0_8px_20px_-6px_rgba(20,184,166,0.5)] transform hover:-translate-y-1 hidden shrink-0 uppercase tracking-[0.2em]">Deploy Batch Sync</button>
+                    </div>
+
+                    <!-- Sales -->
+                    <div id="salesCard" class="glass-panel liquid-hover p-6 flex flex-col h-[38rem]">
+                        <div class="flex justify-between items-center mb-5 shrink-0 border-b border-slate-200/50 dark:border-slate-700/50 pb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-retro-slate/10 rounded-lg"><span class="text-xl">🛒</span></div>
+                                <div><h2 class="text-lg font-extrabold text-retro-slate tracking-tight">Commerce Node</h2><span class="text-[9px] text-slate-500 uppercase tracking-widest font-black">Sales & Returns</span></div>
+                            </div>
+                            <button onclick="toggleFullScreen('salesCard')" class="glass-btn px-2 py-1 rounded-lg text-[10px] font-bold">⛶</button>
+                        </div>
+                        <div class="flex flex-col gap-4 shrink-0">
+                            <select id="salesAction" class="glass-input w-full p-3.5 text-sm font-bold text-retro-slate cursor-pointer shadow-sm">
+                                <option value="SALE">📤 Dispatch Sale (Outbound)</option>
+                                <option value="CUST_RETURN">🔄 Process Return (Inbound)</option>
+                            </select>
+
+                            <div class="relative w-full" id="slDropdownContainer">
+                                <input type="text" id="slSelect" placeholder="Search product parameter... (Arrows & Enter)" autocomplete="off" onfocus="openDropdown('slList')" oninput="filterDropdown('slSelect', 'slList')" onclick="openDropdown('slList')" class="glass-input w-full p-3.5 text-sm shadow-sm">
+                                <ul id="slList" class="hidden absolute z-50 w-full mt-2 glass-panel shadow-[0_20px_40px_-10px_rgba(0,0,0,0.2)] max-h-56 overflow-y-auto py-2 custom-scrollbar flex-col text-slate-700 dark:text-slate-200 font-medium"></ul>
+                            </div>
+
+                            <div class="flex gap-3">
+                                <input type="number" id="slQty" placeholder="Qty" class="glass-input w-24 p-3.5 text-sm font-mono text-center font-bold shadow-sm">
+                                <input type="text" id="slPlatform" placeholder="Platform" class="glass-input w-1/3 p-3.5 text-sm shadow-sm">
+                                <input type="text" id="slComment" placeholder="Order ID" class="glass-input flex-1 p-3.5 text-sm shadow-sm">
+                            </div>
+                            <button onclick="addToSlBatch()" class="glass-btn hover:border-retro-slate hover:text-retro-slate font-bold px-4 py-3 rounded-xl text-xs uppercase tracking-widest shadow-sm">Queue Operation ↵</button>
+                        </div>
+                        <div class="flex-1 overflow-y-auto mt-5 glass-input bg-opacity-20 dark:bg-opacity-10 p-3 custom-scrollbar rounded-xl border-dashed" id="slBatchContainer"></div>
+                        <button onclick="submitSlBatch()" id="btnSubmitSl" class="mt-4 bg-gradient-to-r from-retro-slate to-indigo-500 hover:from-indigo-500 hover:to-retro-slate text-white font-black py-4 rounded-xl text-xs transition-all shadow-[0_8px_20px_-6px_rgba(99,102,241,0.5)] transform hover:-translate-y-1 hidden shrink-0 uppercase tracking-[0.2em]">Deploy Batch Sync</button>
+                    </div>
+                </div>
+
+                <!-- History Logs -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <div id="whHistoryCard" class="glass-panel liquid-hover h-[38rem] flex flex-col p-3">
+                        <div class="p-5 border-b border-slate-200/30 dark:border-slate-700/30 flex flex-col gap-4 shrink-0 bg-white/10 dark:bg-black/5 rounded-t-xl">
+                            <div class="flex justify-between items-center">
+                                <h2 class="text-sm font-black text-retro-teal uppercase tracking-widest flex items-center gap-2"><span>🚚</span> Logistics Ledger</h2>
+                                <button onclick="toggleFullScreen('whHistoryCard')" class="glass-btn px-2 py-1 rounded-md text-[10px] font-bold">⛶</button>
+                            </div>
+                            <input type="text" id="whFilter" onkeyup="filterHistory('whFilter', 'whHistoryContainer')" placeholder="Filter records by any parameter..." class="glass-input w-full p-2.5 text-sm text-center italic shadow-inner bg-white/40 dark:bg-black/20">
+                        </div>
+                        <div id="whHistoryContainer" class="flex-1 overflow-y-auto p-4 custom-scrollbar"></div>
+                    </div>
+
+                    <div id="slHistoryCard" class="glass-panel liquid-hover h-[38rem] flex flex-col p-3">
+                        <div class="p-5 border-b border-slate-200/30 dark:border-slate-700/30 flex flex-col gap-4 shrink-0 bg-white/10 dark:bg-black/5 rounded-t-xl">
+                            <div class="flex justify-between items-center">
+                                <h2 class="text-sm font-black text-retro-slate uppercase tracking-widest flex items-center gap-2"><span>📈</span> Commerce Ledger</h2>
+                                <button onclick="toggleFullScreen('slHistoryCard')" class="glass-btn px-2 py-1 rounded-md text-[10px] font-bold">⛶</button>
+                            </div>
+                            <input type="text" id="slFilter" onkeyup="filterHistory('slFilter', 'slHistoryContainer')" placeholder="Filter records by any parameter..." class="glass-input w-full p-2.5 text-sm text-center italic shadow-inner bg-white/40 dark:bg-black/20">
+                        </div>
+                        <div id="slHistoryContainer" class="flex-1 overflow-y-auto p-4 custom-scrollbar"></div>
+                    </div>
+                </div>
+
+                <!-- Master Stock Setup (Admin) -->
+                <div id="masterCard" class="glass-panel overflow-hidden no-print flex flex-col mb-10 admin-only-section animate-fade-in-up">
+                    <div class="p-6 border-b border-slate-200/30 dark:border-slate-700/30 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 shrink-0 bg-white/20 dark:bg-black/10">
+                        <div class="flex flex-wrap items-center gap-4 w-full lg:w-auto justify-between lg:justify-start">
+                            <div class="p-2.5 bg-white/50 dark:bg-white/10 rounded-xl shadow-inner"><span class="text-2xl">🗄️</span></div>
+                            <h2 class="text-xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">Master Directory</h2>
+                            <button onclick="toggleFullScreen('masterCard')" class="glass-btn px-2.5 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest">⛶ Expand</button>
+                        </div>
+                        <div class="flex flex-col gap-4 w-full lg:w-auto">
+                            <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="🔍 Deep scan directory..." class="glass-input p-3 text-sm text-center shadow-inner font-medium">
+                            <div class="flex flex-wrap md:flex-nowrap gap-2 glass-input p-1.5 w-full shadow-sm">
+                                <input type="text" id="newCategory" placeholder="Category" class="p-2 text-sm w-full md:w-32 bg-transparent outline-none text-center border-b md:border-b-0 md:border-r border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-100 font-bold">
+                                <input type="text" id="newNames" placeholder="Product Name (Comma separated)" class="p-2 text-sm flex-1 bg-transparent outline-none text-slate-800 dark:text-slate-100 font-medium">
+                                <input type="text" id="newImage" placeholder="🔗 Image URL link" class="p-2 text-sm flex-1 bg-transparent outline-none text-slate-800 dark:text-slate-100 font-medium" onkeypress="if(event.key === 'Enter') addMasterProduct()">
+                                <button onclick="addMasterProduct()" class="bg-gradient-to-r from-retro-slate to-indigo-500 text-white px-6 py-2 rounded-xl text-xs font-black transition-transform transform hover:scale-105 shadow-md w-full md:w-auto uppercase tracking-widest">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto max-h-[35rem] custom-scrollbar overflow-y-auto flex-1 p-3">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="sticky top-0 glass-panel z-10 shadow-sm">
+                                <tr class="text-slate-500 dark:text-slate-400 uppercase text-[10px] tracking-widest font-black">
+                                    <th class="p-5">Class</th>
+                                    <th class="p-5">Nomenclature</th>
+                                    <th class="p-5 text-center text-retro-teal bg-retro-teal/5">Vault</th>
+                                    <th class="p-5 text-center text-retro-mustard bg-retro-mustard/5">Floor</th>
+                                    <th class="p-5 text-center text-retro-slate bg-retro-slate/5 border-r border-white/10">Global</th>
+                                    <th class="p-5 text-center w-28">Access</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryBody" class="text-sm font-medium text-slate-700 dark:text-slate-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Viewer View -->
+            <div id="viewerView" class="hidden space-y-8 animate-fade-in-up">
+                <div class="glass-panel p-8 no-print">
+                    <div class="flex items-center gap-3 mb-6 border-b border-slate-200/50 dark:border-slate-700/50 pb-4">
+                        <div class="p-2 bg-retro-slate/10 rounded-lg"><span class="text-xl animate-pulse">📡</span></div>
+                        <h2 class="text-xl font-extrabold text-slate-800 dark:text-white tracking-tight">Global Radar</h2>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div class="group">
+                            <label class="block text-[10px] font-black text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-widest transition-colors group-focus-within:text-retro-slate">Locator</label>
+                            <input type="text" id="viewerSearch" oninput="renderViewerTable()" placeholder="Designation..." class="glass-input w-full p-3.5 text-sm text-center italic shadow-sm transition-transform hover:scale-105 focus:scale-105">
+                        </div>
+                        <div class="group">
+                            <label class="block text-[10px] font-black text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-widest transition-colors group-focus-within:text-retro-slate">Class Filter</label>
+                            <select id="viewerCategory" onchange="renderViewerTable()" class="glass-input w-full p-3.5 text-sm cursor-pointer font-bold text-center text-slate-700 dark:text-slate-200 shadow-sm transition-transform hover:scale-105">
+                                <option value="ALL">ALL CLASSES</option>
+                            </select>
+                        </div>
+                        <div class="group">
+                            <label class="block text-[10px] font-black text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-widest transition-colors group-focus-within:text-retro-slate">Health Status</label>
+                            <select id="viewerStatus" onchange="renderViewerTable()" class="glass-input w-full p-3.5 text-sm cursor-pointer font-bold text-center text-slate-700 dark:text-slate-200 shadow-sm transition-transform hover:scale-105">
+                                <option value="ALL">ALL STATUS</option>
+                                <option value="INSTOCK">🟢 OPTIMAL (>10)</option>
+                                <option value="LOWSTOCK">🟠 CRITICAL (1-10)</option>
+                                <option value="OUTOFSTOCK">🔴 DEPLETED (0)</option>
+                            </select>
+                        </div>
+                        <div class="group">
+                            <label class="block text-[10px] font-black text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-widest transition-colors group-focus-within:text-retro-slate">Sort Array</label>
+                            <select id="viewerSort" onchange="renderViewerTable()" class="glass-input w-full p-3.5 text-sm cursor-pointer font-bold text-center text-slate-700 dark:text-slate-200 shadow-sm transition-transform hover:scale-105">
+                                <option value="NAME_ASC">Alpha: A ➔ Z</option>
+                                <option value="NAME_DESC">Alpha: Z ➔ A</option>
+                                <option value="STOCK_DESC">Volume: Max ➔ Min</option>
+                                <option value="STOCK_ASC">Volume: Min ➔ Max</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="viewerTableCard" class="glass-panel overflow-hidden flex flex-col transition-all duration-500">
+                    <div class="p-6 border-b border-slate-200/50 dark:border-slate-700/50 bg-white/20 dark:bg-black/10 flex justify-between items-center shrink-0">
+                        <h3 class="text-sm font-black uppercase tracking-widest text-slate-700 dark:text-slate-200">Radar Hits: <span id="viewerResultCount" class="text-transparent bg-clip-text bg-gradient-to-r from-retro-slate to-retro-rose text-lg">0</span></h3>
+                        <button onclick="toggleFullScreen('viewerTableCard')" class="glass-btn px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-sm">⛶ Expand Radar</button>
+                    </div>
+                    <div class="overflow-x-auto h-[45rem] max-h-[75vh] custom-scrollbar p-3">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="sticky top-0 glass-panel z-10 shadow-sm">
+                                <tr class="text-slate-500 dark:text-slate-400 uppercase text-[10px] tracking-widest font-black">
+                                    <th class="p-5 w-1/6">Class</th>
+                                    <th class="p-5 w-1/3">Nomenclature</th>
+                                    <th class="p-5 text-center w-1/6">Health</th>
+                                    <th class="p-5 text-center text-retro-teal bg-retro-teal/5">Bawana</th>
+                                    <th class="p-5 text-center text-retro-mustard bg-retro-mustard/5">Office</th>
+                                    <th class="p-5 text-center text-retro-slate bg-retro-slate/5 border-r border-white/10">Global Volume</th>
+                                </tr>
+                            </thead>
+                            <tbody id="viewerBody" class="text-sm font-medium text-slate-700 dark:text-slate-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div> <!-- END MAIN APP -->
+
+    <!-- MODALS -->
+    <!-- Export Modal -->
+    <div id="exportModal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/10 dark:bg-black/40">
+        <div class="glass-panel p-8 w-[28rem] max-w-full animate-fade-in-up">
+            <h3 class="text-xl font-black mb-6 border-b border-slate-200/50 dark:border-slate-700/50 pb-4 uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-3">
+                <span class="p-2 bg-retro-slate/10 rounded-lg">📤</span> Export Config
+            </h3>
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-[10px] font-black text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-widest">Target Category</label>
+                    <select id="exportCategory" class="glass-input w-full p-3.5 text-sm text-slate-800 dark:text-slate-100 font-bold cursor-pointer shadow-sm">
+                        <option value="ALL">All Categories</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-widest">Start Epoch</label>
+                        <input type="date" id="exportStartDate" class="glass-input w-full p-3.5 text-sm text-slate-800 dark:text-slate-100 cursor-pointer shadow-sm font-medium">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-widest">End Epoch</label>
+                        <input type="date" id="exportEndDate" class="glass-input w-full p-3.5 text-sm text-slate-800 dark:text-slate-100 cursor-pointer shadow-sm font-medium">
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-end gap-4 mt-10">
+                <button onclick="closeExportModal()" class="glass-btn px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-xl text-slate-600 dark:text-slate-300">Abort</button>
+                <button onclick="executeExport()" class="bg-gradient-to-r from-retro-slate to-indigo-500 text-white px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-xl shadow-[0_5px_15px_-5px_rgba(99,102,241,0.5)] transform hover:-translate-y-1 transition-all">Extract</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Master Modal -->
+    <div id="editMasterModal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/10 dark:bg-black/40">
+        <div class="glass-panel p-8 w-[28rem] max-w-full animate-fade-in-up">
+            <h3 class="text-xl font-black mb-6 border-b border-slate-200/50 dark:border-slate-700/50 pb-4 uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-3">
+                <span class="p-2 bg-slate-500/10 rounded-lg">✏️</span> Modify Object
+            </h3>
             <input type="hidden" id="editMasterId">
-            <div class="space-y-3">
-                <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Name</label><input type="text" id="editMasterName" class="w-full border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none dark:text-white"></div>
-                <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Category</label><input type="text" id="editMasterCategory" class="w-full border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none dark:text-white"></div>
-                <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Image URL</label><input type="text" id="editMasterImage" class="w-full border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none dark:text-white"></div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Godown Stock</label><input type="number" id="editMasterGodown" class="w-full border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none dark:text-white"></div>
-                    <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Office Stock</label><input type="number" id="editMasterOffice" class="w-full border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none dark:text-white"></div>
+            <div class="space-y-5">
+                <div><label class="block text-[10px] font-black text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-widest">Nomenclature</label><input type="text" id="editMasterName" class="glass-input w-full p-3.5 text-sm font-bold shadow-sm"></div>
+                <div><label class="block text-[10px] font-black text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-widest">Class</label><input type="text" id="editMasterCategory" class="glass-input w-full p-3.5 text-sm font-bold shadow-sm"></div>
+                <div><label class="block text-[10px] font-black text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-widest">Image Source (URL)</label><input type="text" id="editMasterImage" class="glass-input w-full p-3.5 text-sm font-medium shadow-sm"></div>
+                <div class="grid grid-cols-2 gap-5 p-4 glass-input bg-white/30 dark:bg-black/10 border-dashed rounded-xl">
+                    <div><label class="block text-[10px] font-black text-retro-teal mb-1.5 uppercase tracking-widest text-center">Godown Stock</label><input type="number" id="editMasterGodown" class="glass-input w-full p-3 text-lg font-mono text-center text-retro-teal font-black shadow-inner"></div>
+                    <div><label class="block text-[10px] font-black text-retro-mustard mb-1.5 uppercase tracking-widest text-center">Office Stock</label><input type="number" id="editMasterOffice" class="glass-input w-full p-3 text-lg font-mono text-center text-retro-mustard font-black shadow-inner"></div>
                 </div>
             </div>
-            <div class="flex justify-end gap-3 mt-6">
-                <button onclick="closeEditMasterModal()" class="px-5 py-2 text-sm text-slate-700 bg-slate-200 dark:bg-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 rounded-lg transition font-bold">Cancel</button>
-                <button onclick="saveEditMaster()" class="px-5 py-2 text-sm bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg transition shadow-md">Save Changes</button>
+            <div class="flex justify-end gap-4 mt-8">
+                <button onclick="closeEditMasterModal()" class="glass-btn px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-xl text-slate-600 dark:text-slate-300">Abort</button>
+                <button onclick="saveEditMaster()" class="bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-white dark:text-slate-900 text-white px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-xl shadow-lg transform hover:-translate-y-1 transition-all">Commit</button>
             </div>
         </div>
     </div>
 
-    <div id="editHistoryModal" class="hidden fixed inset-0 bg-slate-900/60 dark:bg-slate-900/80 z-[10000] items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-[28rem] max-w-full border dark:border-slate-700">
-            <h3 class="text-xl font-bold mb-4 border-b dark:border-slate-700 pb-3">✏️ Edit Transfer/Sales Log</h3>
+    <!-- Edit History Modal -->
+    <div id="editHistoryModal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/10 dark:bg-black/40">
+        <div class="glass-panel p-8 w-[28rem] max-w-full animate-fade-in-up">
+            <h3 class="text-xl font-black mb-6 border-b border-slate-200/50 dark:border-slate-700/50 pb-4 uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-3">
+                <span class="p-2 bg-retro-mustard/10 rounded-lg">🖋️</span> Revise Ledger
+            </h3>
             <input type="hidden" id="editHistoryId">
-            <p id="editHistoryItemName" class="text-sm font-bold text-slate-500 dark:text-slate-400 mb-3"></p>
-            <div class="space-y-3">
-                <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Quantity</label><input type="number" id="editHistoryQty" class="w-full border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none dark:text-white"></div>
-                <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Platform / Ref</label><input type="text" id="editHistoryPlatform" class="w-full border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none dark:text-white"></div>
-                <div><label class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Remarks</label><input type="text" id="editHistoryComment" class="w-full border border-slate-300 dark:border-slate-600 p-2 rounded-lg text-sm bg-slate-50 dark:bg-slate-700 outline-none dark:text-white"></div>
+            <div class="p-3 mb-5 glass-input bg-retro-mustard/10 border-retro-mustard/20 rounded-xl">
+                <p id="editHistoryItemName" class="text-[11px] font-bold text-retro-mustard uppercase tracking-widest text-center"></p>
             </div>
-            <div class="flex justify-end gap-3 mt-6">
-                <button onclick="closeEditHistoryModal()" class="px-5 py-2 text-sm text-slate-700 bg-slate-200 dark:bg-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 rounded-lg transition font-bold">Cancel</button>
-                <button onclick="saveEditHistory()" class="px-5 py-2 text-sm bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg transition shadow-md">Save Logs</button>
+            <div class="space-y-5">
+                <div><label class="block text-[10px] font-black text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-widest text-center">Volume</label><input type="number" id="editHistoryQty" class="glass-input w-full p-4 text-2xl font-mono text-center font-black shadow-inner text-slate-800 dark:text-white"></div>
+                <div><label class="block text-[10px] font-black text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-widest">Reference Code</label><input type="text" id="editHistoryPlatform" class="glass-input w-full p-3.5 text-sm font-bold shadow-sm"></div>
+                <div><label class="block text-[10px] font-black text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-widest">Annotations</label><input type="text" id="editHistoryComment" class="glass-input w-full p-3.5 text-sm font-medium italic shadow-sm"></div>
+            </div>
+            <div class="flex justify-end gap-4 mt-8">
+                <button onclick="closeEditHistoryModal()" class="glass-btn px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-xl text-slate-600 dark:text-slate-300">Abort</button>
+                <button onclick="saveEditHistory()" class="bg-gradient-to-r from-retro-mustard to-orange-500 text-white px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-xl shadow-[0_5px_15px_-5px_rgba(245,158,11,0.5)] transform hover:-translate-y-1 transition-all">Rewrite</button>
             </div>
         </div>
     </div>
 
     <script>
-        let inventory = [];
-        let historyLog = [];
-        let pendingWh = [];
-        let pendingSl = [];
-        let uniqueCategories = [];
-
-        // Integrated Active Target Macro URL
+        // CONFIGURABLE PASSWORDS
+        const PASSWORDS = { admin: "admin123", office: "dozy123" };
+        let currentRole = null; 
+        let inventory = []; let historyLog = []; let pendingWh = []; let pendingSl = []; let uniqueCategories = [];
         const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycby44thggci_dwQ2MvlTxbVtFswov7esG7eC5VGRxzaXPe0lQc81BswIT8lXIsqKVrfH/exec"; 
 
         // THEME LOGIC
-        function toggleTheme() {
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-        }
-        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        }
+        function toggleTheme() { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); }
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); }
 
-        // VIEW SWITCHER LOGIC
-        function switchView(viewName) {
-            const adminView = document.getElementById('adminView');
-            const viewerView = document.getElementById('viewerView');
-            const tabAdmin = document.getElementById('tabAdmin');
-            const tabViewer = document.getElementById('tabViewer');
-            const adminControls = document.getElementById('adminControls');
-
-            if (viewName === 'admin') {
-                adminView.classList.remove('hidden'); adminView.classList.add('block');
-                viewerView.classList.remove('block'); viewerView.classList.add('hidden');
-                
-                tabAdmin.classList.add('tab-active');
-                tabAdmin.classList.remove('text-slate-300', 'hover:text-white');
-                tabViewer.classList.remove('tab-active');
-                tabViewer.classList.add('text-slate-300', 'hover:text-white');
-                
-                adminControls.classList.remove('hidden'); adminControls.classList.add('flex');
+        // LOGIN AUTHENTICATION LOGIC
+        function attemptLogin() {
+            const role = document.getElementById('loginRole').value; const pass = document.getElementById('loginPassword').value;
+            if (role === 'admin' && pass === PASSWORDS.admin) { currentRole = 'admin'; grantAccess(); } 
+            else if (role === 'office' && pass === PASSWORDS.office) { currentRole = 'office'; grantAccess(); } 
+            else { document.getElementById('loginError').classList.remove('hidden'); }
+        }
+        function logout() { currentRole = null; document.getElementById('loginPassword').value = ''; document.getElementById('mainApp').classList.add('hidden'); document.getElementById('loginOverlay').classList.remove('hidden'); document.getElementById('loginError').classList.add('hidden'); }
+        function grantAccess() {
+            document.getElementById('loginError').classList.add('hidden'); document.getElementById('loginOverlay').classList.add('hidden'); document.getElementById('mainApp').classList.remove('hidden');
+            document.getElementById('userRoleBadge').innerText = currentRole;
+            const whActionSelect = document.getElementById('warehouseAction');
+            if (currentRole === 'office') {
+                document.querySelectorAll('.admin-only-section').forEach(el => el.classList.add('hidden'));
+                document.getElementById('adminOnlyControls').classList.add('hidden');
+                whActionSelect.innerHTML = `<option value="GODOWN_TO_OFFICE">🚚 Pull: Godown ➔ Office</option><option value="OFFICE_RETURN">🔙 Return: Office ➔ Godown</option>`;
             } else {
-                adminView.classList.remove('block'); adminView.classList.add('hidden');
-                viewerView.classList.remove('hidden'); viewerView.classList.add('block');
-                
-                tabViewer.classList.add('tab-active');
-                tabViewer.classList.remove('text-slate-300', 'hover:text-white');
-                tabAdmin.classList.remove('tab-active');
-                tabAdmin.classList.add('text-slate-300', 'hover:text-white');
-                
-                adminControls.classList.remove('flex'); adminControls.classList.add('hidden');
+                document.querySelectorAll('.admin-only-section').forEach(el => el.classList.remove('hidden'));
+                document.getElementById('adminOnlyControls').classList.remove('hidden');
+                whActionSelect.innerHTML = `<option value="MFR_RECEIVE">📥 Intake: Manufacturer ➔ Godown</option><option value="MFR_RETURN">📤 Return: Godown ➔ Manufacturer</option><option value="GODOWN_TO_OFFICE">🚚 Dispatch: Godown ➔ Office</option><option value="OFFICE_RETURN">🔙 Return: Office ➔ Godown</option>`;
+            }
+            loadData();
+        }
+
+        // VIEW SWITCHER
+        function switchView(viewName) {
+            const adminView = document.getElementById('adminView'); const viewerView = document.getElementById('viewerView');
+            const tabAdmin = document.getElementById('tabAdmin'); const tabViewer = document.getElementById('tabViewer');
+            if (viewName === 'admin') {
+                adminView.classList.remove('hidden'); adminView.classList.add('block'); viewerView.classList.remove('block'); viewerView.classList.add('hidden');
+                tabAdmin.classList.add('tab-active'); tabAdmin.classList.remove('text-slate-500', 'dark:text-slate-400', 'hover:text-slate-800', 'dark:hover:text-white');
+                tabViewer.classList.remove('tab-active'); tabViewer.classList.add('text-slate-500', 'dark:text-slate-400', 'hover:text-slate-800', 'dark:hover:text-white');
+            } else {
+                adminView.classList.remove('block'); adminView.classList.add('hidden'); viewerView.classList.remove('hidden'); viewerView.classList.add('block');
+                tabViewer.classList.add('tab-active'); tabViewer.classList.remove('text-slate-500', 'dark:text-slate-400', 'hover:text-slate-800', 'dark:hover:text-white');
+                tabAdmin.classList.remove('tab-active'); tabAdmin.classList.add('text-slate-500', 'dark:text-slate-400', 'hover:text-slate-800', 'dark:hover:text-white');
                 renderViewerTable(); 
             }
         }
 
-        /* --- KEYBOARD NAVIGATION LOGIC --- */
+        // KEYBOARD & QUICK ACTIONS
         function setupKeyboardNav(inputId, listId) {
-            const input = document.getElementById(inputId);
-            let currentFocus = -1;
-
+            const input = document.getElementById(inputId); let currentFocus = -1;
             input.addEventListener("input", function() { currentFocus = -1; });
-
             input.addEventListener("keydown", function(e) {
-                const list = document.getElementById(listId);
-                if (list.classList.contains('hidden')) return;
-
-                let items = Array.from(list.getElementsByTagName("li")).filter(li => li.style.display !== "none" && li.innerText !== "No products found");
-                
-                if (e.key === "ArrowDown") {
-                    currentFocus++; addActive(items); e.preventDefault(); 
-                } else if (e.key === "ArrowUp") {
-                    currentFocus--; addActive(items); e.preventDefault();
-                } else if (e.key === "Enter") {
-                    e.preventDefault();
-                    if (currentFocus > -1) { if (items[currentFocus]) items[currentFocus].click(); } 
-                    else if (items.length > 0) { items[0].click(); }
-                }
+                const list = document.getElementById(listId); if (list.classList.contains('hidden')) return;
+                let items = Array.from(list.getElementsByTagName("li")).filter(li => li.style.display !== "none" && !li.innerText.includes("Void Signal"));
+                if (e.key === "ArrowDown") { currentFocus++; addActive(items); e.preventDefault(); } 
+                else if (e.key === "ArrowUp") { currentFocus--; addActive(items); e.preventDefault(); } 
+                else if (e.key === "Enter") { e.preventDefault(); if (currentFocus > -1) { if (items[currentFocus]) items[currentFocus].click(); } else if (items.length > 0) { items[0].click(); } }
             });
-
             function addActive(items) {
-                if (!items || items.length === 0) return false;
-                removeActive(items);
-                if (currentFocus >= items.length) currentFocus = 0;
-                if (currentFocus < 0) currentFocus = items.length - 1;
-                items[currentFocus].classList.add("keyboard-focus");
-                items[currentFocus].scrollIntoView({ block: 'nearest' });
+                if (!items || items.length === 0) return false; removeActive(items);
+                if (currentFocus >= items.length) currentFocus = 0; if (currentFocus < 0) currentFocus = items.length - 1;
+                items[currentFocus].classList.add("keyboard-focus"); items[currentFocus].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
             }
-
-            function removeActive(items) {
-                for (let i = 0; i < items.length; i++) { items[i].classList.remove("keyboard-focus"); }
-            }
+            function removeActive(items) { for (let i = 0; i < items.length; i++) { items[i].classList.remove("keyboard-focus"); } }
         }
-
         setupKeyboardNav('whSelect', 'whList'); setupKeyboardNav('slSelect', 'slList');
-
-        /* --- FAST ENTRY UX LOGIC --- */
         ['whQty', 'whPlatform', 'whComment'].forEach(id => { document.getElementById(id).addEventListener('keypress', function(e) { if(e.key === 'Enter') addTowhBatch(); }); });
         ['slQty', 'slPlatform', 'slComment'].forEach(id => { document.getElementById(id).addEventListener('keypress', function(e) { if(e.key === 'Enter') addToSlBatch(); }); });
 
-        // DATE TIME FORMATS
+        // TIME FORMATS
         function formatToIndianDate(val) { return (!val || !val.includes('T')) ? val : new Date(val).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' }); }
         function formatToIndianTime(val) { return (!val || !val.includes('T')) ? val : new Date(val).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' }); }
-        function getFormattedRealTime() {
-            const realNow = new Date();
-            return { dateString: realNow.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }), timeString: realNow.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) };
-        }
+        function getFormattedRealTime() { const realNow = new Date(); return { dateString: realNow.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }), timeString: realNow.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) }; }
         
+        // DATA SYNC
         async function loadData() {
-            document.getElementById('syncStatus').innerText = "(Loading...)";
+            document.getElementById('syncStatus').innerText = "Establishing Link...";
             try {
-                const response = await fetch(GOOGLE_SHEET_URL);
-                const data = await response.json();
-                
-                inventory = (data.inventory || []).map(item => ({ 
-                    id: item.id || Date.now().toString() + Math.random().toString(36).substr(2, 5),
-                    name: item.name, category: item.category || 'General', image: item.image || '',
-                    godownQty: parseInt(item.godownQty) || 0, officeQty: parseInt(item.officeQty) || 0, createdAt: item.createdAt || Date.now()
-                }));
+                const response = await fetch(GOOGLE_SHEET_URL); const data = await response.json();
+                inventory = (data.inventory || []).map(item => ({ id: item.id || Date.now().toString() + Math.random().toString(36).substr(2, 5), name: item.name, category: item.category || 'General', image: item.image || '', godownQty: parseInt(item.godownQty) || 0, officeQty: parseInt(item.officeQty) || 0, createdAt: item.createdAt || Date.now() }));
                 historyLog = (data.historyLog || []).map(log => ({ ...log, dateString: formatToIndianDate(log.dateString), timeString: formatToIndianTime(log.timeString) }));
-                
-                document.getElementById('syncStatus').innerText = "📊 Connected";
-                setTimeout(() => { document.getElementById('syncStatus').innerText = ""; }, 2000);
-                saveAndRender(false); 
-            } catch (error) {
-                document.getElementById('syncStatus').innerText = "⚠️ Offline Mode"; saveAndRender(false);
-            }
+                document.getElementById('syncStatus').innerText = "Link Active"; setTimeout(() => { document.getElementById('syncStatus').innerText = ""; }, 2000); saveAndRender(false); 
+            } catch (error) { document.getElementById('syncStatus').innerText = "Offline Mode"; saveAndRender(false); }
         }
-
         function persistData() {
             if (GOOGLE_SHEET_URL === "" || GOOGLE_SHEET_URL.includes("PASTE_YOUR_URL")) return;
-            document.getElementById('syncStatus').innerText = "(Syncing...)";
-            const syncPayload = { inventory: inventory, historyLog: historyLog };
-            fetch(GOOGLE_SHEET_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(syncPayload) })
-            .then(() => {
-                document.getElementById('syncStatus').innerText = "✅ Saved to Sheet"; setTimeout(() => { document.getElementById('syncStatus').innerText = ""; }, 1500);
-            }).catch(e => { document.getElementById('syncStatus').innerText = "⚠️ Sync Error"; });
+            document.getElementById('syncStatus').innerText = "Syncing...";
+            fetch(GOOGLE_SHEET_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ inventory: inventory, historyLog: historyLog }) })
+            .then(() => { document.getElementById('syncStatus').innerText = "Secured"; setTimeout(() => { document.getElementById('syncStatus').innerText = ""; }, 1500); })
+            .catch(e => { document.getElementById('syncStatus').innerText = "Sync Failed"; });
         }
 
+        // RENDER LOGIC
         function extractCategories() {
             uniqueCategories = [...new Set(inventory.map(i => i.category || 'General'))].sort();
             const viewCat = document.getElementById('viewerCategory'); const currentViewVal = viewCat.value;
-            viewCat.innerHTML = '<option value="ALL">All Categories</option>'; uniqueCategories.forEach(cat => viewCat.innerHTML += `<option value="${cat}">${cat}</option>`);
+            viewCat.innerHTML = '<option value="ALL">ALL CLASSES</option>'; uniqueCategories.forEach(cat => viewCat.innerHTML += `<option value="${cat}">${cat}</option>`);
             if(uniqueCategories.includes(currentViewVal)) viewCat.value = currentViewVal;
-
-            const exportCat = document.getElementById('exportCategory'); exportCat.innerHTML = '<option value="ALL">All Categories</option>';
+            const exportCat = document.getElementById('exportCategory'); exportCat.innerHTML = '<option value="ALL">ALL CLASSES</option>';
             uniqueCategories.forEach(cat => exportCat.innerHTML += `<option value="${cat}">${cat}</option>`);
         }
-
         function saveAndRender(triggerSave = true) {
-            inventory.sort((a, b) => a.createdAt - b.createdAt);
-            if (triggerSave) persistData(); 
-            extractCategories(); renderTable(); renderCustomDropdowns(); renderHistory(); updateDashboard(); renderViewerTable(); 
+            inventory.sort((a, b) => a.createdAt - b.createdAt); if (triggerSave) persistData(); 
+            extractCategories(); renderTable(); renderCustomDropdowns(); renderHistory(); 
+            if(currentRole === 'admin') updateDashboard(); renderViewerTable(); 
         }
 
         function updateDashboard() {
             let godownTotal = 0, officeTotal = 0, outOfStock = 0;
-            inventory.forEach(item => {
-                godownTotal += item.godownQty; officeTotal += item.officeQty;
-                if ((item.godownQty + item.officeQty) === 0) outOfStock++;
-            });
-            
-            const todayStr = getFormattedRealTime().dateString;
-            let salesToday = 0, transfersToday = 0, returnsToday = 0;
+            inventory.forEach(item => { godownTotal += item.godownQty; officeTotal += item.officeQty; if ((item.godownQty + item.officeQty) === 0) outOfStock++; });
+            const todayStr = getFormattedRealTime().dateString; let salesToday = 0, transfersToday = 0, returnsToday = 0;
             historyLog.forEach(log => {
                 if (log.dateString === todayStr) {
-                    if (log.action === 'SALE') salesToday += log.qty;
-                    if (log.action === 'GODOWN_TO_OFFICE') transfersToday += log.qty;
-                    if (log.action === 'CUST_RETURN') returnsToday += log.qty;
+                    if (log.action === 'SALE') salesToday += log.qty; if (log.action === 'GODOWN_TO_OFFICE') transfersToday += log.qty; if (log.action === 'CUST_RETURN') returnsToday += log.qty;
                 }
             });
-            
-            document.getElementById('kpi-products').innerText = inventory.length.toLocaleString();
-            document.getElementById('kpi-godown').innerText = godownTotal.toLocaleString();
-            document.getElementById('kpi-office').innerText = officeTotal.toLocaleString();
-            document.getElementById('kpi-units').innerText = (godownTotal + officeTotal).toLocaleString();
-            document.getElementById('kpi-oos').innerText = outOfStock.toLocaleString();
-            document.getElementById('kpi-sales').innerText = salesToday.toLocaleString();
-            document.getElementById('kpi-transfers').innerText = transfersToday.toLocaleString();
-            document.getElementById('kpi-returns').innerText = returnsToday.toLocaleString();
+            document.getElementById('kpi-products').innerText = inventory.length.toLocaleString(); document.getElementById('kpi-godown').innerText = godownTotal.toLocaleString();
+            document.getElementById('kpi-office').innerText = officeTotal.toLocaleString(); document.getElementById('kpi-units').innerText = (godownTotal + officeTotal).toLocaleString();
+            document.getElementById('kpi-oos').innerText = outOfStock.toLocaleString(); document.getElementById('kpi-sales').innerText = salesToday.toLocaleString();
+            document.getElementById('kpi-transfers').innerText = transfersToday.toLocaleString(); document.getElementById('kpi-returns').innerText = returnsToday.toLocaleString();
         }
 
         function renderCustomDropdowns() {
             const whList = document.getElementById('whList'); const slList = document.getElementById('slList');
-            let html = inventory.length === 0 ? `<li class="p-3 text-slate-400 text-sm text-center">No products found</li>` : '';
+            let html = inventory.length === 0 ? `<li class="p-4 text-slate-400 text-xs text-center italic font-bold tracking-widest uppercase">Void Signal...</li>` : '';
             if (inventory.length > 0) {
                 inventory.forEach(item => {
                     const safeName = item.name.replace(/'/g, "\\'");
-                    html += `<li data-name="${item.name.toLowerCase()}" class="p-2.5 px-4 text-sm dropdown-item border-b border-slate-100 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-600 flex justify-between dark:text-slate-200" onclick="selectDropdownItem('TARGET_ID', 'LIST_ID', '${safeName}')"><span class="font-medium truncate max-w-[65%]">${item.name}</span><span class="text-xs text-slate-500 dark:text-slate-400 font-mono">G:${item.godownQty} | O:${item.officeQty}</span></li>`;
+                    html += `<li data-name="${item.name.toLowerCase()}" class="p-3.5 px-5 text-sm dropdown-item border-b border-white/20 dark:border-white/5 hover:bg-white/40 dark:hover:bg-white/10 flex justify-between transition-colors rounded-lg mx-1 my-0.5" onclick="selectDropdownItem('TARGET_ID', 'LIST_ID', '${safeName}')"><span class="font-bold truncate max-w-[65%] text-slate-700 dark:text-slate-200">${item.name}</span><span class="text-[10px] text-slate-500 font-mono tracking-widest font-bold bg-white/50 dark:bg-black/30 px-2 py-1 rounded shadow-inner">G:${item.godownQty} O:${item.officeQty}</span></li>`;
                 });
             }
-            whList.innerHTML = html.replace(/TARGET_ID/g, 'whSelect').replace(/LIST_ID/g, 'whList');
-            slList.innerHTML = html.replace(/TARGET_ID/g, 'slSelect').replace(/LIST_ID/g, 'slList');
+            whList.innerHTML = html.replace(/TARGET_ID/g, 'whSelect').replace(/LIST_ID/g, 'whList'); slList.innerHTML = html.replace(/TARGET_ID/g, 'slSelect').replace(/LIST_ID/g, 'slList');
         }
 
         function openDropdown(listId) { const list = document.getElementById(listId); list.classList.remove('hidden'); list.classList.add('flex'); Array.from(list.getElementsByTagName('li')).forEach(li => { li.style.display = 'flex'; }); }
@@ -520,45 +714,33 @@
         function filterDropdown(inputId, listId) {
             const query = document.getElementById(inputId).value.toLowerCase().trim(); const list = document.getElementById(listId); let hasVisible = false;
             Array.from(list.getElementsByTagName('li')).forEach(li => {
-                if(li.innerText === 'No products found') return;
+                if(li.innerText.includes('Void Signal')) return;
                 if (li.getAttribute('data-name').includes(query)) { li.style.display = 'flex'; hasVisible = true; } else { li.style.display = 'none'; }
-            });
-            hasVisible ? list.classList.remove('hidden') : list.classList.add('hidden');
+            }); hasVisible ? list.classList.remove('hidden') : list.classList.add('hidden');
         }
+        document.addEventListener('click', function(e) { if (!e.target.closest('#whDropdownContainer')) document.getElementById('whList').classList.add('hidden'); if (!e.target.closest('#slDropdownContainer')) document.getElementById('slList').classList.add('hidden'); });
 
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('#whDropdownContainer')) document.getElementById('whList').classList.add('hidden');
-            if (!e.target.closest('#slDropdownContainer')) document.getElementById('slList').classList.add('hidden');
-        });
-
+        // BATCH LOGIC
         function addTowhBatch() {
             const name = document.getElementById('whSelect').value.trim(); const qty = parseInt(document.getElementById('whQty').value); const action = document.getElementById('warehouseAction').value; const platform = document.getElementById('whPlatform').value.trim(); const comment = document.getElementById('whComment').value.trim();
-            if (!name || isNaN(qty) || qty <= 0) return; const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase()); if (!item) return alert("Product not found.");
-            
-            let actionText = action === 'MFR_RECEIVE' ? 'Mfr ➔ Godown' : action === 'MFR_RETURN' ? 'Godown ➔ Mfr (Return)' : action === 'GODOWN_TO_OFFICE' ? 'Godown ➔ Office' : 'Office ➔ Godown';
-            
-            if (action === 'GODOWN_TO_OFFICE' && item.godownQty < qty) return alert(`Insufficient Godown Stock. Only ${item.godownQty} available.`);
-            if (action === 'OFFICE_RETURN' && item.officeQty < qty) return alert(`Insufficient Office Stock. Only ${item.officeQty} available.`);
-            if (action === 'MFR_RETURN' && item.godownQty < qty) return alert(`Insufficient Godown Stock. Only ${item.godownQty} available to return.`);
-            
+            if (!name || isNaN(qty) || qty <= 0) return; const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase()); if (!item) return alert("Signal Lost. Item void.");
+            let actionText = action === 'MFR_RECEIVE' ? 'Mfr ➔ Godown' : action === 'MFR_RETURN' ? 'Godown ➔ Mfr' : action === 'GODOWN_TO_OFFICE' ? 'Godown ➔ Office' : 'Office ➔ Godown';
+            if (action === 'GODOWN_TO_OFFICE' && item.godownQty < qty) return alert(`Godown Capacity Error: ${item.godownQty} Max.`); if (action === 'OFFICE_RETURN' && item.officeQty < qty) return alert(`Office Capacity Error: ${item.officeQty} Max.`); if (action === 'MFR_RETURN' && item.godownQty < qty) return alert(`Godown Capacity Error: ${item.godownQty} Max.`);
             pendingWh.push({ id: item.id, name: item.name, action, actionText, qty, platform, comment });
             document.getElementById('whSelect').value = ''; document.getElementById('whQty').value = ''; document.getElementById('whPlatform').value = ''; document.getElementById('whComment').value = ''; document.getElementById('whSelect').focus(); renderWhBatch();
         }
         function removeWhBatch(index) { pendingWh.splice(index, 1); renderWhBatch(); }
         function renderWhBatch() {
             const container = document.getElementById('whBatchContainer'); const btn = document.getElementById('btnSubmitWh'); container.innerHTML = '';
-            if(pendingWh.length === 0) { container.innerHTML = '<div class="text-slate-400 text-sm text-center mt-6">No pending operations.</div>'; btn.style.display = 'none'; return; } btn.style.display = 'block';
-            pendingWh.forEach((p, idx) => { container.innerHTML += `<div class="flex justify-between items-center bg-white dark:bg-slate-700 p-2 border-l-4 border-l-emerald-500 mb-1 rounded shadow-sm"><div class="flex flex-col"><span class="font-bold text-sm dark:text-white">${p.name}</span><span class="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold">${p.actionText}</span></div><div class="flex items-center gap-3"><span class="font-bold font-mono dark:text-slate-200">${p.qty} Units</span><button onclick="removeWhBatch(${idx})" class="text-red-400 hover:text-red-600">✖</button></div></div>`; });
+            if(pendingWh.length === 0) { container.innerHTML = '<div class="text-slate-400/70 text-[10px] text-center mt-8 uppercase tracking-[0.3em] font-black">Queue Empty</div>'; btn.style.display = 'none'; return; } btn.style.display = 'block';
+            pendingWh.forEach((p, idx) => { container.innerHTML += `<div class="flex justify-between items-center glass-input p-3 mb-2 rounded-xl border-l-4 border-l-retro-teal shadow-sm animate-fade-in-up" style="animation-duration: 0.3s"><div class="flex flex-col"><span class="font-extrabold text-sm text-slate-700 dark:text-slate-200">${p.name}</span><span class="text-[9px] text-retro-teal font-black uppercase tracking-widest mt-0.5">${p.actionText}</span></div><div class="flex items-center gap-4"><span class="font-black font-mono text-lg text-slate-700 dark:text-white bg-white/40 dark:bg-black/30 px-2 py-0.5 rounded shadow-inner">${p.qty}</span><button onclick="removeWhBatch(${idx})" class="text-retro-rose hover:scale-125 transition-transform text-sm px-1 font-bold">✕</button></div></div>`; });
         }
         function submitWhBatch() {
             if(pendingWh.length === 0) return; const { dateString, timeString } = getFormattedRealTime();
             pendingWh.forEach(p => {
                 const item = inventory.find(i => i.id === p.id);
                 if(item) {
-                    if (p.action === 'MFR_RECEIVE') item.godownQty += p.qty; 
-                    else if (p.action === 'MFR_RETURN') item.godownQty -= p.qty;
-                    else if (p.action === 'GODOWN_TO_OFFICE') { item.godownQty -= p.qty; item.officeQty += p.qty; } 
-                    else if (p.action === 'OFFICE_RETURN') { item.officeQty -= p.qty; item.godownQty += p.qty; }
+                    if (p.action === 'MFR_RECEIVE') item.godownQty += p.qty; else if (p.action === 'MFR_RETURN') item.godownQty -= p.qty; else if (p.action === 'GODOWN_TO_OFFICE') { item.godownQty -= p.qty; item.officeQty += p.qty; } else if (p.action === 'OFFICE_RETURN') { item.officeQty -= p.qty; item.godownQty += p.qty; }
                     historyLog.unshift({ id: Date.now().toString() + Math.random().toString(36).substr(2), dateString, timeString, name: item.name, action: p.action, actionText: p.actionText, qty: p.qty, platform: p.platform, comment: p.comment });
                 }
             }); pendingWh = []; renderWhBatch(); saveAndRender(true);
@@ -566,18 +748,18 @@
 
         function addToSlBatch() {
             const name = document.getElementById('slSelect').value.trim(); const qty = parseInt(document.getElementById('slQty').value); const action = document.getElementById('salesAction').value; const platform = document.getElementById('slPlatform').value.trim(); const comment = document.getElementById('slComment').value.trim();
-            if (!name || isNaN(qty) || qty <= 0) return; const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase()); if (!item) return alert("Product not found.");
-            let actionText = action === 'SALE' ? 'Sale (Office Out)' : 'Cust. Return (Office In)';
-            if (action === 'SALE' && item.officeQty < qty) return alert(`Insufficient Office Stock! You only have ${item.officeQty} ready for dispatch.`);
+            if (!name || isNaN(qty) || qty <= 0) return; const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase()); if (!item) return alert("Signal Lost. Item void.");
+            let actionText = action === 'SALE' ? 'Sale (Out)' : 'Return (In)';
+            if (action === 'SALE' && item.officeQty < qty) return alert(`Office Deficit! Max dispatch: ${item.officeQty}.`);
             pendingSl.push({ id: item.id, name: item.name, action, actionText, qty, platform, comment });
             document.getElementById('slSelect').value = ''; document.getElementById('slQty').value = ''; document.getElementById('slPlatform').value = ''; document.getElementById('slComment').value = ''; document.getElementById('slSelect').focus(); renderSlBatch();
         }
         function removeSlBatch(index) { pendingSl.splice(index, 1); renderSlBatch(); }
         function renderSlBatch() {
             const container = document.getElementById('slBatchContainer'); const btn = document.getElementById('btnSubmitSl'); container.innerHTML = '';
-            if(pendingSl.length === 0) { container.innerHTML = '<div class="text-slate-400 text-sm text-center mt-6">No pending sales.</div>'; btn.style.display = 'none'; return; } btn.style.display = 'block';
-            pendingSl.forEach((p, idx) => { const colors = p.action === 'SALE' ? 'border-l-blue-500 text-blue-600 dark:text-blue-400' : 'border-l-rose-500 text-rose-600 dark:text-rose-400';
-                container.innerHTML += `<div class="flex justify-between items-center bg-white dark:bg-slate-700 p-2 border-l-4 ${colors.split(' ')[0]} mb-1 rounded shadow-sm"><div class="flex flex-col"><span class="font-bold text-sm dark:text-white">${p.name}</span><span class="text-[11px] ${colors.split(' ')[1]} font-bold">${p.actionText}</span></div><div class="flex items-center gap-3"><span class="font-bold font-mono dark:text-slate-200">${p.qty} Units</span><button onclick="removeSlBatch(${idx})" class="text-red-400 hover:text-red-600">✖</button></div></div>`; });
+            if(pendingSl.length === 0) { container.innerHTML = '<div class="text-slate-400/70 text-[10px] text-center mt-8 uppercase tracking-[0.3em] font-black">Queue Empty</div>'; btn.style.display = 'none'; return; } btn.style.display = 'block';
+            pendingSl.forEach((p, idx) => { const colors = p.action === 'SALE' ? 'border-l-retro-slate text-retro-slate' : 'border-l-retro-rose text-retro-rose';
+                container.innerHTML += `<div class="flex justify-between items-center glass-input p-3 mb-2 rounded-xl border-l-4 ${colors.split(' ')[0]} shadow-sm animate-fade-in-up" style="animation-duration: 0.3s"><div class="flex flex-col"><span class="font-extrabold text-sm text-slate-700 dark:text-slate-200">${p.name}</span><span class="text-[9px] ${colors.split(' ')[1]} font-black uppercase tracking-widest mt-0.5">${p.actionText}</span></div><div class="flex items-center gap-4"><span class="font-black font-mono text-lg text-slate-700 dark:text-white bg-white/40 dark:bg-black/30 px-2 py-0.5 rounded shadow-inner">${p.qty}</span><button onclick="removeSlBatch(${idx})" class="text-retro-rose hover:scale-125 transition-transform text-sm px-1 font-bold">✕</button></div></div>`; });
         }
         function submitSlBatch() {
             if(pendingSl.length === 0) return; const { dateString, timeString } = getFormattedRealTime();
@@ -590,150 +772,111 @@
             }); pendingSl = []; renderSlBatch(); saveAndRender(true);
         }
 
+        // HISTORY HTML
         function renderHistory() {
             const whContainer = document.getElementById('whHistoryContainer'); const slContainer = document.getElementById('slHistoryContainer');
-            const whLogs = historyLog.filter(l => ['MFR_RECEIVE', 'MFR_RETURN', 'GODOWN_TO_OFFICE', 'OFFICE_RETURN'].includes(l.action));
+            let whLogs = historyLog.filter(l => ['MFR_RECEIVE', 'MFR_RETURN', 'GODOWN_TO_OFFICE', 'OFFICE_RETURN'].includes(l.action));
             const slLogs = historyLog.filter(l => ['SALE', 'CUST_RETURN'].includes(l.action));
             whContainer.innerHTML = buildHistoryHTML(whLogs, 'wh'); slContainer.innerHTML = buildHistoryHTML(slLogs, 'sl');
         }
-
         function buildHistoryHTML(logsArray, type) {
-            if (!logsArray.length) return '<div class="text-center text-slate-400 mt-10">No records found.</div>';
+            if (!logsArray.length) return '<div class="text-center text-slate-400/70 mt-12 text-[10px] uppercase tracking-[0.3em] font-black">No Ledgers</div>';
             const grouped = {}; logsArray.forEach(l => { if(!grouped[l.dateString]) grouped[l.dateString] = []; grouped[l.dateString].push(l); }); let html = '';
             for (let date in grouped) {
-                html += `<div class="mb-5 date-group"><span class="text-xs font-bold bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-1 rounded-full uppercase tracking-wide">${date}</span><div class="mt-3 grid grid-cols-1 gap-3">`;
+                html += `<div class="mb-8 date-group"><div class="flex items-center gap-3 mb-4"><div class="h-px bg-slate-300 dark:bg-slate-700 flex-1"></div><span class="text-[10px] font-black bg-white/60 dark:bg-black/50 text-slate-600 dark:text-slate-300 px-4 py-1.5 rounded-full uppercase tracking-[0.2em] shadow-sm">${date}</span><div class="h-px bg-slate-300 dark:bg-slate-700 flex-1"></div></div><div class="grid grid-cols-1 gap-4">`;
                 grouped[date].forEach(log => {
-                    let border = type === 'wh' ? 'border-emerald-300 dark:border-emerald-700' : (log.action === 'SALE' ? 'border-blue-300 dark:border-blue-700' : 'border-rose-300 dark:border-rose-700');
-                    let icon = type === 'wh' ? '🚚' : (log.action === 'SALE' ? '📤' : '🔄');
-                    
+                    let border = type === 'wh' ? 'border-l-retro-teal' : (log.action === 'SALE' ? 'border-l-retro-slate' : 'border-l-retro-rose');
+                    let badge = type === 'wh' ? 'bg-retro-teal text-white' : (log.action === 'SALE' ? 'bg-retro-slate text-white' : 'bg-retro-rose text-white');
                     html += `
-                    <div class="log-item p-3 border ${border} bg-white dark:bg-slate-800 rounded-lg shadow-sm">
-                        <div class="flex justify-between items-start mb-1">
-                            <span class="text-xs font-black text-slate-700 dark:text-slate-300 uppercase px-2 py-0.5 bg-slate-100 dark:bg-slate-700 rounded">${log.actionText}</span>
-                            <div class="flex gap-2">
-                                <button onclick="openEditHistoryModal('${log.id}')" class="text-indigo-500 hover:text-indigo-700 text-xs no-print" title="Edit">✏️</button>
-                                <span class="text-[10px] text-slate-400">${log.timeString}</span>
+                    <div class="log-item glass-input p-4 border-l-4 ${border} hover:bg-white/80 dark:hover:bg-white/10 transition-colors shadow-sm">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-[9px] font-black uppercase px-2.5 py-1 rounded shadow-sm tracking-widest ${badge}">${log.actionText}</span>
+                            <div class="flex gap-3 items-center">
+                                ${currentRole === 'admin' ? `<button onclick="openEditHistoryModal('${log.id}')" class="text-slate-400 hover:text-retro-mustard hover:scale-110 text-sm no-print transition-all">✏️</button>` : ''}
+                                <span class="text-[10px] text-slate-500 font-bold bg-white/50 dark:bg-black/30 px-2 py-0.5 rounded">${log.timeString}</span>
                             </div>
                         </div>
-                        <div class="font-bold text-sm text-slate-800 dark:text-slate-100 truncate mb-2">${log.name}</div>
+                        <div class="font-extrabold text-sm text-slate-800 dark:text-slate-100 truncate mb-3 mt-3">${log.name}</div>
                         <div class="flex justify-between items-end">
-                            <span class="font-mono font-bold text-lg text-slate-700 dark:text-slate-300">${icon} ${log.qty} Units</span>
-                            <div class="flex flex-col items-end">
-                                ${log.platform ? `<span class="bg-indigo-50 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 px-1.5 rounded text-[10px] border border-indigo-200 dark:border-indigo-800 font-bold">${log.platform}</span>` : ''}
-                                ${log.comment ? `<span class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 truncate max-w-[150px]">📝 ${log.comment}</span>` : ''}
+                            <span class="font-mono font-black text-2xl text-slate-700 dark:text-white tracking-tighter drop-shadow-sm">${log.qty} <span class="text-[9px] tracking-[0.2em] font-sans uppercase font-bold text-slate-400">UNITS</span></span>
+                            <div class="flex flex-col items-end gap-1.5">
+                                ${log.platform ? `<span class="text-[9px] uppercase tracking-widest font-black text-slate-600 dark:text-slate-300 bg-white/60 dark:bg-black/40 px-2 py-1 rounded shadow-inner">${log.platform}</span>` : ''}
+                                ${log.comment ? `<span class="text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-[150px] font-medium italic">"${log.comment}"</span>` : ''}
                             </div>
                         </div>
                     </div>`;
-                });
-                html += `</div></div>`;
+                }); html += `</div></div>`;
             } return html;
         }
 
+        // MASTER TABLE RENDER
         function addMasterProduct() {
-            const namesInput = document.getElementById('newNames').value; const categoryInput = document.getElementById('newCategory').value.trim() || 'General'; const imgInput = document.getElementById('newImage').value.trim();
+            if(currentRole !== 'admin') return; const namesInput = document.getElementById('newNames').value; const categoryInput = document.getElementById('newCategory').value.trim() || 'General'; const imgInput = document.getElementById('newImage').value.trim();
             if (!namesInput.trim()) return;
-            namesInput.split(',').map(n => n.trim()).filter(n => n !== "").forEach((name, index) => {
-                if (!inventory.some(item => item.name.toLowerCase() === name.toLowerCase())) {
-                    inventory.push({ id: Date.now().toString() + index + Math.random().toString(36).substr(2, 5), name: name, category: categoryInput, image: imgInput, godownQty: 0, officeQty: 0, createdAt: new Date().getTime() + index });
-                }
-            }); document.getElementById('newNames').value = ''; document.getElementById('newImage').value = ''; saveAndRender(true);
+            namesInput.split(',').map(n => n.trim()).filter(n => n !== "").forEach((name, index) => { if (!inventory.some(item => item.name.toLowerCase() === name.toLowerCase())) { inventory.push({ id: Date.now().toString() + index + Math.random().toString(36).substr(2, 5), name: name, category: categoryInput, image: imgInput, godownQty: 0, officeQty: 0, createdAt: new Date().getTime() + index }); } }); document.getElementById('newNames').value = ''; document.getElementById('newImage').value = ''; saveAndRender(true);
         }
-
         function renderTable() {
             const tbody = document.getElementById('inventoryBody'); tbody.innerHTML = '';
-            if (inventory.length === 0) return tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400">Master Catalog empty. Import or Add manually.</td></tr>`;
-
+            if (inventory.length === 0) return tbody.innerHTML = `<tr><td colspan="6" class="p-10 text-center text-slate-400/70 text-[10px] uppercase tracking-[0.3em] font-black">Catalog Void</td></tr>`;
             inventory.forEach(item => {
                 const totalQty = item.godownQty + item.officeQty;
-                let nameDisplayHTML = `<div class="font-bold dark:text-slate-100">${item.name}</div>`;
-                if(item.image && item.image.trim() !== '') { nameDisplayHTML = `<a href="${item.image}" target="_blank" class="font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1">🔗 ${item.name}</a>`; }
-
-                // --- Low Stock Color Logic ---
-                let bgGodown = item.godownQty <= 10 ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" : "bg-emerald-50/30 dark:bg-emerald-900/10 text-emerald-700 dark:text-emerald-400 border-x border-slate-100 dark:border-slate-700";
-                let bgOffice = item.officeQty <= 10 ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" : "bg-amber-50/30 dark:bg-amber-900/10 text-amber-700 dark:text-amber-400 border-r border-slate-100 dark:border-slate-700";
-
+                let nameDisplayHTML = `<div class="font-extrabold text-sm">${item.name}</div>`;
+                if(item.image && item.image.trim() !== '') { nameDisplayHTML = `<a href="${item.image}" target="_blank" class="font-extrabold text-sm text-retro-slate hover:opacity-70 flex items-center gap-1.5 transition-opacity">⎋ ${item.name}</a>`; }
+                let colGodown = item.godownQty <= 10 ? "text-retro-rose" : "text-retro-teal"; let colOffice = item.officeQty <= 10 ? "text-retro-rose" : "text-retro-mustard";
                 tbody.innerHTML += `
-                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 border-b dark:border-slate-700 bg-white dark:bg-transparent group transition-colors">
-                        <td class="p-3"><div class="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded inline-block border dark:border-slate-600">${item.category}</div></td>
-                        <td class="p-3">${nameDisplayHTML}</td>
-                        <td class="p-3 text-center font-mono font-bold text-lg transition-colors duration-300 ${bgGodown}">${item.godownQty}</td>
-                        <td class="p-3 text-center font-mono font-bold text-lg transition-colors duration-300 ${bgOffice}">${item.officeQty}</td>
-                        <td class="p-3 text-center font-black font-mono text-indigo-900 dark:text-indigo-300 text-lg">${totalQty}</td>
-                        <td class="p-3 text-center no-print opacity-0 group-hover:opacity-100 transition flex justify-center gap-2">
-                            <button onclick="openEditMasterModal('${item.id}')" class="bg-indigo-100 dark:bg-indigo-900/50 hover:bg-indigo-200 dark:hover:bg-indigo-800 text-indigo-600 dark:text-indigo-400 p-1.5 rounded text-xs font-bold" title="Edit">✏️</button>
-                            <button onclick="deleteItem('${item.id}')" class="bg-red-100 dark:bg-red-900/50 hover:bg-red-200 dark:hover:bg-red-800 text-red-600 dark:text-red-400 p-1.5 rounded text-xs font-bold" title="Delete">🗑️</button>
+                    <tr class="hover:bg-white/40 dark:hover:bg-white/5 border-b border-white/30 dark:border-white/5 transition-colors group">
+                        <td class="p-5"><div class="text-[9px] font-black text-slate-500 uppercase tracking-widest bg-white/60 dark:bg-black/40 shadow-inner inline-block px-2.5 py-1 rounded">${item.category}</div></td>
+                        <td class="p-5">${nameDisplayHTML}</td>
+                        <td class="p-5 text-center font-mono font-black text-xl ${colGodown}">${item.godownQty}</td>
+                        <td class="p-5 text-center font-mono font-black text-xl ${colOffice}">${item.officeQty}</td>
+                        <td class="p-5 text-center font-black font-mono text-slate-700 dark:text-white text-2xl border-r border-white/20 dark:border-white/5 bg-white/10 dark:bg-black/10 shadow-[inset_2px_0_5px_rgba(0,0,0,0.02)]">${totalQty}</td>
+                        <td class="p-5 text-center no-print opacity-0 group-hover:opacity-100 transition-opacity flex justify-center gap-3">
+                            <button onclick="openEditMasterModal('${item.id}')" class="glass-btn text-retro-slate p-2 rounded-lg text-xs hover:scale-110 transition-transform" title="Edit">✏️</button>
+                            <button onclick="deleteItem('${item.id}')" class="glass-btn text-retro-rose p-2 rounded-lg text-xs hover:scale-110 transition-transform" title="Delete">✕</button>
                         </td>
                     </tr>`;
             });
         }
+        function filterTable() { const q = document.getElementById('searchInput').value.toLowerCase(); document.querySelectorAll('#inventoryBody tr').forEach(row => { if(row.cells.length > 1) { const text = row.innerText.toLowerCase(); row.style.display = text.includes(q) ? '' : 'none'; } }); }
 
-        function filterTable() { 
-            const q = document.getElementById('searchInput').value.toLowerCase(); 
-            document.querySelectorAll('#inventoryBody tr').forEach(row => { 
-                if(row.cells.length > 1) { const text = row.innerText.toLowerCase(); row.style.display = text.includes(q) ? '' : 'none'; }
-            }); 
-        }
-
-        /* ================= STOCK VIEWER LOGIC ================= */
+        // VIEWER RENDER
         function renderViewerTable() {
             const viewSearch = document.getElementById('viewerSearch').value.toLowerCase(); const viewCategory = document.getElementById('viewerCategory').value; const viewStatus = document.getElementById('viewerStatus').value; const viewSort = document.getElementById('viewerSort').value;
-            let filtered = inventory.filter(item => {
-                const totalQty = item.godownQty + item.officeQty;
-                let matchSearch = item.name.toLowerCase().includes(viewSearch); let matchCategory = viewCategory === 'ALL' ? true : (item.category || 'General') === viewCategory; let matchStatus = true;
+            let filtered = inventory.filter(item => { const totalQty = item.godownQty + item.officeQty; let matchSearch = item.name.toLowerCase().includes(viewSearch); let matchCategory = viewCategory === 'ALL' ? true : (item.category || 'General') === viewCategory; let matchStatus = true;
                 if (viewStatus === 'INSTOCK') matchStatus = totalQty > 10; else if (viewStatus === 'LOWSTOCK') matchStatus = totalQty > 0 && totalQty <= 10; else if (viewStatus === 'OUTOFSTOCK') matchStatus = totalQty === 0;
                 return matchSearch && matchCategory && matchStatus;
             });
-
-            filtered.sort((a, b) => {
-                let totalA = a.godownQty + a.officeQty; let totalB = b.godownQty + b.officeQty;
-                if (viewSort === 'NAME_ASC') return a.name.localeCompare(b.name); if (viewSort === 'NAME_DESC') return b.name.localeCompare(a.name); if (viewSort === 'STOCK_DESC') return totalB - totalA; if (viewSort === 'STOCK_ASC') return totalA - totalB; return 0;
-            });
-
+            filtered.sort((a, b) => { let totalA = a.godownQty + a.officeQty; let totalB = b.godownQty + b.officeQty; if (viewSort === 'NAME_ASC') return a.name.localeCompare(b.name); if (viewSort === 'NAME_DESC') return b.name.localeCompare(a.name); if (viewSort === 'STOCK_DESC') return totalB - totalA; if (viewSort === 'STOCK_ASC') return totalA - totalB; return 0; });
             const tbody = document.getElementById('viewerBody'); tbody.innerHTML = ''; document.getElementById('viewerResultCount').innerText = filtered.length;
-            if (filtered.length === 0) { tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400">No products match your filters.</td></tr>`; return; }
+            if (filtered.length === 0) { tbody.innerHTML = `<tr><td colspan="6" class="p-10 text-center text-slate-400/70 text-[10px] uppercase tracking-[0.3em] font-black">No Signal Detected</td></tr>`; return; }
 
             filtered.forEach(item => {
-                const totalQty = item.godownQty + item.officeQty;
-                let statusBadge = '';
-                if (totalQty === 0) { statusBadge = `<span class="bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400 px-2.5 py-1 rounded-full text-xs font-bold border border-red-200 dark:border-red-800">🔴 Out of Stock</span>`; } 
-                else if (totalQty <= 10) { statusBadge = `<span class="bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400 px-2.5 py-1 rounded-full text-xs font-bold border border-orange-200 dark:border-orange-800">🟠 Low Stock</span>`; } 
-                else { statusBadge = `<span class="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400 px-2.5 py-1 rounded-full text-xs font-bold border border-emerald-200 dark:border-emerald-800">🟢 In Stock</span>`; }
-
-                let nameDisplayHTML = `<div class="font-bold text-base dark:text-slate-100">${item.name}</div>`;
-                if(item.image && item.image.trim() !== '') { nameDisplayHTML = `<a href="${item.image}" target="_blank" class="font-bold text-base text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1">🔗 ${item.name}</a>`; }
-
-                // --- Low Stock Color Logic for Viewer ---
-                let colGodown = item.godownQty <= 10 ? "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20" : "text-emerald-700 dark:text-emerald-400";
-                let colOffice = item.officeQty <= 10 ? "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20" : "text-amber-700 dark:text-amber-400";
-
+                const totalQty = item.godownQty + item.officeQty; let statusBadge = '';
+                if (totalQty === 0) { statusBadge = `<span class="bg-retro-rose/20 text-retro-rose px-2.5 py-1 rounded shadow-inner text-[9px] font-black border border-retro-rose/30 uppercase tracking-widest">🔴 Depleted</span>`; } 
+                else if (totalQty <= 10) { statusBadge = `<span class="bg-retro-mustard/20 text-retro-mustard px-2.5 py-1 rounded shadow-inner text-[9px] font-black border border-retro-mustard/30 uppercase tracking-widest">🟠 Critical</span>`; } 
+                else { statusBadge = `<span class="bg-retro-teal/20 text-retro-teal px-2.5 py-1 rounded shadow-inner text-[9px] font-black border border-retro-teal/30 uppercase tracking-widest">🟢 Optimal</span>`; }
+                let nameDisplayHTML = `<div class="font-extrabold text-sm">${item.name}</div>`;
+                if(item.image && item.image.trim() !== '') { nameDisplayHTML = `<a href="${item.image}" target="_blank" class="font-extrabold text-sm text-retro-slate hover:opacity-70 transition flex items-center gap-1.5">⎋ ${item.name}</a>`; }
+                let colGodown = item.godownQty <= 10 ? "text-retro-rose" : "text-retro-teal"; let colOffice = item.officeQty <= 10 ? "text-retro-rose" : "text-retro-mustard";
                 tbody.innerHTML += `
-                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 border-b dark:border-slate-700 bg-white dark:bg-transparent transition-colors">
-                        <td class="p-4"><div class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">${item.category}</div></td>
-                        <td class="p-4">${nameDisplayHTML}</td>
-                        <td class="p-4 text-center">${statusBadge}</td>
-                        <td class="p-4 text-center font-mono font-bold text-lg ${colGodown}">${item.godownQty}</td>
-                        <td class="p-4 text-center font-mono font-bold text-lg ${colOffice}">${item.officeQty}</td>
-                        <td class="p-4 text-center font-black font-mono text-indigo-900 dark:text-indigo-300 text-xl bg-slate-50 dark:bg-slate-800/50">${totalQty}</td>
+                    <tr class="hover:bg-white/40 dark:hover:bg-white/5 border-b border-white/30 dark:border-white/5 transition-colors">
+                        <td class="p-5"><div class="text-[9px] font-black text-slate-500 uppercase tracking-widest bg-white/60 dark:bg-black/40 shadow-inner inline-block px-2.5 py-1 rounded">${item.category}</div></td>
+                        <td class="p-5">${nameDisplayHTML}</td>
+                        <td class="p-5 text-center">${statusBadge}</td>
+                        <td class="p-5 text-center font-mono font-black text-xl ${colGodown}">${item.godownQty}</td>
+                        <td class="p-5 text-center font-mono font-black text-xl ${colOffice}">${item.officeQty}</td>
+                        <td class="p-5 text-center font-black font-mono text-slate-700 dark:text-white text-2xl border-r border-white/20 dark:border-white/5 bg-white/10 dark:bg-black/10 shadow-[inset_2px_0_5px_rgba(0,0,0,0.02)]">${totalQty}</td>
                     </tr>`;
             });
         }
         
-        function filterHistory(inputId, containerId) {
-            const query = document.getElementById(inputId).value.toLowerCase();
-            document.getElementById(containerId).querySelectorAll('.date-group').forEach(group => {
-                let hasVisible = false;
-                group.querySelectorAll('.log-item').forEach(item => { if (item.innerText.toLowerCase().includes(query)) { item.style.display = ''; hasVisible = true; } else { item.style.display = 'none'; } });
-                group.style.display = hasVisible ? '' : 'none';
-            });
-        }
+        function filterHistory(inputId, containerId) { const query = document.getElementById(inputId).value.toLowerCase(); document.getElementById(containerId).querySelectorAll('.date-group').forEach(group => { let hasVisible = false; group.querySelectorAll('.log-item').forEach(item => { if (item.innerText.toLowerCase().includes(query)) { item.style.display = ''; hasVisible = true; } else { item.style.display = 'none'; } }); group.style.display = hasVisible ? '' : 'none'; }); }
+        function deleteItem(id) { if(confirm("Permanently erase product record?")) { inventory = inventory.filter(i => i.id !== id); saveAndRender(true); } }
+        function clearHistory() { if(confirm("Purge ALL ledger logs?")) { historyLog = []; saveAndRender(true); } }
+        function clearAllBackendData() { if (prompt("Type 'YES' to confirm full system wipe:") === 'YES') { inventory = []; historyLog = []; saveAndRender(true); alert("System Purged."); } }
+        function toggleFullScreen(cardId) { document.getElementById(cardId).classList.toggle('fullscreen-card'); const btn = event.target; btn.innerText = btn.innerText.includes('Expand') ? '⛶ Shrink' : '⛶ Expand'; }
 
-        function deleteItem(id) { if(confirm("Permanently delete this product?")) { inventory = inventory.filter(i => i.id !== id); saveAndRender(true); } }
-        function clearHistory() { if(confirm("Clear ALL activity logs?")) { historyLog = []; saveAndRender(true); } }
-        function clearAllBackendData() { if (prompt("Type 'YES' to confirm full reset:") === 'YES') { inventory = []; historyLog = []; saveAndRender(true); alert("Reset Complete."); } }
-        
-        function toggleFullScreen(cardId) { document.getElementById(cardId).classList.toggle('fullscreen-card'); const btn = event.target; btn.innerText = btn.innerText.includes('Close') ? '⛶ Fullscreen' : '✖ Close Fullscreen'; }
-
-        /* ================= EXPORT MODAL LOGIC ================= */
+        // EXPORT LOGIC
         function openExportModal() { document.getElementById('exportModal').classList.remove('hidden'); document.getElementById('exportModal').classList.add('flex'); }
         function closeExportModal() { document.getElementById('exportModal').classList.add('hidden'); document.getElementById('exportModal').classList.remove('flex'); }
         function executeExport() {
@@ -743,50 +886,40 @@
             if (startDateStr || endDateStr) {
                 const startDate = startDateStr ? new Date(startDateStr) : null; const endDate = endDateStr ? new Date(endDateStr) : null;
                 filteredHist = historyLog.filter(h => {
-                    if(!h.dateString) return false; const parts = h.dateString.split(' '); if(parts.length < 3) return true;
-                    const months = {"Jan":0,"Feb":1,"Mar":2,"Apr":3,"May":4,"Jun":5,"Jul":6,"Aug":7,"Sep":8,"Oct":9,"Nov":10,"Dec":11};
-                    const logDate = new Date(parts[2], months[parts[1]], parts[0]);
-                    let valid = true; if (startDate && logDate < startDate) valid = false; if (endDate && logDate > endDate) valid = false; return valid;
+                    if(!h.dateString) return false; const parts = h.dateString.split(' '); if(parts.length < 3) return true; const months = {"Jan":0,"Feb":1,"Mar":2,"Apr":3,"May":4,"Jun":5,"Jul":6,"Aug":7,"Sep":8,"Oct":9,"Nov":10,"Dec":11};
+                    const logDate = new Date(parts[2], months[parts[1]], parts[0]); let valid = true; if (startDate && logDate < startDate) valid = false; if (endDate && logDate > endDate) valid = false; return valid;
                 });
             }
-            if(filteredInv.length === 0 && filteredHist.length === 0) return alert("No data found for the selected filters!");
+            if(filteredInv.length === 0 && filteredHist.length === 0) return alert("Zero records match parameters.");
             const invData = filteredInv.map(i => ({ "Product ID": i.id, "Category": i.category || "General", "Item Name": i.name, "Image Link": i.image || "", "Godown Stock": i.godownQty, "Office Stock": i.officeQty, "Total Qty": i.godownQty + i.officeQty }));
             const histData = filteredHist.map(h => ({ "Log ID": h.id, "Date": h.dateString, "Time": h.timeString, "Type of Transfer": h.actionText, "Item Name": h.name, "Quantity": h.qty, "Platform / Ref": h.platform || "", "Remarks": h.comment || "" }));
             const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(invData), "Inventory"); if (histData.length > 0) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(histData), "History Log");
-            let filename = "HNN_StockPro_Export.xlsx"; if(catFilter !== 'ALL') filename = `HNN_StockPro_${catFilter}.xlsx`;
+            let filename = "DOZY_StockPro_Export.xlsx"; if(catFilter !== 'ALL') filename = `DOZY_StockPro_${catFilter}.xlsx`;
             XLSX.writeFile(wb, filename); closeExportModal();
         }
 
+        // IMPORT LOGIC
         function importAllDataExcel(event) {
             const file = event.target.files[0]; if (!file) return; const reader = new FileReader();
             reader.onload = function(e) {
                 const workbook = XLSX.read(new Uint8Array(e.target.result), {type: 'array'}); let addedInv = 0, addedHist = 0;
                 if (workbook.SheetNames.includes("Inventory")) {
-                    XLSX.utils.sheet_to_json(workbook.Sheets["Inventory"]).forEach(row => {
-                        const name = row["Item Name"];
-                        if (name && !inventory.some(item => item.name.toLowerCase() === name.toLowerCase())) {
-                            inventory.push({ id: row["Product ID"] || Date.now().toString() + Math.random().toString(36).substr(2, 5), name: name, category: row["Category"] || 'General', image: row["Image Link"] || '', godownQty: parseInt(row["Godown Stock"]) || 0, officeQty: parseInt(row["Office Stock"]) || 0, createdAt: new Date().getTime() + addedInv });
-                            addedInv++;
-                        }
+                    XLSX.utils.sheet_to_json(workbook.Sheets["Inventory"]).forEach(row => { const name = row["Item Name"];
+                        if (name && !inventory.some(item => item.name.toLowerCase() === name.toLowerCase())) { inventory.push({ id: row["Product ID"] || Date.now().toString() + Math.random().toString(36).substr(2, 5), name: name, category: row["Category"] || 'General', image: row["Image Link"] || '', godownQty: parseInt(row["Godown Stock"]) || 0, officeQty: parseInt(row["Office Stock"]) || 0, createdAt: new Date().getTime() + addedInv }); addedInv++; }
                     });
                 }
                 if (workbook.SheetNames.includes("History Log")) {
                     XLSX.utils.sheet_to_json(workbook.Sheets["History Log"]).forEach(row => {
-                        if (row["Item Name"] && row["Type of Transfer"]) {
-                            const logId = row["Log ID"];
-                            if (!historyLog.some(h => h.id === logId)) {
-                                historyLog.push({ id: logId || Date.now().toString() + Math.random().toString(36).substr(2), dateString: row["Date"], timeString: row["Time"], name: row["Item Name"], action: 'IMPORTED', actionText: row["Type of Transfer"], qty: parseInt(row["Quantity"]) || 0, platform: row["Platform / Ref"] || "", comment: row["Remarks"] || "" });
-                                addedHist++;
-                            }
+                        if (row["Item Name"] && row["Type of Transfer"]) { const logId = row["Log ID"];
+                            if (!historyLog.some(h => h.id === logId)) { historyLog.push({ id: logId || Date.now().toString() + Math.random().toString(36).substr(2), dateString: row["Date"], timeString: row["Time"], name: row["Item Name"], action: 'IMPORTED', actionText: row["Type of Transfer"], qty: parseInt(row["Quantity"]) || 0, platform: row["Platform / Ref"] || "", comment: row["Remarks"] || "" }); addedHist++; }
                         }
                     });
                 }
-                alert(`Import Complete!\nNew Products: ${addedInv}\nNew Logs: ${addedHist}`); document.getElementById('importExcelGlobal').value = ''; saveAndRender(true);
+                alert(`Import Complete\nNew Catalog Items: ${addedInv}\nNew Ledger Entries: ${addedHist}`); document.getElementById('importExcelGlobal').value = ''; saveAndRender(true);
             }; reader.readAsArrayBuffer(file);
         }
 
-        /* ================= EDIT MODAL LOGIC ================= */
-        // Edit Master Modal Methods
+        // EDIT LOGIC
         function openEditMasterModal(id) {
             const item = inventory.find(i => i.id === id); if(!item) return;
             document.getElementById('editMasterId').value = item.id; document.getElementById('editMasterName').value = item.name; document.getElementById('editMasterCategory').value = item.category || 'General'; document.getElementById('editMasterImage').value = item.image || ''; document.getElementById('editMasterGodown').value = item.godownQty; document.getElementById('editMasterOffice').value = item.officeQty;
@@ -799,10 +932,9 @@
             closeEditMasterModal(); saveAndRender(true);
         }
 
-        // Edit History Modal Methods
         function openEditHistoryModal(id) {
             const log = historyLog.find(h => h.id === id); if(!log) return;
-            document.getElementById('editHistoryId').value = log.id; document.getElementById('editHistoryItemName').innerText = `Item: ${log.name} (${log.actionText})`; document.getElementById('editHistoryQty').value = log.qty; document.getElementById('editHistoryPlatform').value = log.platform || ''; document.getElementById('editHistoryComment').value = log.comment || '';
+            document.getElementById('editHistoryId').value = log.id; document.getElementById('editHistoryItemName').innerText = `Target: ${log.name} | Action: ${log.actionText}`; document.getElementById('editHistoryQty').value = log.qty; document.getElementById('editHistoryPlatform').value = log.platform || ''; document.getElementById('editHistoryComment').value = log.comment || '';
             document.getElementById('editHistoryModal').classList.remove('hidden'); document.getElementById('editHistoryModal').classList.add('flex');
         }
         function closeEditHistoryModal() { document.getElementById('editHistoryModal').classList.add('hidden'); document.getElementById('editHistoryModal').classList.remove('flex'); }
@@ -811,8 +943,6 @@
             log.qty = parseInt(document.getElementById('editHistoryQty').value) || 0; log.platform = document.getElementById('editHistoryPlatform').value.trim(); log.comment = document.getElementById('editHistoryComment').value.trim();
             closeEditHistoryModal(); saveAndRender(true);
         }
-
-        window.onload = loadData;
     </script>
 </body>
 </html>
