@@ -14,10 +14,10 @@
                         retro: {
                             base: '#f4f0eb',
                             dark: '#1a1c23',
-                            teal: '#14b8a6',    // Vibrant Teal
-                            rose: '#f43f5e',    // Sunset Rose
-                            mustard: '#f59e0b', // Golden Mustard
-                            slate: '#6366f1'    // Indigo Slate
+                            teal: '#14b8a6',    
+                            rose: '#f43f5e',    
+                            mustard: '#f59e0b', 
+                            slate: '#6366f1'    
                         }
                     },
                     animation: {
@@ -42,19 +42,14 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
-        /* --- LIQUID GLASS & ANIMATED BACKGROUND STYLES --- */
         body {
             background-color: #f4f0eb;
             color: #334155;
             font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             overflow-x: hidden;
         }
-        .dark body {
-            background-color: #111827;
-            color: #e2e8f0;
-        }
+        .dark body { background-color: #111827; color: #e2e8f0; }
 
-        /* Animated Floating Blobs */
         .bg-blobs { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; filter: blur(60px); opacity: 0.6; }
         .dark .bg-blobs { opacity: 0.3; }
         .blob-1 { position: absolute; top: -10%; left: -10%; width: 50vw; height: 50vw; background: #c084fc; border-radius: 50%; mix-blend-mode: multiply; animation: blob 18s infinite alternate; }
@@ -64,38 +59,24 @@
         .dark .blob-2 { background: #1d4ed8; mix-blend-mode: screen; }
         .dark .blob-3 { background: #be185d; mix-blend-mode: screen; }
 
-        /* The Premium Glass Panel */
         .glass-panel {
             background: rgba(255, 255, 255, 0.45);
             backdrop-filter: blur(24px) saturate(180%);
             -webkit-backdrop-filter: blur(24px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 
-                0 10px 30px rgba(0, 0, 0, 0.05), 
-                inset 1px 1px 0px rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(255, 255, 255, 0.8);
             border-radius: 1.5rem;
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
         .dark .glass-panel {
             background: rgba(17, 24, 39, 0.55);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 
-                0 10px 30px rgba(0, 0, 0, 0.3), 
-                inset 1px 1px 0px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 1px 1px 0px rgba(255, 255, 255, 0.05);
         }
 
-        /* Smooth Liquid Hover Effect */
-        .liquid-hover:hover {
-            transform: translateY(-4px) scale(1.01);
-            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1);
-            border-color: rgba(255,255,255,0.9);
-        }
-        .dark .liquid-hover:hover {
-            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
-            border-color: rgba(255,255,255,0.15);
-        }
+        .liquid-hover:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); border-color: rgba(255,255,255,0.9); }
+        .dark .liquid-hover:hover { box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5); border-color: rgba(255,255,255,0.15); }
 
-        /* Glass Input Fields */
         .glass-input {
             background: rgba(255, 255, 255, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.5);
@@ -104,45 +85,25 @@
             transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         }
         .glass-input:focus {
-            background: rgba(255, 255, 255, 0.9);
-            outline: none;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2), inset 2px 2px 5px rgba(0,0,0,0.03);
-            transform: scale(1.01);
+            background: rgba(255, 255, 255, 0.9); outline: none; border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2), inset 2px 2px 5px rgba(0,0,0,0.03); transform: scale(1.01);
         }
         .dark .glass-input {
-            background: rgba(0, 0, 0, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.4), inset -1px -1px 3px rgba(255,255,255,0.02);
-            color: #f8fafc;
+            background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.4), inset -1px -1px 3px rgba(255,255,255,0.02); color: #f8fafc;
         }
-        .dark .glass-input:focus {
-            background: rgba(0, 0, 0, 0.45);
-            border-color: #818cf8;
-            box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
-        }
+        .dark .glass-input:focus { background: rgba(0, 0, 0, 0.45); border-color: #818cf8; box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2); }
 
-        /* Elegant Buttons */
         .glass-btn {
             background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.4));
             border: 1px solid rgba(255, 255, 255, 0.9);
             box-shadow: 2px 4px 10px rgba(0,0,0,0.05), inset 1px 1px 2px rgba(255,255,255,1);
             transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        .glass-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 2px 8px 15px rgba(0,0,0,0.08), inset 1px 1px 2px rgba(255,255,255,1);
-        }
+        .glass-btn:hover { transform: translateY(-2px); box-shadow: 2px 8px 15px rgba(0,0,0,0.08), inset 1px 1px 2px rgba(255,255,255,1); }
         .glass-btn:active { transform: translateY(1px) scale(0.98); }
-        
-        .dark .glass-btn {
-            background: linear-gradient(135deg, rgba(55,65,81,0.8), rgba(31,41,55,0.6));
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 2px 4px 10px rgba(0,0,0,0.3), inset 1px 1px 2px rgba(255,255,255,0.05);
-            color: #f1f5f9;
-        }
+        .dark .glass-btn { background: linear-gradient(135deg, rgba(55,65,81,0.8), rgba(31,41,55,0.6)); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 2px 4px 10px rgba(0,0,0,0.3), inset 1px 1px 2px rgba(255,255,255,0.05); color: #f1f5f9; }
 
-        /* Soft Custom Scrollbar */
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.3); border-radius: 10px; }
@@ -150,40 +111,22 @@
 
         @media print { .no-print { display: none; } }
         
-        /* FULLSCREEN FIX */
         .fullscreen-card {
-            position: fixed !important; 
-            inset: 0 !important; 
-            width: 100% !important; 
-            height: 100% !important;
-            z-index: 9999 !important; 
-            border-radius: 0 !important; 
-            margin: 0 !important; 
-            max-width: 100% !important; 
-            max-height: 100% !important;
-            padding: 2rem !important; 
-            overflow-y: auto !important;
-            box-sizing: border-box !important;
+            position: fixed !important; inset: 0 !important; width: 100% !important; height: 100% !important;
+            z-index: 9999 !important; border-radius: 0 !important; margin: 0 !important; max-width: 100% !important; 
+            max-height: 100% !important; padding: 2rem !important; overflow-y: auto !important; box-sizing: border-box !important;
         }
         
         .keyboard-focus { background-color: rgba(99, 102, 241, 0.15) !important; transform: scale(1.02); }
         .dark .keyboard-focus { background-color: rgba(255, 255, 255, 0.1) !important; }
         .tab-active { background-color: #6366f1 !important; color: white !important; box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2), 0 4px 10px rgba(99,102,241,0.4) !important; }
-        
-        /* Modal Overlay Transition */
         .modal-overlay { transition: opacity 0.3s ease, backdrop-filter 0.3s ease; }
     </style>
 </head>
 <body class="min-h-screen transition-colors duration-500 selection:bg-retro-slate selection:text-white">
 
-    <!-- LIQUID BACKGROUND BLOBS -->
-    <div class="bg-blobs">
-        <div class="blob-1"></div>
-        <div class="blob-2"></div>
-        <div class="blob-3"></div>
-    </div>
+    <div class="bg-blobs"><div class="blob-1"></div><div class="blob-2"></div><div class="blob-3"></div></div>
 
-    <!-- LOGIN OVERLAY -->
     <div id="loginOverlay" class="fixed inset-0 z-[10000] flex items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/10 dark:bg-black/20">
         <div class="glass-panel p-10 max-w-sm w-full animate-fade-in-up">
             <div class="text-center mb-8">
@@ -193,37 +136,30 @@
                 <h2 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-retro-slate to-retro-rose tracking-tight">DOZY StockPro</h2>
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 uppercase tracking-[0.2em] font-bold">Secure Gateway</p>
             </div>
-            
             <div class="space-y-5">
                 <div>
                     <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-widest ml-1">Select Identity</label>
                     <select id="loginRole" class="glass-input w-full p-3.5 font-bold text-slate-700 dark:text-slate-200 cursor-pointer shadow-sm">
-                        <option value="office">🏢 Office</option>
-                        <option value="admin">⚙️ Admin(Rahul)</option>
+                        <option value="office">🏢 Branch Office</option>
+                        <option value="admin">⚙️ Headquarters</option>
                     </select>
                 </div>
-                
                 <div>
                     <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-widest ml-1">Passcode</label>
                     <input type="password" id="loginPassword" placeholder="••••••••" class="glass-input w-full p-3.5 font-bold tracking-[0.3em] text-center text-slate-700 dark:text-slate-200 shadow-sm" onkeypress="if(event.key === 'Enter') attemptLogin()">
                     <p id="loginError" class="text-retro-rose text-xs mt-2 hidden font-bold text-center animate-pulse">⚠️ Access Denied</p>
                 </div>
-                
                 <button onclick="attemptLogin()" class="w-full bg-gradient-to-r from-retro-slate to-indigo-500 hover:from-indigo-500 hover:to-retro-slate text-white font-bold py-3.5 rounded-xl transition-all duration-300 shadow-[0_8px_20px_-6px_rgba(99,102,241,0.5)] transform hover:-translate-y-1 uppercase tracking-widest text-sm mt-2">Initialize Session</button>
             </div>
         </div>
     </div>
 
-    <!-- MAIN APP CONTAINER -->
     <div id="mainApp" class="hidden">
-        <!-- Floating Nav Bar -->
         <div class="p-4 md:p-6 no-print sticky top-0 z-50">
             <nav class="glass-panel px-6 py-4 flex flex-col xl:flex-row justify-between items-center gap-5">
                 <div class="flex items-center gap-4 w-full xl:w-auto justify-between">
                     <div class="flex items-center gap-3">
-                        <div class="p-2 bg-white/50 dark:bg-white/10 rounded-xl shadow-inner">
-                            <span class="text-xl">📦</span>
-                        </div>
+                        <div class="p-2 bg-white/50 dark:bg-white/10 rounded-xl shadow-inner"><span class="text-xl">📦</span></div>
                         <div>
                             <h1 class="text-xl font-extrabold tracking-tight text-slate-800 dark:text-slate-100">DOZY <span class="text-transparent bg-clip-text bg-gradient-to-r from-retro-slate to-retro-teal">Pro</span></h1>
                             <div class="flex items-center gap-2 mt-0.5">
@@ -243,7 +179,6 @@
                 <div class="flex flex-wrap gap-2 justify-center xl:justify-end w-full xl:w-auto items-center" id="adminControls">
                     <button onclick="toggleTheme()" class="hidden xl:block glass-btn p-2.5 rounded-xl text-sm shadow-sm" title="Toggle Theme">🌗</button>
                     <div class="h-8 w-px bg-slate-300 dark:bg-slate-700 hidden xl:block mx-2"></div>
-                    
                     <div id="adminOnlyControls" class="flex gap-2">
                         <input type="file" id="importExcelGlobal" accept=".xlsx, .xls" class="hidden" onchange="importAllDataExcel(event)">
                         <button onclick="document.getElementById('importExcelGlobal').click()" class="bg-gradient-to-r from-retro-teal to-emerald-400 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all transform hover:-translate-y-1 shadow-[0_5px_15px_-5px_rgba(20,184,166,0.5)] uppercase tracking-wide">📥 Import</button>
@@ -251,22 +186,17 @@
                         <button onclick="clearHistory()" class="glass-btn px-4 py-2 rounded-xl text-xs font-bold transition-all uppercase tracking-wide hidden md:block text-slate-600 dark:text-slate-300">Clean Logs</button>
                         <button onclick="clearAllBackendData()" class="bg-gradient-to-r from-retro-rose to-red-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all transform hover:-translate-y-1 shadow-[0_5px_15px_-5px_rgba(244,63,94,0.5)] uppercase tracking-wide">🚨 Reset</button>
                     </div>
-                    
                     <button onclick="logout()" class="glass-btn hover:text-retro-rose dark:hover:text-retro-rose px-4 py-2 rounded-xl text-xs font-bold transition-all uppercase tracking-wide ml-2">🚪 Disconnect</button>
                 </div>
             </nav>
         </div>
 
         <div class="max-w-7xl mx-auto p-4 md:p-6 pt-0">
-            
             <div id="adminView" class="space-y-8 block animate-fade-in-up">
-                <!-- Liquid KPI Dashboard -->
                 <div id="kpiDashboard" class="glass-panel liquid-hover p-6 no-print flex flex-col admin-only-section">
                     <div class="flex justify-between items-center mb-6 shrink-0 border-b border-slate-200/50 dark:border-slate-700/50 pb-4">
-                        <h2 class="text-xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight flex items-center gap-2">
-                            <span class="p-1.5 bg-white/50 dark:bg-white/10 rounded-lg">📊</span> Neural Analytics
-                        </h2>
-                        <button onclick="toggleFullScreen('kpiDashboard')" class="glass-btn px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-sm">⛶ Expand</button>
+                        <h2 class="text-xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight flex items-center gap-2"><span class="p-1.5 bg-white/50 dark:bg-white/10 rounded-lg">📊</span> Neural Analytics</h2>
+                        <button onclick="toggleFullScreen('kpiDashboard')" class="glass-btn px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-sm">⛶ Shrink / Expand</button>
                     </div>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
                         <div class="glass-input p-5 border-l-4 border-l-retro-slate flex flex-col justify-center transition-transform hover:scale-105">
@@ -304,9 +234,7 @@
                     </div>
                 </div>
 
-                <!-- Transaction Cards -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 no-print">
-                    <!-- Logistics -->
                     <div id="warehouseCard" class="glass-panel liquid-hover p-6 flex flex-col h-[38rem]">
                         <div class="flex justify-between items-center mb-5 shrink-0 border-b border-slate-200/50 dark:border-slate-700/50 pb-4">
                             <div class="flex items-center gap-3">
@@ -317,14 +245,11 @@
                         </div>
                         <div class="flex flex-col gap-4 shrink-0">
                             <select id="warehouseAction" class="glass-input w-full p-3.5 text-sm font-bold text-retro-teal cursor-pointer shadow-sm">
-                                <!-- JS injected -->
                             </select>
-
                             <div class="relative w-full" id="whDropdownContainer">
                                 <input type="text" id="whSelect" placeholder="Search product parameter... (Arrows & Enter)" autocomplete="off" onfocus="openDropdown('whList')" oninput="filterDropdown('whSelect', 'whList')" onclick="openDropdown('whList')" class="glass-input w-full p-3.5 text-sm shadow-sm">
                                 <ul id="whList" class="hidden absolute z-50 w-full mt-2 glass-panel shadow-[0_20px_40px_-10px_rgba(0,0,0,0.2)] max-h-56 overflow-y-auto py-2 custom-scrollbar flex-col text-slate-700 dark:text-slate-200 font-medium"></ul>
                             </div>
-
                             <div class="flex gap-3">
                                 <input type="number" id="whQty" placeholder="Qty" class="glass-input w-24 p-3.5 text-sm font-mono text-center font-bold shadow-sm">
                                 <input type="text" id="whPlatform" placeholder="Ref/Challan" class="glass-input w-1/3 p-3.5 text-sm shadow-sm">
@@ -336,7 +261,6 @@
                         <button onclick="submitWhBatch()" id="btnSubmitWh" class="mt-4 bg-gradient-to-r from-retro-teal to-emerald-400 hover:from-emerald-400 hover:to-retro-teal text-white font-black py-4 rounded-xl text-xs transition-all shadow-[0_8px_20px_-6px_rgba(20,184,166,0.5)] transform hover:-translate-y-1 hidden shrink-0 uppercase tracking-[0.2em]">Deploy Batch Sync</button>
                     </div>
 
-                    <!-- Sales -->
                     <div id="salesCard" class="glass-panel liquid-hover p-6 flex flex-col h-[38rem]">
                         <div class="flex justify-between items-center mb-5 shrink-0 border-b border-slate-200/50 dark:border-slate-700/50 pb-4">
                             <div class="flex items-center gap-3">
@@ -350,12 +274,10 @@
                                 <option value="SALE">📤 Dispatch Sale (Outbound)</option>
                                 <option value="CUST_RETURN">🔄 Process Return (Inbound)</option>
                             </select>
-
                             <div class="relative w-full" id="slDropdownContainer">
                                 <input type="text" id="slSelect" placeholder="Search product parameter... (Arrows & Enter)" autocomplete="off" onfocus="openDropdown('slList')" oninput="filterDropdown('slSelect', 'slList')" onclick="openDropdown('slList')" class="glass-input w-full p-3.5 text-sm shadow-sm">
                                 <ul id="slList" class="hidden absolute z-50 w-full mt-2 glass-panel shadow-[0_20px_40px_-10px_rgba(0,0,0,0.2)] max-h-56 overflow-y-auto py-2 custom-scrollbar flex-col text-slate-700 dark:text-slate-200 font-medium"></ul>
                             </div>
-
                             <div class="flex gap-3">
                                 <input type="number" id="slQty" placeholder="Qty" class="glass-input w-24 p-3.5 text-sm font-mono text-center font-bold shadow-sm">
                                 <input type="text" id="slPlatform" placeholder="Platform" class="glass-input w-1/3 p-3.5 text-sm shadow-sm">
@@ -368,7 +290,6 @@
                     </div>
                 </div>
 
-                <!-- History Logs -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                     <div id="whHistoryCard" class="glass-panel liquid-hover h-[38rem] flex flex-col p-3">
                         <div class="p-5 border-b border-slate-200/30 dark:border-slate-700/30 flex flex-col gap-4 shrink-0 bg-white/10 dark:bg-black/5 rounded-t-xl">
@@ -393,13 +314,12 @@
                     </div>
                 </div>
 
-                <!-- Master Stock Setup (Admin) -->
                 <div id="masterCard" class="glass-panel overflow-hidden no-print flex flex-col mb-10 admin-only-section animate-fade-in-up">
                     <div class="p-6 border-b border-slate-200/30 dark:border-slate-700/30 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 shrink-0 bg-white/20 dark:bg-black/10">
                         <div class="flex flex-wrap items-center gap-4 w-full lg:w-auto justify-between lg:justify-start">
                             <div class="p-2.5 bg-white/50 dark:bg-white/10 rounded-xl shadow-inner"><span class="text-2xl">🗄️</span></div>
                             <h2 class="text-xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">Master Directory</h2>
-                            <button onclick="toggleFullScreen('masterCard')" class="glass-btn px-2.5 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest">⛶ Expand</button>
+                            <button onclick="toggleFullScreen('masterCard')" class="glass-btn px-2.5 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest">⛶ Shrink / Expand</button>
                         </div>
                         <div class="flex flex-col gap-4 w-full lg:w-auto">
                             <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="🔍 Deep scan directory..." class="glass-input p-3 text-sm text-center shadow-inner font-medium">
@@ -429,7 +349,6 @@
                 </div>
             </div>
 
-            <!-- Viewer View -->
             <div id="viewerView" class="hidden space-y-8 animate-fade-in-up">
                 <div class="glass-panel p-8 no-print">
                     <div class="flex items-center gap-3 mb-6 border-b border-slate-200/50 dark:border-slate-700/50 pb-4">
@@ -471,7 +390,7 @@
                 <div id="viewerTableCard" class="glass-panel overflow-hidden flex flex-col transition-all duration-500">
                     <div class="p-6 border-b border-slate-200/50 dark:border-slate-700/50 bg-white/20 dark:bg-black/10 flex justify-between items-center shrink-0">
                         <h3 class="text-sm font-black uppercase tracking-widest text-slate-700 dark:text-slate-200">Radar Hits: <span id="viewerResultCount" class="text-transparent bg-clip-text bg-gradient-to-r from-retro-slate to-retro-rose text-lg">0</span></h3>
-                        <button onclick="toggleFullScreen('viewerTableCard')" class="glass-btn px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-sm">⛶ Expand Radar</button>
+                        <button onclick="toggleFullScreen('viewerTableCard')" class="glass-btn px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-sm">⛶ Shrink / Expand Radar</button>
                     </div>
                     <div class="overflow-x-auto h-[45rem] max-h-[75vh] custom-scrollbar p-3">
                         <table class="w-full text-left border-collapse">
@@ -480,8 +399,8 @@
                                     <th class="p-5 w-1/6">Class</th>
                                     <th class="p-5 w-1/3">Nomenclature</th>
                                     <th class="p-5 text-center w-1/6">Health</th>
-                                    <th class="p-5 text-center text-retro-teal bg-retro-teal/5">Bawana</th>
-                                    <th class="p-5 text-center text-retro-mustard bg-retro-mustard/5">Office</th>
+                                    <th class="p-5 text-center text-retro-teal bg-retro-teal/5">Vault</th>
+                                    <th class="p-5 text-center text-retro-mustard bg-retro-mustard/5">Floor</th>
                                     <th class="p-5 text-center text-retro-slate bg-retro-slate/5 border-r border-white/10">Global Volume</th>
                                 </tr>
                             </thead>
@@ -492,10 +411,8 @@
             </div>
 
         </div>
-    </div> <!-- END MAIN APP -->
+    </div> 
 
-    <!-- MODALS -->
-    <!-- Export Modal -->
     <div id="exportModal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/10 dark:bg-black/40">
         <div class="glass-panel p-8 w-[28rem] max-w-full animate-fade-in-up">
             <h3 class="text-xl font-black mb-6 border-b border-slate-200/50 dark:border-slate-700/50 pb-4 uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-3">
@@ -526,7 +443,6 @@
         </div>
     </div>
 
-    <!-- Edit Master Modal -->
     <div id="editMasterModal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/10 dark:bg-black/40">
         <div class="glass-panel p-8 w-[28rem] max-w-full animate-fade-in-up">
             <h3 class="text-xl font-black mb-6 border-b border-slate-200/50 dark:border-slate-700/50 pb-4 uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-3">
@@ -549,7 +465,6 @@
         </div>
     </div>
 
-    <!-- Edit History Modal -->
     <div id="editHistoryModal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/10 dark:bg-black/40">
         <div class="glass-panel p-8 w-[28rem] max-w-full animate-fade-in-up">
             <h3 class="text-xl font-black mb-6 border-b border-slate-200/50 dark:border-slate-700/50 pb-4 uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-3">
@@ -572,17 +487,14 @@
     </div>
 
     <script>
-        // CONFIGURABLE PASSWORDS
         const PASSWORDS = { admin: "admin123", office: "dozy123" };
         let currentRole = null; 
         let inventory = []; let historyLog = []; let pendingWh = []; let pendingSl = []; let uniqueCategories = [];
         const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycby44thggci_dwQ2MvlTxbVtFswov7esG7eC5VGRxzaXPe0lQc81BswIT8lXIsqKVrfH/exec"; 
 
-        // THEME LOGIC
         function toggleTheme() { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); }
         if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); }
 
-        // LOGIN AUTHENTICATION LOGIC
         function attemptLogin() {
             const role = document.getElementById('loginRole').value; const pass = document.getElementById('loginPassword').value;
             if (role === 'admin' && pass === PASSWORDS.admin) { currentRole = 'admin'; grantAccess(); } 
@@ -590,6 +502,7 @@
             else { document.getElementById('loginError').classList.remove('hidden'); }
         }
         function logout() { currentRole = null; document.getElementById('loginPassword').value = ''; document.getElementById('mainApp').classList.add('hidden'); document.getElementById('loginOverlay').classList.remove('hidden'); document.getElementById('loginError').classList.add('hidden'); }
+        
         function grantAccess() {
             document.getElementById('loginError').classList.add('hidden'); document.getElementById('loginOverlay').classList.add('hidden'); document.getElementById('mainApp').classList.remove('hidden');
             document.getElementById('userRoleBadge').innerText = currentRole;
@@ -606,7 +519,6 @@
             loadData();
         }
 
-        // VIEW SWITCHER
         function switchView(viewName) {
             const adminView = document.getElementById('adminView'); const viewerView = document.getElementById('viewerView');
             const tabAdmin = document.getElementById('tabAdmin'); const tabViewer = document.getElementById('tabViewer');
@@ -622,7 +534,6 @@
             }
         }
 
-        // KEYBOARD & QUICK ACTIONS
         function setupKeyboardNav(inputId, listId) {
             const input = document.getElementById(inputId); let currentFocus = -1;
             input.addEventListener("input", function() { currentFocus = -1; });
@@ -644,12 +555,10 @@
         ['whQty', 'whPlatform', 'whComment'].forEach(id => { document.getElementById(id).addEventListener('keypress', function(e) { if(e.key === 'Enter') addTowhBatch(); }); });
         ['slQty', 'slPlatform', 'slComment'].forEach(id => { document.getElementById(id).addEventListener('keypress', function(e) { if(e.key === 'Enter') addToSlBatch(); }); });
 
-        // TIME FORMATS
         function formatToIndianDate(val) { return (!val || !val.includes('T')) ? val : new Date(val).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' }); }
         function formatToIndianTime(val) { return (!val || !val.includes('T')) ? val : new Date(val).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' }); }
         function getFormattedRealTime() { const realNow = new Date(); return { dateString: realNow.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }), timeString: realNow.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) }; }
         
-        // DATA SYNC
         async function loadData() {
             document.getElementById('syncStatus').innerText = "Establishing Link...";
             try {
@@ -667,7 +576,6 @@
             .catch(e => { document.getElementById('syncStatus').innerText = "Sync Failed"; });
         }
 
-        // RENDER LOGIC
         function extractCategories() {
             uniqueCategories = [...new Set(inventory.map(i => i.category || 'General'))].sort();
             const viewCat = document.getElementById('viewerCategory'); const currentViewVal = viewCat.value;
@@ -720,21 +628,53 @@
         }
         document.addEventListener('click', function(e) { if (!e.target.closest('#whDropdownContainer')) document.getElementById('whList').classList.add('hidden'); if (!e.target.closest('#slDropdownContainer')) document.getElementById('slList').classList.add('hidden'); });
 
-        // BATCH LOGIC
+        /* ================= AUTO COMBO LOGIC ================= */
+        
         function addTowhBatch() {
             const name = document.getElementById('whSelect').value.trim(); const qty = parseInt(document.getElementById('whQty').value); const action = document.getElementById('warehouseAction').value; const platform = document.getElementById('whPlatform').value.trim(); const comment = document.getElementById('whComment').value.trim();
             if (!name || isNaN(qty) || qty <= 0) return; const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase()); if (!item) return alert("Signal Lost. Item void.");
             let actionText = action === 'MFR_RECEIVE' ? 'Mfr ➔ Godown' : action === 'MFR_RETURN' ? 'Godown ➔ Mfr' : action === 'GODOWN_TO_OFFICE' ? 'Godown ➔ Office' : 'Office ➔ Godown';
+            
             if (action === 'GODOWN_TO_OFFICE' && item.godownQty < qty) return alert(`Godown Capacity Error: ${item.godownQty} Max.`); if (action === 'OFFICE_RETURN' && item.officeQty < qty) return alert(`Office Capacity Error: ${item.officeQty} Max.`); if (action === 'MFR_RETURN' && item.godownQty < qty) return alert(`Godown Capacity Error: ${item.godownQty} Max.`);
+
+            // AUTO COMBO ANALYZER
+            const match = item.name.match(/\(([^)]+)\)/);
+            let autoItems = [];
+            if (match) {
+                const numbers = match[1].split(/[+,&]/).map(n => n.trim()).filter(n => n);
+                for (let num of numbers) {
+                    const regex = new RegExp('^' + num + '([^a-zA-Z0-9]|$)', 'i');
+                    const baseItem = inventory.find(i => regex.test(i.name));
+                    if (baseItem) {
+                        if (action === 'GODOWN_TO_OFFICE' && baseItem.godownQty < qty) return alert(`Auto-Combo Abort: Base item "${baseItem.name}" has only ${baseItem.godownQty} in Godown.`);
+                        if (action === 'OFFICE_RETURN' && baseItem.officeQty < qty) return alert(`Auto-Combo Abort: Base item "${baseItem.name}" has only ${baseItem.officeQty} in Office.`);
+                        if (action === 'MFR_RETURN' && baseItem.godownQty < qty) return alert(`Auto-Combo Abort: Base item "${baseItem.name}" has only ${baseItem.godownQty} in Godown.`);
+                        autoItems.push(baseItem);
+                    }
+                }
+            }
+
             pendingWh.push({ id: item.id, name: item.name, action, actionText, qty, platform, comment });
+            
+            // Push valid base items
+            autoItems.forEach(bItem => {
+                pendingWh.push({ id: bItem.id, name: bItem.name, action: action, actionText: '⚡ Auto: ' + actionText, qty: qty, platform: platform, comment: comment ? comment + ' [Combo Sync]' : '[Combo Sync]' });
+            });
+
             document.getElementById('whSelect').value = ''; document.getElementById('whQty').value = ''; document.getElementById('whPlatform').value = ''; document.getElementById('whComment').value = ''; document.getElementById('whSelect').focus(); renderWhBatch();
         }
+
         function removeWhBatch(index) { pendingWh.splice(index, 1); renderWhBatch(); }
+        
         function renderWhBatch() {
             const container = document.getElementById('whBatchContainer'); const btn = document.getElementById('btnSubmitWh'); container.innerHTML = '';
             if(pendingWh.length === 0) { container.innerHTML = '<div class="text-slate-400/70 text-[10px] text-center mt-8 uppercase tracking-[0.3em] font-black">Queue Empty</div>'; btn.style.display = 'none'; return; } btn.style.display = 'block';
-            pendingWh.forEach((p, idx) => { container.innerHTML += `<div class="flex justify-between items-center glass-input p-3 mb-2 rounded-xl border-l-4 border-l-retro-teal shadow-sm animate-fade-in-up" style="animation-duration: 0.3s"><div class="flex flex-col"><span class="font-extrabold text-sm text-slate-700 dark:text-slate-200">${p.name}</span><span class="text-[9px] text-retro-teal font-black uppercase tracking-widest mt-0.5">${p.actionText}</span></div><div class="flex items-center gap-4"><span class="font-black font-mono text-lg text-slate-700 dark:text-white bg-white/40 dark:bg-black/30 px-2 py-0.5 rounded shadow-inner">${p.qty}</span><button onclick="removeWhBatch(${idx})" class="text-retro-rose hover:scale-125 transition-transform text-sm px-1 font-bold">✕</button></div></div>`; });
+            pendingWh.forEach((p, idx) => { 
+                let autoStyle = p.actionText.includes('⚡') ? 'opacity-80 scale-[0.98]' : '';
+                container.innerHTML += `<div class="flex justify-between items-center glass-input p-3 mb-2 rounded-xl border-l-4 border-l-retro-teal shadow-sm animate-fade-in-up ${autoStyle}" style="animation-duration: 0.3s"><div class="flex flex-col"><span class="font-extrabold text-sm text-slate-700 dark:text-slate-200">${p.name}</span><span class="text-[9px] text-retro-teal font-black uppercase tracking-widest mt-0.5">${p.actionText}</span></div><div class="flex items-center gap-4"><span class="font-black font-mono text-lg text-slate-700 dark:text-white bg-white/40 dark:bg-black/30 px-2 py-0.5 rounded shadow-inner">${p.qty}</span><button onclick="removeWhBatch(${idx})" class="text-retro-rose hover:scale-125 transition-transform text-sm px-1 font-bold">✕</button></div></div>`; 
+            });
         }
+
         function submitWhBatch() {
             if(pendingWh.length === 0) return; const { dateString, timeString } = getFormattedRealTime();
             pendingWh.forEach(p => {
@@ -751,16 +691,44 @@
             if (!name || isNaN(qty) || qty <= 0) return; const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase()); if (!item) return alert("Signal Lost. Item void.");
             let actionText = action === 'SALE' ? 'Sale (Out)' : 'Return (In)';
             if (action === 'SALE' && item.officeQty < qty) return alert(`Office Deficit! Max dispatch: ${item.officeQty}.`);
+
+            // AUTO COMBO ANALYZER
+            const match = item.name.match(/\(([^)]+)\)/);
+            let autoItems = [];
+            if (match) {
+                const numbers = match[1].split(/[+,&]/).map(n => n.trim()).filter(n => n);
+                for (let num of numbers) {
+                    const regex = new RegExp('^' + num + '([^a-zA-Z0-9]|$)', 'i');
+                    const baseItem = inventory.find(i => regex.test(i.name));
+                    if (baseItem) {
+                        if (action === 'SALE' && baseItem.officeQty < qty) return alert(`Auto-Combo Abort: Base item "${baseItem.name}" has only ${baseItem.officeQty} in Office.`);
+                        autoItems.push(baseItem);
+                    }
+                }
+            }
+
             pendingSl.push({ id: item.id, name: item.name, action, actionText, qty, platform, comment });
+            
+            // Push valid base items
+            autoItems.forEach(bItem => {
+                pendingSl.push({ id: bItem.id, name: bItem.name, action: action, actionText: '⚡ Auto: ' + actionText, qty: qty, platform: platform, comment: comment ? comment + ' [Combo Sync]' : '[Combo Sync]' });
+            });
+
             document.getElementById('slSelect').value = ''; document.getElementById('slQty').value = ''; document.getElementById('slPlatform').value = ''; document.getElementById('slComment').value = ''; document.getElementById('slSelect').focus(); renderSlBatch();
         }
+
         function removeSlBatch(index) { pendingSl.splice(index, 1); renderSlBatch(); }
+        
         function renderSlBatch() {
             const container = document.getElementById('slBatchContainer'); const btn = document.getElementById('btnSubmitSl'); container.innerHTML = '';
             if(pendingSl.length === 0) { container.innerHTML = '<div class="text-slate-400/70 text-[10px] text-center mt-8 uppercase tracking-[0.3em] font-black">Queue Empty</div>'; btn.style.display = 'none'; return; } btn.style.display = 'block';
-            pendingSl.forEach((p, idx) => { const colors = p.action === 'SALE' ? 'border-l-retro-slate text-retro-slate' : 'border-l-retro-rose text-retro-rose';
-                container.innerHTML += `<div class="flex justify-between items-center glass-input p-3 mb-2 rounded-xl border-l-4 ${colors.split(' ')[0]} shadow-sm animate-fade-in-up" style="animation-duration: 0.3s"><div class="flex flex-col"><span class="font-extrabold text-sm text-slate-700 dark:text-slate-200">${p.name}</span><span class="text-[9px] ${colors.split(' ')[1]} font-black uppercase tracking-widest mt-0.5">${p.actionText}</span></div><div class="flex items-center gap-4"><span class="font-black font-mono text-lg text-slate-700 dark:text-white bg-white/40 dark:bg-black/30 px-2 py-0.5 rounded shadow-inner">${p.qty}</span><button onclick="removeSlBatch(${idx})" class="text-retro-rose hover:scale-125 transition-transform text-sm px-1 font-bold">✕</button></div></div>`; });
+            pendingSl.forEach((p, idx) => { 
+                const colors = p.action === 'SALE' ? 'border-l-retro-slate text-retro-slate' : 'border-l-retro-rose text-retro-rose';
+                let autoStyle = p.actionText.includes('⚡') ? 'opacity-80 scale-[0.98]' : '';
+                container.innerHTML += `<div class="flex justify-between items-center glass-input p-3 mb-2 rounded-xl border-l-4 ${colors.split(' ')[0]} shadow-sm animate-fade-in-up ${autoStyle}" style="animation-duration: 0.3s"><div class="flex flex-col"><span class="font-extrabold text-sm text-slate-700 dark:text-slate-200">${p.name}</span><span class="text-[9px] ${colors.split(' ')[1]} font-black uppercase tracking-widest mt-0.5">${p.actionText}</span></div><div class="flex items-center gap-4"><span class="font-black font-mono text-lg text-slate-700 dark:text-white bg-white/40 dark:bg-black/30 px-2 py-0.5 rounded shadow-inner">${p.qty}</span><button onclick="removeSlBatch(${idx})" class="text-retro-rose hover:scale-125 transition-transform text-sm px-1 font-bold">✕</button></div></div>`; 
+            });
         }
+
         function submitSlBatch() {
             if(pendingSl.length === 0) return; const { dateString, timeString } = getFormattedRealTime();
             pendingSl.forEach(p => {
