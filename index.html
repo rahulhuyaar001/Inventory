@@ -235,6 +235,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 no-print">
+                    <!-- Logistics -->
                     <div id="warehouseCard" class="glass-panel liquid-hover p-6 flex flex-col h-[38rem]">
                         <div class="flex justify-between items-center mb-5 shrink-0 border-b border-slate-200/50 dark:border-slate-700/50 pb-4">
                             <div class="flex items-center gap-3">
@@ -261,6 +262,7 @@
                         <button onclick="submitWhBatch()" id="btnSubmitWh" class="mt-4 bg-gradient-to-r from-retro-teal to-emerald-400 hover:from-emerald-400 hover:to-retro-teal text-white font-black py-4 rounded-xl text-xs transition-all shadow-[0_8px_20px_-6px_rgba(20,184,166,0.5)] transform hover:-translate-y-1 hidden shrink-0 uppercase tracking-[0.2em]">Deploy Batch Sync</button>
                     </div>
 
+                    <!-- Sales -->
                     <div id="salesCard" class="glass-panel liquid-hover p-6 flex flex-col h-[38rem]">
                         <div class="flex justify-between items-center mb-5 shrink-0 border-b border-slate-200/50 dark:border-slate-700/50 pb-4">
                             <div class="flex items-center gap-3">
@@ -637,14 +639,15 @@
             
             if (action === 'GODOWN_TO_OFFICE' && item.godownQty < qty) return alert(`Godown Capacity Error: ${item.godownQty} Max.`); if (action === 'OFFICE_RETURN' && item.officeQty < qty) return alert(`Office Capacity Error: ${item.officeQty} Max.`); if (action === 'MFR_RETURN' && item.godownQty < qty) return alert(`Godown Capacity Error: ${item.godownQty} Max.`);
 
-            // AUTO COMBO ANALYZER
+            // AUTO COMBO ANALYZER - WITH KITCHEN CATEGORY FILTER
             const match = item.name.match(/\(([^)]+)\)/);
             let autoItems = [];
             if (match) {
                 const numbers = match[1].split(/[+,&]/).map(n => n.trim()).filter(n => n);
                 for (let num of numbers) {
                     const regex = new RegExp('^' + num + '([^a-zA-Z0-9]|$)', 'i');
-                    const baseItem = inventory.find(i => regex.test(i.name));
+                    // ONLY PICK FROM KITCHEN CATEGORY
+                    const baseItem = inventory.find(i => regex.test(i.name) && i.category && (i.category.toLowerCase().includes('kitchen') || i.category.toLowerCase().includes('kichen')));
                     if (baseItem) {
                         if (action === 'GODOWN_TO_OFFICE' && baseItem.godownQty < qty) return alert(`Auto-Combo Abort: Base item "${baseItem.name}" has only ${baseItem.godownQty} in Godown.`);
                         if (action === 'OFFICE_RETURN' && baseItem.officeQty < qty) return alert(`Auto-Combo Abort: Base item "${baseItem.name}" has only ${baseItem.officeQty} in Office.`);
@@ -692,14 +695,15 @@
             let actionText = action === 'SALE' ? 'Sale (Out)' : 'Return (In)';
             if (action === 'SALE' && item.officeQty < qty) return alert(`Office Deficit! Max dispatch: ${item.officeQty}.`);
 
-            // AUTO COMBO ANALYZER
+            // AUTO COMBO ANALYZER - WITH KITCHEN CATEGORY FILTER
             const match = item.name.match(/\(([^)]+)\)/);
             let autoItems = [];
             if (match) {
                 const numbers = match[1].split(/[+,&]/).map(n => n.trim()).filter(n => n);
                 for (let num of numbers) {
                     const regex = new RegExp('^' + num + '([^a-zA-Z0-9]|$)', 'i');
-                    const baseItem = inventory.find(i => regex.test(i.name));
+                    // ONLY PICK FROM KITCHEN CATEGORY
+                    const baseItem = inventory.find(i => regex.test(i.name) && i.category && (i.category.toLowerCase().includes('kitchen') || i.category.toLowerCase().includes('kichen')));
                     if (baseItem) {
                         if (action === 'SALE' && baseItem.officeQty < qty) return alert(`Auto-Combo Abort: Base item "${baseItem.name}" has only ${baseItem.officeQty} in Office.`);
                         autoItems.push(baseItem);
@@ -740,7 +744,6 @@
             }); pendingSl = []; renderSlBatch(); saveAndRender(true);
         }
 
-        // HISTORY HTML
         function renderHistory() {
             const whContainer = document.getElementById('whHistoryContainer'); const slContainer = document.getElementById('slHistoryContainer');
             let whLogs = historyLog.filter(l => ['MFR_RECEIVE', 'MFR_RETURN', 'GODOWN_TO_OFFICE', 'OFFICE_RETURN'].includes(l.action));
@@ -777,7 +780,6 @@
             } return html;
         }
 
-        // MASTER TABLE RENDER
         function addMasterProduct() {
             if(currentRole !== 'admin') return; const namesInput = document.getElementById('newNames').value; const categoryInput = document.getElementById('newCategory').value.trim() || 'General'; const imgInput = document.getElementById('newImage').value.trim();
             if (!namesInput.trim()) return;
@@ -807,7 +809,6 @@
         }
         function filterTable() { const q = document.getElementById('searchInput').value.toLowerCase(); document.querySelectorAll('#inventoryBody tr').forEach(row => { if(row.cells.length > 1) { const text = row.innerText.toLowerCase(); row.style.display = text.includes(q) ? '' : 'none'; } }); }
 
-        // VIEWER RENDER
         function renderViewerTable() {
             const viewSearch = document.getElementById('viewerSearch').value.toLowerCase(); const viewCategory = document.getElementById('viewerCategory').value; const viewStatus = document.getElementById('viewerStatus').value; const viewSort = document.getElementById('viewerSort').value;
             let filtered = inventory.filter(item => { const totalQty = item.godownQty + item.officeQty; let matchSearch = item.name.toLowerCase().includes(viewSearch); let matchCategory = viewCategory === 'ALL' ? true : (item.category || 'General') === viewCategory; let matchStatus = true;
@@ -844,7 +845,6 @@
         function clearAllBackendData() { if (prompt("Type 'YES' to confirm full system wipe:") === 'YES') { inventory = []; historyLog = []; saveAndRender(true); alert("System Purged."); } }
         function toggleFullScreen(cardId) { document.getElementById(cardId).classList.toggle('fullscreen-card'); const btn = event.target; btn.innerText = btn.innerText.includes('Expand') ? '⛶ Shrink' : '⛶ Expand'; }
 
-        // EXPORT LOGIC
         function openExportModal() { document.getElementById('exportModal').classList.remove('hidden'); document.getElementById('exportModal').classList.add('flex'); }
         function closeExportModal() { document.getElementById('exportModal').classList.add('hidden'); document.getElementById('exportModal').classList.remove('flex'); }
         function executeExport() {
@@ -866,7 +866,6 @@
             XLSX.writeFile(wb, filename); closeExportModal();
         }
 
-        // IMPORT LOGIC
         function importAllDataExcel(event) {
             const file = event.target.files[0]; if (!file) return; const reader = new FileReader();
             reader.onload = function(e) {
@@ -887,7 +886,6 @@
             }; reader.readAsArrayBuffer(file);
         }
 
-        // EDIT LOGIC
         function openEditMasterModal(id) {
             const item = inventory.find(i => i.id === id); if(!item) return;
             document.getElementById('editMasterId').value = item.id; document.getElementById('editMasterName').value = item.name; document.getElementById('editMasterCategory').value = item.category || 'General'; document.getElementById('editMasterImage').value = item.image || ''; document.getElementById('editMasterGodown').value = item.godownQty; document.getElementById('editMasterOffice').value = item.officeQty;
