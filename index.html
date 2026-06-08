@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOZY StockPro | Liquid Glass & QR</title>
+    <title>DOZY StockPro | Barcode Ready</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -41,7 +41,6 @@
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <style>
         body {
             background-color: #f4f0eb;
@@ -122,16 +121,13 @@
         .dark .keyboard-focus { background-color: rgba(255, 255, 255, 0.1) !important; }
         .tab-active { background-color: #6366f1 !important; color: white !important; box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2), 0 4px 10px rgba(99,102,241,0.4) !important; }
         .modal-overlay { transition: opacity 0.3s ease, backdrop-filter 0.3s ease; }
-
-        /* Style adjustments for HTML5 QR Code */
-        #reader { border: none !important; border-radius: 1rem; overflow: hidden; }
-        #reader video { border-radius: 1rem; }
     </style>
 </head>
 <body class="min-h-screen transition-colors duration-500 selection:bg-retro-slate selection:text-white">
 
     <div class="bg-blobs"><div class="blob-1"></div><div class="blob-2"></div><div class="blob-3"></div></div>
 
+    <!-- LOGIN / HOME SCREEN -->
     <div id="loginOverlay" class="fixed inset-0 z-[10000] flex items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/10 dark:bg-black/20 overflow-y-auto">
         <div class="glass-panel p-8 md:p-10 max-w-sm w-full animate-fade-in-up my-auto">
             <div class="text-center mb-8">
@@ -168,6 +164,7 @@
         </div>
     </div>
 
+    <!-- MAIN APP CONTAINER -->
     <div id="mainApp" class="hidden">
         <div class="p-2 md:p-6 no-print sticky top-0 z-50">
             <nav class="glass-panel px-4 py-4 md:px-6 flex flex-col xl:flex-row justify-between items-center gap-4">
@@ -206,6 +203,7 @@
         </div>
 
         <div class="max-w-7xl mx-auto p-2 md:p-6 pt-0">
+            <!-- ADMIN & OFFICE VIEW (Actions Panel) -->
             <div id="adminView" class="space-y-6 md:space-y-8 block animate-fade-in-up">
                 
                 <div id="kpiDashboard" class="glass-panel liquid-hover p-4 md:p-6 no-print flex flex-col admin-only-section">
@@ -251,6 +249,7 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 no-print">
                     
+                    <!-- Logistics Panel -->
                     <div id="warehouseCard" class="glass-panel liquid-hover p-4 md:p-6 flex flex-col h-auto md:h-[42rem]">
                         <div class="flex justify-between items-center mb-4 md:mb-5 shrink-0 border-b border-slate-200/50 dark:border-slate-700/50 pb-3 md:pb-4">
                             <div class="flex items-center gap-3">
@@ -262,10 +261,10 @@
                         <div class="flex flex-col gap-3 md:gap-4 shrink-0">
                             <select id="warehouseAction" oninput="updatePreview('wh')" class="glass-input w-full p-3 text-xs md:text-sm font-bold text-retro-teal cursor-pointer shadow-sm"></select>
                             
-                            <div class="flex gap-2 relative" id="whDropdownContainer">
-                                <input type="text" id="whSelect" oninput="filterDropdown('whSelect', 'whList'); updatePreview('wh')" onfocus="openDropdown('whList')" onclick="openDropdown('whList')" placeholder="Search or Scan... (Arrows & Enter)" autocomplete="off" class="glass-input w-full p-3 text-xs md:text-sm shadow-sm">
-                                <button onclick="openScanner('whSelect', 'whList', 'wh')" class="glass-btn px-4 rounded-xl text-xl hover:text-retro-teal transition-colors shadow-sm" title="Scan QR Code">📷</button>
-                                <ul id="whList" class="hidden absolute z-50 w-full mt-12 glass-panel shadow-[0_20px_40px_-10px_rgba(0,0,0,0.2)] max-h-56 overflow-y-auto py-2 custom-scrollbar flex-col text-slate-700 dark:text-slate-200 font-medium"></ul>
+                            <div class="relative w-full" id="whDropdownContainer">
+                                <!-- Physical Barcode Scanner Ready -->
+                                <input type="text" id="whSelect" oninput="filterDropdown('whSelect', 'whList'); updatePreview('wh')" onfocus="openDropdown('whList')" onclick="openDropdown('whList')" placeholder="Scan Barcode or Type Name... (Arrows & Enter)" autocomplete="off" class="glass-input w-full p-3 text-xs md:text-sm shadow-sm border-retro-teal border-opacity-50">
+                                <ul id="whList" class="hidden absolute z-50 w-full mt-2 glass-panel shadow-[0_20px_40px_-10px_rgba(0,0,0,0.2)] max-h-56 overflow-y-auto py-2 custom-scrollbar flex-col text-slate-700 dark:text-slate-200 font-medium"></ul>
                             </div>
                             
                             <div class="flex flex-col md:flex-row gap-3">
@@ -282,6 +281,7 @@
                         <button onclick="submitWhBatch()" id="btnSubmitWh" class="mt-4 bg-gradient-to-r from-retro-teal to-emerald-400 hover:from-emerald-400 hover:to-retro-teal text-white font-black py-3 md:py-4 rounded-xl text-xs transition-all shadow-[0_8px_20px_-6px_rgba(20,184,166,0.5)] transform hover:-translate-y-1 hidden shrink-0 uppercase tracking-[0.2em]">Submit Batch</button>
                     </div>
 
+                    <!-- Sales Panel -->
                     <div id="salesCard" class="glass-panel liquid-hover p-4 md:p-6 flex flex-col h-auto md:h-[42rem]">
                         <div class="flex justify-between items-center mb-4 md:mb-5 shrink-0 border-b border-slate-200/50 dark:border-slate-700/50 pb-3 md:pb-4">
                             <div class="flex items-center gap-3">
@@ -296,10 +296,10 @@
                                 <option value="CUST_RETURN">🔄 Customer Return (In to Office)</option>
                             </select>
                             
-                            <div class="flex gap-2 relative" id="slDropdownContainer">
-                                <input type="text" id="slSelect" oninput="filterDropdown('slSelect', 'slList'); updatePreview('sl')" onfocus="openDropdown('slList')" onclick="openDropdown('slList')" placeholder="Search or Scan... (Arrows & Enter)" autocomplete="off" class="glass-input w-full p-3 text-xs md:text-sm shadow-sm">
-                                <button onclick="openScanner('slSelect', 'slList', 'sl')" class="glass-btn px-4 rounded-xl text-xl hover:text-retro-slate transition-colors shadow-sm" title="Scan QR Code">📷</button>
-                                <ul id="slList" class="hidden absolute z-50 w-full mt-12 glass-panel shadow-[0_20px_40px_-10px_rgba(0,0,0,0.2)] max-h-56 overflow-y-auto py-2 custom-scrollbar flex-col text-slate-700 dark:text-slate-200 font-medium"></ul>
+                            <div class="relative w-full" id="slDropdownContainer">
+                                <!-- Physical Barcode Scanner Ready -->
+                                <input type="text" id="slSelect" oninput="filterDropdown('slSelect', 'slList'); updatePreview('sl')" onfocus="openDropdown('slList')" onclick="openDropdown('slList')" placeholder="Scan Barcode or Type Name... (Arrows & Enter)" autocomplete="off" class="glass-input w-full p-3 text-xs md:text-sm shadow-sm border-retro-slate border-opacity-50">
+                                <ul id="slList" class="hidden absolute z-50 w-full mt-2 glass-panel shadow-[0_20px_40px_-10px_rgba(0,0,0,0.2)] max-h-56 overflow-y-auto py-2 custom-scrollbar flex-col text-slate-700 dark:text-slate-200 font-medium"></ul>
                             </div>
                             
                             <div class="flex flex-col md:flex-row gap-3">
@@ -376,6 +376,7 @@
                 </div>
             </div>
 
+            <!-- VIEWER VIEW (Live Stock) -->
             <div id="viewerView" class="hidden space-y-6 md:space-y-8 animate-fade-in-up">
                 <div class="glass-panel p-4 md:p-8 no-print">
                     <div class="flex items-center gap-3 mb-4 md:mb-6 border-b border-slate-200/50 dark:border-slate-700/50 pb-3 md:pb-4">
@@ -385,10 +386,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                         <div class="group relative">
                             <label class="block text-[9px] md:text-[10px] font-black text-slate-500 dark:text-slate-400 mb-1 md:mb-2 uppercase tracking-widest transition-colors group-focus-within:text-retro-slate">Search Name / Scan ID</label>
-                            <div class="flex gap-2">
-                                <input type="text" id="viewerSearch" oninput="renderViewerTable()" placeholder="Type here..." class="glass-input w-full p-2.5 md:p-3.5 text-xs md:text-sm text-center italic shadow-sm transition-transform hover:scale-105 focus:scale-105">
-                                <button onclick="openScanner('viewerSearch', '', 'viewer')" class="glass-btn px-4 rounded-xl text-xl hover:text-retro-slate transition-colors shadow-sm" title="Scan QR Code">📷</button>
-                            </div>
+                            <input type="text" id="viewerSearch" oninput="renderViewerTable()" placeholder="Scan or Type..." class="glass-input w-full p-2.5 md:p-3.5 text-xs md:text-sm text-center italic shadow-sm transition-transform hover:scale-105 focus:scale-105 border-retro-slate border-opacity-50">
                         </div>
                         <div class="group">
                             <label class="block text-[9px] md:text-[10px] font-black text-slate-500 dark:text-slate-400 mb-1 md:mb-2 uppercase tracking-widest transition-colors group-focus-within:text-retro-slate">Category</label>
@@ -422,26 +420,17 @@
                         <h3 class="text-xs md:text-sm font-black uppercase tracking-widest text-slate-700 dark:text-slate-200">Total Results: <span id="viewerResultCount" class="text-transparent bg-clip-text bg-gradient-to-r from-retro-slate to-retro-rose text-base md:text-lg">0</span></h3>
                         <button onclick="toggleFullScreen('viewerTableCard')" class="glass-btn px-2 py-1 md:px-3 md:py-1.5 rounded-lg text-[9px] md:text-[10px] font-bold uppercase tracking-widest shadow-sm">⛶ Fullscreen</button>
                     </div>
+                    <!-- Responsive List View -->
                     <div class="overflow-x-hidden overflow-y-auto h-[40rem] md:h-[45rem] max-h-[75vh] custom-scrollbar p-3 md:p-5" id="viewerBody">
-                        </div>
+                        <!-- JS injected cards -->
+                    </div>
                 </div>
             </div>
 
         </div>
     </div> 
 
-    <div id="scanModal" class="hidden fixed inset-0 z-[20000] flex items-center justify-center p-4 modal-overlay backdrop-blur-md bg-black/50">
-        <div class="glass-panel p-6 w-full max-w-md flex flex-col items-center bg-white/10 dark:bg-black/40 border-white/20">
-            <h3 class="text-lg font-black text-slate-800 dark:text-white mb-4 uppercase tracking-widest flex items-center gap-2">
-                <span class="text-2xl">📷</span> Scan QR Code
-            </h3>
-            <div class="w-full bg-black/20 rounded-2xl p-2 shadow-inner">
-                <div id="reader" class="w-full rounded-xl overflow-hidden"></div>
-            </div>
-            <button onclick="closeScanner()" class="mt-6 w-full bg-gradient-to-r from-retro-rose to-red-500 text-white px-6 py-3 rounded-xl font-bold uppercase tracking-widest shadow-lg transform hover:-translate-y-1 transition-all">Cancel Scanning</button>
-        </div>
-    </div>
-
+    <!-- Export Modal -->
     <div id="exportModal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/10 dark:bg-black/40">
         <div class="glass-panel p-6 md:p-8 w-[28rem] max-w-[95vw] animate-fade-in-up">
             <h3 class="text-lg md:text-xl font-black mb-4 md:mb-6 border-b border-slate-200/50 dark:border-slate-700/50 pb-3 md:pb-4 uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-3">
@@ -472,6 +461,7 @@
         </div>
     </div>
 
+    <!-- Edit Master Modal -->
     <div id="editMasterModal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/10 dark:bg-black/40">
         <div class="glass-panel p-6 md:p-8 w-[28rem] max-w-[95vw] animate-fade-in-up">
             <h3 class="text-lg md:text-xl font-black mb-4 md:mb-6 border-b border-slate-200/50 dark:border-slate-700/50 pb-3 md:pb-4 uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-3">
@@ -521,69 +511,6 @@
         let inventory = []; let historyLog = []; let pendingWh = []; let pendingSl = []; let uniqueCategories = [];
         const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycby44thggci_dwQ2MvlTxbVtFswov7esG7eC5VGRxzaXPe0lQc81BswIT8lXIsqKVrfH/exec"; 
 
-        /* QR CODE SCANNER LOGIC */
-        let html5QrcodeScanner = null;
-        let scanTargetInput = '';
-        let scanTargetList = '';
-        let scanTargetType = '';
-
-        function openScanner(inputId, listId, type) {
-            scanTargetInput = inputId;
-            scanTargetList = listId;
-            scanTargetType = type;
-            
-            document.getElementById('scanModal').classList.remove('hidden');
-            document.getElementById('scanModal').classList.add('flex');
-            
-            html5QrcodeScanner = new Html5QrcodeScanner(
-                "reader", 
-                { fps: 10, qrbox: {width: 250, height: 250}, aspectRatio: 1.0 },
-                /* verbose= */ false
-            );
-            
-            html5QrcodeScanner.render(onScanSuccess, onScanFailure);
-        }
-
-        function onScanSuccess(decodedText, decodedResult) {
-            const item = inventory.find(i => i.id === decodedText.trim());
-            
-            if (item) {
-                document.getElementById(scanTargetInput).value = item.name;
-                
-                if(scanTargetList) {
-                    document.getElementById(scanTargetList).classList.add('hidden');
-                }
-                
-                if(scanTargetType === 'wh' || scanTargetType === 'sl') {
-                    updatePreview(scanTargetType);
-                    document.getElementById(scanTargetType + 'Qty').focus();
-                } else if (scanTargetType === 'viewer') {
-                    renderViewerTable();
-                }
-                
-                closeScanner();
-            } else {
-                alert("No product found matching this QR Code ID: " + decodedText);
-                closeScanner();
-            }
-        }
-
-        function onScanFailure(error) {
-            // Background scan errors, can be safely ignored.
-        }
-
-        function closeScanner() {
-            document.getElementById('scanModal').classList.add('hidden');
-            document.getElementById('scanModal').classList.remove('flex');
-            if (html5QrcodeScanner) {
-                html5QrcodeScanner.clear().catch(error => {
-                    console.error("Failed to clear html5QrcodeScanner. ", error);
-                });
-                html5QrcodeScanner = null;
-            }
-        }
-
-        /* CORE LOGIC */
         function toggleTheme() { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); }
         if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); }
 
@@ -654,6 +581,7 @@
             }
         }
 
+        // BARCODE SCANNER LOGIC APPLIED TO SEARCH INPUT
         function setupKeyboardNav(inputId, listId) {
             const input = document.getElementById(inputId); let currentFocus = -1;
             input.addEventListener("input", function() { currentFocus = -1; });
@@ -662,7 +590,11 @@
                 let items = Array.from(list.getElementsByTagName("li")).filter(li => li.style.display !== "none" && !li.innerText.includes("Void Signal"));
                 if (e.key === "ArrowDown") { currentFocus++; addActive(items); e.preventDefault(); } 
                 else if (e.key === "ArrowUp") { currentFocus--; addActive(items); e.preventDefault(); } 
-                else if (e.key === "Enter") { e.preventDefault(); if (currentFocus > -1) { if (items[currentFocus]) items[currentFocus].click(); } else if (items.length > 0) { items[0].click(); } }
+                else if (e.key === "Enter") { 
+                    e.preventDefault(); 
+                    if (currentFocus > -1) { if (items[currentFocus]) items[currentFocus].click(); } 
+                    else if (items.length > 0) { items[0].click(); } 
+                }
             });
             function addActive(items) {
                 if (!items || items.length === 0) return false; removeActive(items);
@@ -726,13 +658,15 @@
             document.getElementById('kpi-transfers').innerText = transfersToday.toLocaleString(); document.getElementById('kpi-returns').innerText = returnsToday.toLocaleString();
         }
 
+        // BARCODE DATA ADDED TO SEARCH STRING
         function renderCustomDropdowns() {
             const whList = document.getElementById('whList'); const slList = document.getElementById('slList');
             let html = inventory.length === 0 ? `<li class="p-4 text-slate-400 text-xs text-center italic font-bold tracking-widest uppercase">Void Signal...</li>` : '';
             if (inventory.length > 0) {
                 inventory.forEach(item => {
                     const safeName = item.name.replace(/'/g, "\\'");
-                    html += `<li data-name="${item.name.toLowerCase()}" class="p-3.5 px-4 text-xs md:text-sm dropdown-item border-b border-white/20 dark:border-white/5 hover:bg-white/40 dark:hover:bg-white/10 flex justify-between transition-colors rounded-lg mx-1 my-0.5" onclick="selectDropdownItem('TARGET_ID', 'LIST_ID', '${safeName}')"><span class="font-bold truncate max-w-[65%] text-slate-700 dark:text-slate-200">${item.name}</span><span class="text-[9px] md:text-[10px] text-slate-500 font-mono tracking-widest font-bold bg-white/50 dark:bg-black/30 px-2 py-1 rounded shadow-inner">G:${item.godownQty} O:${item.officeQty}</span></li>`;
+                    // data-search includes both name and ID so scanner can find it instantly
+                    html += `<li data-search="${item.name.toLowerCase()} ${String(item.id).toLowerCase()}" class="p-3.5 px-4 text-xs md:text-sm dropdown-item border-b border-white/20 dark:border-white/5 hover:bg-white/40 dark:hover:bg-white/10 flex justify-between transition-colors rounded-lg mx-1 my-0.5" onclick="selectDropdownItem('TARGET_ID', 'LIST_ID', '${safeName}')"><span class="font-bold truncate max-w-[65%] text-slate-700 dark:text-slate-200">${item.name}</span><span class="text-[9px] md:text-[10px] text-slate-500 font-mono tracking-widest font-bold bg-white/50 dark:bg-black/30 px-2 py-1 rounded shadow-inner">G:${item.godownQty} O:${item.officeQty}</span></li>`;
                 });
             }
             whList.innerHTML = html.replace(/TARGET_ID/g, 'whSelect').replace(/LIST_ID/g, 'whList'); slList.innerHTML = html.replace(/TARGET_ID/g, 'slSelect').replace(/LIST_ID/g, 'slList');
@@ -749,7 +683,8 @@
             const query = document.getElementById(inputId).value.toLowerCase().trim(); const list = document.getElementById(listId); let hasVisible = false;
             Array.from(list.getElementsByTagName('li')).forEach(li => {
                 if(li.innerText.includes('Void Signal')) return;
-                if (li.getAttribute('data-name').includes(query)) { li.style.display = 'flex'; hasVisible = true; } else { li.style.display = 'none'; }
+                // Scanner hits here: Matches against data-search which contains ID
+                if (li.getAttribute('data-search').includes(query)) { li.style.display = 'flex'; hasVisible = true; } else { li.style.display = 'none'; }
             }); hasVisible ? list.classList.remove('hidden') : list.classList.add('hidden');
         }
         document.addEventListener('click', function(e) { if (!e.target.closest('#whDropdownContainer')) document.getElementById('whList').classList.add('hidden'); if (!e.target.closest('#slDropdownContainer')) document.getElementById('slList').classList.add('hidden'); });
@@ -816,7 +751,6 @@
         }
 
         /* ================= AUTO COMBO LOGIC ================= */
-        
         function addTowhBatch() {
             const name = document.getElementById('whSelect').value.trim(); const qty = parseInt(document.getElementById('whQty').value); const action = document.getElementById('warehouseAction').value; const platform = document.getElementById('whPlatform').value.trim(); const comment = document.getElementById('whComment').value.trim();
             if (!name || isNaN(qty) || qty <= 0) return; const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase()); if (!item) return alert("Item not found in catalog.");
@@ -824,14 +758,12 @@
             
             if (action === 'GODOWN_TO_OFFICE' && item.godownQty < qty) return alert(`Bawana Capacity Error: Only ${item.godownQty} left.`); if (action === 'OFFICE_RETURN' && item.officeQty < qty) return alert(`Office Capacity Error: Only ${item.officeQty} left.`); if (action === 'MFR_RETURN' && item.godownQty < qty) return alert(`Bawana Capacity Error: Only ${item.godownQty} left.`);
 
-            // AUTO COMBO ANALYZER - WITH KITCHEN CATEGORY FILTER
             const match = item.name.match(/\(([^)]+)\)/);
             let autoItems = [];
             if (match) {
                 const numbers = match[1].split(/[+,&]/).map(n => n.trim()).filter(n => n);
                 for (let num of numbers) {
                     const regex = new RegExp('^' + num + '([^a-zA-Z0-9]|$)', 'i');
-                    // ONLY PICK FROM KITCHEN CATEGORY
                     const baseItem = inventory.find(i => regex.test(i.name) && i.category && (i.category.toLowerCase().includes('kitchen') || i.category.toLowerCase().includes('kichen')));
                     if (baseItem) {
                         if (action === 'GODOWN_TO_OFFICE' && baseItem.godownQty < qty) return alert(`Combo Item Error: "${baseItem.name}" has only ${baseItem.godownQty} left in Bawana.`);
@@ -844,7 +776,6 @@
 
             pendingWh.push({ id: item.id, name: item.name, action, actionText, qty, platform, comment });
             
-            // Push valid base items
             autoItems.forEach(bItem => {
                 let autoActionText = `⚡ Auto (${item.name})`;
                 let autoComment = comment ? `[Combo: ${item.name}] ${comment}` : `[Combo: ${item.name}]`;
@@ -884,14 +815,12 @@
             let actionText = action === 'SALE' ? 'Sale (Out)' : 'Return (In)';
             if (action === 'SALE' && item.officeQty < qty) return alert(`Office Deficit! Only ${item.officeQty} left.`);
 
-            // AUTO COMBO ANALYZER - WITH KITCHEN CATEGORY FILTER
             const match = item.name.match(/\(([^)]+)\)/);
             let autoItems = [];
             if (match) {
                 const numbers = match[1].split(/[+,&]/).map(n => n.trim()).filter(n => n);
                 for (let num of numbers) {
                     const regex = new RegExp('^' + num + '([^a-zA-Z0-9]|$)', 'i');
-                    // ONLY PICK FROM KITCHEN CATEGORY
                     const baseItem = inventory.find(i => regex.test(i.name) && i.category && (i.category.toLowerCase().includes('kitchen') || i.category.toLowerCase().includes('kichen')));
                     if (baseItem) {
                         if (action === 'SALE' && baseItem.officeQty < qty) return alert(`Combo Item Error: "${baseItem.name}" has only ${baseItem.officeQty} left in Office.`);
@@ -902,7 +831,6 @@
 
             pendingSl.push({ id: item.id, name: item.name, action, actionText, qty, platform, comment });
             
-            // Push valid base items
             autoItems.forEach(bItem => {
                 let autoActionText = `⚡ Auto (${item.name})`;
                 let autoComment = comment ? `[Combo: ${item.name}] ${comment}` : `[Combo: ${item.name}]`;
@@ -951,7 +879,6 @@
                 grouped[date].forEach(log => {
                     let border = type === 'wh' ? 'border-l-retro-teal' : (log.action === 'SALE' ? 'border-l-retro-slate' : 'border-l-retro-rose');
                     let badge = type === 'wh' ? 'bg-retro-teal text-white' : (log.action === 'SALE' ? 'bg-retro-slate text-white' : 'bg-retro-rose text-white');
-                    // Special styling for auto items
                     if(log.actionText.includes('⚡ Auto')) border = 'border-l-retro-mustard border-dashed opacity-80';
 
                     html += `
