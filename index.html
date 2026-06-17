@@ -14,8 +14,8 @@
                         retro: {
                             base: '#f4f0eb',
                             dark: '#1a1c23',
-                            teal: '#14b8a6',    
-                            rose: '#f43f5e',    
+                            teal: '#14b8a6',   
+                            rose: '#f43f5e',   
                             mustard: '#f59e0b', 
                             slate: '#6366f1'    
                         }
@@ -115,7 +115,6 @@
 
         @media print { .no-print { display: none; } }
         
-        /* FULLSCREEN FIX - Using solid backgrounds */
         .fullscreen-card {
             position: fixed !important; inset: 0 !important; width: 100% !important; height: 100% !important;
             z-index: 9999 !important; border-radius: 0 !important; margin: 0 !important; max-width: 100% !important; 
@@ -147,12 +146,18 @@
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 uppercase tracking-[0.2em] font-bold">Login Panel</p>
             </div>
             <div class="space-y-4">
-                <div>
-                    <select id="loginRole" class="glass-input w-full p-3.5 font-bold text-slate-700 dark:text-slate-200 cursor-pointer shadow-sm text-sm">
-                        <option value="office">🏢 Office(Lakshmi)</option>
-                        <option value="admin">⚙️ Admin</option>
-                    </select>
+                
+                <div class="flex gap-2 w-full p-1 bg-white/40 dark:bg-black/30 rounded-xl shadow-inner mb-2" id="loginRoleContainer">
+                    <label class="flex-1 cursor-pointer">
+                        <input type="radio" name="loginRole" value="office" class="peer hidden" checked>
+                        <div class="h-full flex items-center justify-center text-center px-2 py-3 rounded-lg text-[10px] md:text-xs font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-slate peer-checked:shadow-sm text-slate-500 dark:text-slate-400 hover:bg-white/50 dark:hover:bg-white/10 border border-transparent peer-checked:border-retro-slate/20">🏢 Office (Lakshmi)</div>
+                    </label>
+                    <label class="flex-1 cursor-pointer">
+                        <input type="radio" name="loginRole" value="admin" class="peer hidden">
+                        <div class="h-full flex items-center justify-center text-center px-2 py-3 rounded-lg text-[10px] md:text-xs font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-slate peer-checked:shadow-sm text-slate-500 dark:text-slate-400 hover:bg-white/50 dark:hover:bg-white/10 border border-transparent peer-checked:border-retro-slate/20">⚙️ Admin</div>
+                    </label>
                 </div>
+
                 <div>
                     <input type="password" id="loginPassword" placeholder="Enter Password" class="glass-input w-full p-3.5 font-bold tracking-widest text-center text-slate-700 dark:text-slate-200 shadow-sm text-sm" onkeypress="if(event.key === 'Enter') attemptLogin()">
                     <p id="loginError" class="text-retro-rose text-xs mt-2 hidden font-bold text-center animate-pulse">⚠️ Incorrect Password</p>
@@ -256,7 +261,7 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 no-print">
                     
-                    <div id="warehouseCard" class="glass-panel liquid-hover p-4 md:p-6 flex flex-col h-auto md:h-[42rem]">
+                    <div id="warehouseCard" class="glass-panel liquid-hover p-4 md:p-6 flex flex-col h-auto md:h-[45rem]">
                         <div class="flex justify-between items-center mb-4 shrink-0 border-b border-slate-200/50 dark:border-slate-700/50 pb-3 md:pb-4">
                             <div class="flex items-center gap-3">
                                 <div class="p-2 bg-retro-teal/10 rounded-lg"><span class="text-lg md:text-xl">🏭</span></div>
@@ -288,7 +293,7 @@
                         <button onclick="submitWhBatch()" id="btnSubmitWh" class="mt-4 bg-gradient-to-r from-retro-teal to-emerald-400 hover:from-emerald-400 hover:to-retro-teal text-white font-black py-3 md:py-4 rounded-xl text-xs transition-all shadow-[0_8px_20px_-6px_rgba(20,184,166,0.5)] transform hover:-translate-y-1 hidden shrink-0 uppercase tracking-[0.2em]">Submit Batch</button>
                     </div>
 
-                    <div id="salesCard" class="glass-panel liquid-hover p-4 md:p-6 flex flex-col h-auto md:h-[42rem]">
+                    <div id="salesCard" class="glass-panel liquid-hover p-4 md:p-6 flex flex-col h-auto md:h-[45rem]">
                         <div class="flex justify-between items-center mb-4 shrink-0 border-b border-slate-200/50 dark:border-slate-700/50 pb-3 md:pb-4">
                             <div class="flex items-center gap-3">
                                 <div class="p-2 bg-retro-slate/10 rounded-lg"><span class="text-lg md:text-xl">🛒</span></div>
@@ -300,16 +305,26 @@
                             
                             <select id="salesAction" class="hidden" oninput="updatePreview('sl')">
                                 <option value="SALE" selected>SALE</option>
+                                <option value="SALE_GODOWN">SALE_GODOWN</option>
                                 <option value="CUST_RETURN">CUST_RETURN</option>
+                                <option value="CUST_RETURN_GODOWN">CUST_RETURN_GODOWN</option>
                             </select>
-                            <div class="flex gap-2 w-full p-1 bg-white/40 dark:bg-black/30 rounded-xl shadow-inner mb-2" id="slRadioGroup">
-                                 <label class="flex-1 cursor-pointer">
+                            <div class="grid grid-cols-2 gap-2 w-full p-1 bg-white/40 dark:bg-black/30 rounded-xl shadow-inner mb-2" id="slRadioGroup">
+                                 <label class="cursor-pointer">
                                      <input type="radio" name="slActionRadio" value="SALE" class="peer hidden" checked onchange="document.getElementById('salesAction').value=this.value; updatePreview('sl');">
-                                     <div class="h-full flex items-center justify-center text-center px-2 py-2.5 rounded-lg text-[10px] md:text-xs font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-slate peer-checked:shadow-sm text-slate-500 dark:text-slate-400 hover:bg-white/50 dark:hover:bg-white/10">📤 Sale Dispatch (Out)</div>
+                                     <div class="h-full flex items-center justify-center text-center px-2 py-2.5 rounded-lg text-[10px] md:text-[11px] font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-slate peer-checked:shadow-sm text-slate-500 dark:text-slate-400 hover:bg-white/50 border border-transparent peer-checked:border-retro-slate/20">📤 Sale (Office)</div>
                                  </label>
-                                 <label class="flex-1 cursor-pointer">
+                                 <label class="cursor-pointer">
                                      <input type="radio" name="slActionRadio" value="CUST_RETURN" class="peer hidden" onchange="document.getElementById('salesAction').value=this.value; updatePreview('sl');">
-                                     <div class="h-full flex items-center justify-center text-center px-2 py-2.5 rounded-lg text-[10px] md:text-xs font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-slate peer-checked:shadow-sm text-slate-500 dark:text-slate-400 hover:bg-white/50 dark:hover:bg-white/10">🔄 Customer Return (In)</div>
+                                     <div class="h-full flex items-center justify-center text-center px-2 py-2.5 rounded-lg text-[10px] md:text-[11px] font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-slate peer-checked:shadow-sm text-slate-500 dark:text-slate-400 hover:bg-white/50 border border-transparent peer-checked:border-retro-slate/20">🔄 Return (Office)</div>
+                                 </label>
+                                 <label class="cursor-pointer">
+                                     <input type="radio" name="slActionRadio" value="SALE_GODOWN" class="peer hidden" onchange="document.getElementById('salesAction').value=this.value; updatePreview('sl');">
+                                     <div class="h-full flex items-center justify-center text-center px-2 py-2.5 rounded-lg text-[10px] md:text-[11px] font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-teal peer-checked:shadow-sm text-slate-500 dark:text-slate-400 hover:bg-white/50 border border-transparent peer-checked:border-retro-teal/20">📤 Sale (Bawana)</div>
+                                 </label>
+                                 <label class="cursor-pointer">
+                                     <input type="radio" name="slActionRadio" value="CUST_RETURN_GODOWN" class="peer hidden" onchange="document.getElementById('salesAction').value=this.value; updatePreview('sl');">
+                                     <div class="h-full flex items-center justify-center text-center px-2 py-2.5 rounded-lg text-[10px] md:text-[11px] font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-teal peer-checked:shadow-sm text-slate-500 dark:text-slate-400 hover:bg-white/50 border border-transparent peer-checked:border-retro-teal/20">🔄 Return (Bawana)</div>
                                  </label>
                             </div>
                             
@@ -526,7 +541,8 @@
         if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); }
 
         function attemptLogin() {
-            const role = document.getElementById('loginRole').value; const pass = document.getElementById('loginPassword').value;
+            const role = document.querySelector('input[name="loginRole"]:checked').value; 
+            const pass = document.getElementById('loginPassword').value;
             if (role === 'admin' && pass === PASSWORDS.admin) { currentRole = 'admin'; grantAccess(); } 
             else if (role === 'office' && pass === PASSWORDS.office) { currentRole = 'office'; grantAccess(); } 
             else { document.getElementById('loginError').classList.remove('hidden'); }
@@ -566,7 +582,7 @@
             return `
             <label class="flex-1 cursor-pointer">
                  <input type="radio" name="${name}" value="${value}" class="peer hidden" ${checked ? 'checked' : ''} onchange="document.getElementById('${targetSelect}').value=this.value; updatePreview('${type}');">
-                 <div class="h-full flex items-center justify-center text-center px-2 py-2.5 rounded-lg text-[10px] md:text-xs font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-${colorClass} peer-checked:shadow-sm text-slate-500 dark:text-slate-400 hover:bg-white/50 dark:hover:bg-white/10 border border-transparent peer-checked:border-${colorClass}/20">${label}</div>
+                 <div class="h-full flex items-center justify-center text-center px-2 py-2.5 rounded-lg text-[10px] md:text-[11px] font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-${colorClass} peer-checked:shadow-sm text-slate-500 dark:text-slate-400 hover:bg-white/50 dark:hover:bg-white/10 border border-transparent peer-checked:border-${colorClass}/20">${label}</div>
             </label>
             `;
         }
@@ -622,7 +638,6 @@
             }
         }
 
-        // BARCODE SCANNER LOGIC APPLIED TO SEARCH INPUT
         function setupKeyboardNav(inputId, listId) {
             const input = document.getElementById(inputId); let currentFocus = -1;
             input.addEventListener("input", function() { currentFocus = -1; });
@@ -690,7 +705,9 @@
             const todayStr = getFormattedRealTime().dateString; let salesToday = 0, transfersToday = 0, returnsToday = 0;
             historyLog.forEach(log => {
                 if (log.dateString === todayStr) {
-                    if (log.action === 'SALE') salesToday += log.qty; if (log.action === 'GODOWN_TO_OFFICE') transfersToday += log.qty; if (log.action === 'CUST_RETURN') returnsToday += log.qty;
+                    if (log.action === 'SALE' || log.action === 'SALE_GODOWN') salesToday += log.qty; 
+                    if (log.action === 'GODOWN_TO_OFFICE') transfersToday += log.qty; 
+                    if (log.action === 'CUST_RETURN' || log.action === 'CUST_RETURN_GODOWN') returnsToday += log.qty;
                 }
             });
             document.getElementById('kpi-products').innerText = inventory.length.toLocaleString(); document.getElementById('kpi-godown').innerText = godownTotal.toLocaleString();
@@ -699,7 +716,6 @@
             document.getElementById('kpi-transfers').innerText = transfersToday.toLocaleString(); document.getElementById('kpi-returns').innerText = returnsToday.toLocaleString();
         }
 
-        // BARCODE DATA ADDED TO SEARCH STRING
         function renderCustomDropdowns() {
             const whList = document.getElementById('whList'); const slList = document.getElementById('slList');
             let html = inventory.length === 0 ? `<li class="p-4 text-slate-400 text-xs text-center italic font-bold tracking-widest uppercase">Void Signal...</li>` : '';
@@ -728,7 +744,6 @@
         }
         document.addEventListener('click', function(e) { if (!e.target.closest('#whDropdownContainer')) document.getElementById('whList').classList.add('hidden'); if (!e.target.closest('#slDropdownContainer')) document.getElementById('slList').classList.add('hidden'); });
 
-        /* ================= LIVE PREVIEW LOGIC ================= */
         function updatePreview(type) {
             const nameId = type === 'wh' ? 'whSelect' : 'slSelect';
             const qtyId = type === 'wh' ? 'whQty' : 'slQty';
@@ -747,7 +762,7 @@
             if (!item) { previewBox.classList.add('hidden'); return; }
 
             const match = item.name.match(/\(([^)]+)\)/);
-            if (!match) { previewBox.classList.add('hidden'); return; } // Not a combo
+            if (!match) { previewBox.classList.add('hidden'); return; } 
 
             const numbers = match[1].split(/[+,&]/).map(n => n.trim()).filter(n => n);
             let hasItems = false;
@@ -763,11 +778,11 @@
 
                     if (action === 'SALE' || action === 'OFFICE_RETURN') {
                         currentStock = baseItem.officeQty; stockLabel = "Office"; isDeducting = true;
-                    } else if (action === 'GODOWN_TO_OFFICE' || action === 'MFR_RETURN') {
+                    } else if (action === 'SALE_GODOWN' || action === 'GODOWN_TO_OFFICE' || action === 'MFR_RETURN') {
                         currentStock = baseItem.godownQty; stockLabel = "Bawana"; isDeducting = true;
                     } else if (action === 'CUST_RETURN') {
                         currentStock = baseItem.officeQty; stockLabel = "Office"; isDeducting = false;
-                    } else if (action === 'MFR_RECEIVE') {
+                    } else if (action === 'CUST_RETURN_GODOWN' || action === 'MFR_RECEIVE') {
                         currentStock = baseItem.godownQty; stockLabel = "Bawana"; isDeducting = false;
                     }
 
@@ -789,7 +804,6 @@
             }
         }
 
-        /* ================= AUTO COMBO LOGIC ================= */
         function addTowhBatch() {
             const name = document.getElementById('whSelect').value.trim(); const qty = parseInt(document.getElementById('whQty').value); const action = document.getElementById('warehouseAction').value; const platform = document.getElementById('whPlatform').value.trim(); const comment = document.getElementById('whComment').value.trim();
             if (!name || isNaN(qty) || qty <= 0) return; const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase()); if (!item) return alert("Item not found in catalog.");
@@ -851,8 +865,10 @@
         function addToSlBatch() {
             const name = document.getElementById('slSelect').value.trim(); const qty = parseInt(document.getElementById('slQty').value); const action = document.getElementById('salesAction').value; const platform = document.getElementById('slPlatform').value.trim(); const comment = document.getElementById('slComment').value.trim();
             if (!name || isNaN(qty) || qty <= 0) return; const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase()); if (!item) return alert("Item not found in catalog.");
-            let actionText = action === 'SALE' ? 'Sale (Out)' : 'Return (In)';
+            let actionText = action === 'SALE' ? 'Sale (Office Out)' : action === 'SALE_GODOWN' ? 'Sale (Bawana Out)' : action === 'CUST_RETURN' ? 'Return (Office In)' : 'Return (Bawana In)';
+            
             if (action === 'SALE' && item.officeQty < qty) return alert(`Office Deficit! Only ${item.officeQty} left.`);
+            if (action === 'SALE_GODOWN' && item.godownQty < qty) return alert(`Bawana Deficit! Only ${item.godownQty} left.`);
 
             const match = item.name.match(/\(([^)]+)\)/);
             let autoItems = [];
@@ -863,6 +879,7 @@
                     const baseItem = inventory.find(i => regex.test(i.name) && i.category && (i.category.toLowerCase().includes('kitchen') || i.category.toLowerCase().includes('kichen')));
                     if (baseItem) {
                         if (action === 'SALE' && baseItem.officeQty < qty) return alert(`Combo Item Error: "${baseItem.name}" has only ${baseItem.officeQty} left in Office.`);
+                        if (action === 'SALE_GODOWN' && baseItem.godownQty < qty) return alert(`Combo Item Error: "${baseItem.name}" has only ${baseItem.godownQty} left in Bawana.`);
                         autoItems.push(baseItem);
                     }
                 }
@@ -887,7 +904,8 @@
             const container = document.getElementById('slBatchContainer'); const btn = document.getElementById('btnSubmitSl'); container.innerHTML = '';
             if(pendingSl.length === 0) { container.innerHTML = '<div class="text-slate-400/70 text-[10px] text-center mt-8 uppercase tracking-[0.3em] font-black">Queue Empty</div>'; btn.style.display = 'none'; return; } btn.style.display = 'block';
             pendingSl.forEach((p, idx) => { 
-                const colors = p.action === 'SALE' ? 'border-l-retro-slate text-retro-slate' : 'border-l-retro-rose text-retro-rose';
+                const isSale = p.action === 'SALE' || p.action === 'SALE_GODOWN';
+                const colors = isSale ? 'border-l-retro-slate text-retro-slate' : 'border-l-retro-rose text-retro-rose';
                 let autoStyle = p.actionText.includes('⚡') ? 'opacity-70 scale-[0.98] border-dashed border-l-retro-mustard' : colors;
                 container.innerHTML += `<div class="flex justify-between items-center glass-input p-3 mb-2 rounded-xl border-l-4 ${autoStyle} shadow-sm anim-scale-in"><div class="flex flex-col"><span class="font-extrabold text-xs md:text-sm text-slate-700 dark:text-slate-200">${p.name}</span><span class="text-[8px] md:text-[9px] ${colors.split(' ')[1]} font-black uppercase tracking-widest mt-0.5">${p.actionText}</span></div><div class="flex items-center gap-3 md:gap-4"><span class="font-black font-mono text-base md:text-lg text-slate-700 dark:text-white bg-white/40 dark:bg-black/30 px-2 py-0.5 rounded shadow-inner">${p.qty}</span><button onclick="removeSlBatch(${idx})" class="text-retro-rose hover:scale-125 transition-transform text-sm px-1 font-bold">✕</button></div></div>`; 
             });
@@ -898,7 +916,11 @@
             pendingSl.forEach(p => {
                 const item = inventory.find(i => i.id === p.id);
                 if(item) {
-                    if (p.action === 'SALE' && item.officeQty >= p.qty) item.officeQty -= p.qty; else if (p.action === 'CUST_RETURN') item.officeQty += p.qty;
+                    if (p.action === 'SALE' && item.officeQty >= p.qty) item.officeQty -= p.qty; 
+                    else if (p.action === 'SALE_GODOWN' && item.godownQty >= p.qty) item.godownQty -= p.qty; 
+                    else if (p.action === 'CUST_RETURN') item.officeQty += p.qty;
+                    else if (p.action === 'CUST_RETURN_GODOWN') item.godownQty += p.qty;
+
                     historyLog.unshift({ id: Date.now().toString() + Math.random().toString(36).substr(2), dateString, timeString, name: item.name, action: p.action, actionText: p.actionText, qty: p.qty, platform: p.platform, comment: p.comment });
                 }
             }); pendingSl = []; renderSlBatch(); saveAndRender(true);
@@ -907,7 +929,7 @@
         function renderHistory() {
             const whContainer = document.getElementById('whHistoryContainer'); const slContainer = document.getElementById('slHistoryContainer');
             let whLogs = historyLog.filter(l => ['MFR_RECEIVE', 'MFR_RETURN', 'GODOWN_TO_OFFICE', 'OFFICE_RETURN'].includes(l.action));
-            const slLogs = historyLog.filter(l => ['SALE', 'CUST_RETURN'].includes(l.action));
+            const slLogs = historyLog.filter(l => ['SALE', 'SALE_GODOWN', 'CUST_RETURN', 'CUST_RETURN_GODOWN'].includes(l.action));
             whContainer.innerHTML = buildHistoryHTML(whLogs, 'wh'); slContainer.innerHTML = buildHistoryHTML(slLogs, 'sl');
         }
         function buildHistoryHTML(logsArray, type) {
@@ -916,8 +938,9 @@
             for (let date in grouped) {
                 html += `<div class="mb-8 date-group anim-scale-in"><div class="flex items-center gap-3 mb-4"><div class="h-px bg-slate-300 dark:bg-slate-700 flex-1"></div><span class="text-[9px] md:text-[10px] font-black bg-white/60 dark:bg-black/50 text-slate-600 dark:text-slate-300 px-3 md:px-4 py-1.5 rounded-full uppercase tracking-[0.2em] shadow-sm">${date}</span><div class="h-px bg-slate-300 dark:bg-slate-700 flex-1"></div></div><div class="grid grid-cols-1 gap-3 md:gap-4">`;
                 grouped[date].forEach(log => {
-                    let border = type === 'wh' ? 'border-l-retro-teal' : (log.action === 'SALE' ? 'border-l-retro-slate' : 'border-l-retro-rose');
-                    let badge = type === 'wh' ? 'bg-retro-teal text-white' : (log.action === 'SALE' ? 'bg-retro-slate text-white' : 'bg-retro-rose text-white');
+                    const isSale = log.action === 'SALE' || log.action === 'SALE_GODOWN';
+                    let border = type === 'wh' ? 'border-l-retro-teal' : (isSale ? 'border-l-retro-slate' : 'border-l-retro-rose');
+                    let badge = type === 'wh' ? 'bg-retro-teal text-white' : (isSale ? 'bg-retro-slate text-white' : 'bg-retro-rose text-white');
                     if(log.actionText.includes('⚡ Auto')) border = 'border-l-retro-mustard border-dashed opacity-80';
 
                     html += `
