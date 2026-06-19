@@ -179,7 +179,7 @@
     </div>
 
     <div id="mainApp" class="hidden">
-        <div class="p-2 md:p-6 no-print sticky top-0 z-50">
+        <div class="p-2 md:p-6 no-print relative z-50">
             <nav class="glass-panel px-4 py-4 md:px-6 flex flex-col xl:flex-row justify-between items-center gap-4">
                 <div class="flex items-center gap-4 w-full xl:w-auto justify-between">
                     <div class="flex items-center gap-3">
@@ -192,7 +192,10 @@
                             </div>
                         </div>
                     </div>
-                    <button onclick="toggleTheme()" class="xl:hidden glass-btn p-2.5 rounded-xl text-sm shadow-sm">🌗</button>
+                    <div class="flex gap-2 xl:hidden">
+                        <button onclick="toggleViewMode()" class="glass-btn p-2.5 rounded-xl text-sm shadow-sm">📏</button>
+                        <button onclick="toggleTheme()" class="glass-btn p-2.5 rounded-xl text-sm shadow-sm">🌗</button>
+                    </div>
                 </div>
                 
                 <div class="flex glass-input rounded-2xl p-1.5 w-full xl:w-auto overflow-hidden shadow-sm" id="navTabsContainer">
@@ -201,6 +204,7 @@
                 </div>
 
                 <div class="flex flex-wrap gap-2 justify-center xl:justify-end w-full xl:w-auto items-center" id="adminControls">
+                    <button onclick="toggleViewMode()" class="hidden xl:block glass-btn p-2.5 rounded-xl text-sm shadow-sm" title="Toggle Compact View">📏</button>
                     <button onclick="toggleTheme()" class="hidden xl:block glass-btn p-2.5 rounded-xl text-sm shadow-sm" title="Toggle Theme">🌗</button>
                     <div class="h-8 w-px bg-slate-300 dark:bg-slate-700 hidden xl:block mx-2"></div>
                     <div id="adminOnlyControls" class="flex flex-wrap justify-center gap-2">
@@ -380,7 +384,13 @@
                             <button onclick="toggleFullScreen('masterCard')" class="glass-btn px-2.5 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-transform hover:scale-110">⛶</button>
                         </div>
                         <div class="flex flex-col gap-3 w-full lg:w-auto">
-                            <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="🔍 Search catalog..." class="glass-input p-2.5 md:p-3 text-xs md:text-sm text-center shadow-inner font-medium">
+                            <!-- MODIFIED: Added Category Filter in Master Catalog -->
+                            <div class="flex flex-col sm:flex-row gap-2 w-full">
+                                <select id="masterCategoryFilter" onchange="filterTable()" class="glass-input p-2.5 md:p-3 text-xs md:text-sm font-bold text-center text-slate-700 dark:text-slate-200 shadow-sm w-full sm:w-1/3">
+                                    <option value="ALL">All Categories</option>
+                                </select>
+                                <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="🔍 Search catalog..." class="glass-input p-2.5 md:p-3 text-xs md:text-sm text-center shadow-inner font-medium w-full sm:flex-1">
+                            </div>
                             <div class="flex flex-col md:flex-row gap-2 glass-input p-1.5 w-full shadow-sm">
                                 <input type="text" id="newCategory" placeholder="Category" class="p-2 text-xs md:text-sm w-full md:w-32 bg-transparent outline-none text-center border-b md:border-b-0 md:border-r border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-100 font-bold">
                                 <input type="text" id="newNames" placeholder="Product Name (Comma separated)" class="p-2 text-xs md:text-sm w-full bg-transparent outline-none text-slate-800 dark:text-slate-100 font-medium border-b md:border-b-0 border-slate-300 dark:border-slate-600">
@@ -537,8 +547,16 @@
         let inventory = []; let historyLog = []; let pendingWh = []; let pendingSl = []; let uniqueCategories = [];
         const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycby44thggci_dwQ2MvlTxbVtFswov7esG7eC5VGRxzaXPe0lQc81BswIT8lXIsqKVrfH/exec"; 
 
+        let viewMode = localStorage.getItem('dozy_view') || 'comfortable';
+
         function toggleTheme() { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); }
         if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); }
+
+        function toggleViewMode() {
+            viewMode = viewMode === 'comfortable' ? 'compact' : 'comfortable';
+            localStorage.setItem('dozy_view', viewMode);
+            saveAndRender(false);
+        }
 
         function attemptLogin() {
             const role = document.querySelector('input[name="loginRole"]:checked').value; 
@@ -576,7 +594,6 @@
             document.getElementById('navTabsContainer').classList.add('flex');
         }
         
-        // Helper function to build Radio Buttons HTML
         function createRadioBtn(name, value, label, checked, type, colorClass) {
             const targetSelect = type === 'wh' ? 'warehouseAction' : 'salesAction';
             return `
@@ -684,14 +701,27 @@
             .catch(e => { document.getElementById('syncStatus').innerText = "Sync Failed"; });
         }
 
+        // MODIFIED: added Master Category update
         function extractCategories() {
             uniqueCategories = [...new Set(inventory.map(i => i.category || 'General'))].sort();
+            
             const viewCat = document.getElementById('viewerCategory'); const currentViewVal = viewCat.value;
             viewCat.innerHTML = '<option value="ALL">All Categories</option>'; uniqueCategories.forEach(cat => viewCat.innerHTML += `<option value="${cat}">${cat}</option>`);
             if(uniqueCategories.includes(currentViewVal)) viewCat.value = currentViewVal;
-            const exportCat = document.getElementById('exportCategory'); exportCat.innerHTML = '<option value="ALL">All Categories</option>';
+            
+            const exportCat = document.getElementById('exportCategory'); 
+            exportCat.innerHTML = '<option value="ALL">All Categories</option>';
             uniqueCategories.forEach(cat => exportCat.innerHTML += `<option value="${cat}">${cat}</option>`);
+            
+            const masterCat = document.getElementById('masterCategoryFilter'); 
+            if (masterCat) {
+                const currentMasterVal = masterCat.value;
+                masterCat.innerHTML = '<option value="ALL">All Categories</option>'; 
+                uniqueCategories.forEach(cat => masterCat.innerHTML += `<option value="${cat}">${cat}</option>`);
+                if(uniqueCategories.includes(currentMasterVal)) masterCat.value = currentMasterVal;
+            }
         }
+        
         function saveAndRender(triggerSave = true) {
             inventory.sort((a, b) => a.createdAt - b.createdAt); if (triggerSave) persistData(); 
             extractCategories(); renderTable(); renderCustomDropdowns(); renderHistory(); 
@@ -970,29 +1000,54 @@
             if (!namesInput.trim()) return;
             namesInput.split(',').map(n => n.trim()).filter(n => n !== "").forEach((name, index) => { if (!inventory.some(item => item.name.toLowerCase() === name.toLowerCase())) { inventory.push({ id: Date.now().toString() + index + Math.random().toString(36).substr(2, 5), name: name, category: categoryInput, image: imgInput, godownQty: 0, officeQty: 0, createdAt: new Date().getTime() + index }); } }); document.getElementById('newNames').value = ''; document.getElementById('newImage').value = ''; saveAndRender(true);
         }
+
         function renderTable() {
             const tbody = document.getElementById('inventoryBody'); tbody.innerHTML = '';
             if (inventory.length === 0) return tbody.innerHTML = `<tr><td colspan="6" class="p-6 md:p-10 text-center text-slate-400/70 text-[9px] md:text-[10px] uppercase tracking-[0.3em] font-black">Catalog Empty</td></tr>`;
+            
+            const isComp = viewMode === 'compact';
+            const tdPad = isComp ? 'p-1.5' : 'p-3 md:p-5';
+            const nameTxt = isComp ? 'text-[10px] md:text-xs' : 'text-xs md:text-sm';
+            const numTxt = isComp ? 'text-sm md:text-base' : 'text-lg md:text-xl';
+            const btnClass = isComp ? 'p-1 text-[9px]' : 'p-1.5 md:p-2 text-[10px] md:text-xs';
+
             inventory.forEach(item => {
                 const totalQty = item.godownQty + item.officeQty;
-                let nameDisplayHTML = `<div class="font-extrabold text-xs md:text-sm">${item.name}</div>`;
-                if(item.image && item.image.trim() !== '') { nameDisplayHTML = `<a href="${item.image}" target="_blank" class="font-extrabold text-xs md:text-sm text-retro-slate hover:opacity-70 flex items-center gap-1.5 transition-opacity">⎋ ${item.name}</a>`; }
+                let nameDisplayHTML = `<div class="font-extrabold ${nameTxt}">${item.name}</div>`;
+                if(item.image && item.image.trim() !== '') { nameDisplayHTML = `<a href="${item.image}" target="_blank" class="font-extrabold ${nameTxt} text-retro-slate hover:opacity-70 flex items-center gap-1.5 transition-opacity">⎋ ${item.name}</a>`; }
                 let colGodown = item.godownQty <= 10 ? "text-retro-rose" : "text-retro-teal"; let colOffice = item.officeQty <= 10 ? "text-retro-rose" : "text-retro-mustard";
                 tbody.innerHTML += `
                     <tr class="hover:bg-white/40 dark:hover:bg-white/5 border-b border-white/30 dark:border-white/5 transition-colors group">
-                        <td class="p-3 md:p-5"><div class="text-[8px] md:text-[9px] font-black text-slate-500 uppercase tracking-widest bg-white/60 dark:bg-black/40 shadow-inner inline-block px-2 md:px-2.5 py-1 rounded">${item.category}</div></td>
-                        <td class="p-3 md:p-5">${nameDisplayHTML}</td>
-                        <td class="p-3 md:p-5 text-center font-mono font-black text-lg md:text-xl ${colGodown}">${item.godownQty}</td>
-                        <td class="p-3 md:p-5 text-center font-mono font-black text-lg md:text-xl ${colOffice}">${item.officeQty}</td>
-                        <td class="p-3 md:p-5 text-center font-black font-mono text-slate-700 dark:text-white text-xl md:text-2xl border-r border-white/20 dark:border-white/5 bg-white/10 dark:bg-black/10 shadow-[inset_2px_0_5px_rgba(0,0,0,0.02)]">${totalQty}</td>
-                        <td class="p-3 md:p-5 text-center no-print opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity flex justify-center gap-2 md:gap-3">
-                            <button onclick="openEditMasterModal('${item.id}')" class="glass-btn text-retro-slate p-1.5 md:p-2 rounded-lg text-[10px] md:text-xs hover:scale-110 transition-transform" title="Edit">✏️</button>
-                            <button onclick="deleteItem('${item.id}')" class="glass-btn text-retro-rose p-1.5 md:p-2 rounded-lg text-[10px] md:text-xs hover:scale-110 transition-transform" title="Delete">✕</button>
+                        <td class="${tdPad}"><div class="text-[8px] md:text-[9px] font-black text-slate-500 uppercase tracking-widest bg-white/60 dark:bg-black/40 shadow-inner inline-block px-2 py-1 rounded">${item.category}</div></td>
+                        <td class="${tdPad}">${nameDisplayHTML}</td>
+                        <td class="${tdPad} text-center font-mono font-black ${numTxt} ${colGodown}">${item.godownQty}</td>
+                        <td class="${tdPad} text-center font-mono font-black ${numTxt} ${colOffice}">${item.officeQty}</td>
+                        <td class="${tdPad} text-center font-black font-mono text-slate-700 dark:text-white ${numTxt} border-r border-white/20 dark:border-white/5 bg-white/10 dark:bg-black/10 shadow-[inset_2px_0_5px_rgba(0,0,0,0.02)]">${totalQty}</td>
+                        <td class="${tdPad} text-center no-print opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity flex justify-center gap-1.5 md:gap-3">
+                            <button onclick="openEditMasterModal('${item.id}')" class="glass-btn text-retro-slate ${btnClass} rounded-lg hover:scale-110 transition-transform" title="Edit">✏️</button>
+                            <button onclick="deleteItem('${item.id}')" class="glass-btn text-retro-rose ${btnClass} rounded-lg hover:scale-110 transition-transform" title="Delete">✕</button>
                         </td>
                     </tr>`;
             });
         }
-        function filterTable() { const q = document.getElementById('searchInput').value.toLowerCase(); document.querySelectorAll('#inventoryBody tr').forEach(row => { if(row.cells.length > 1) { const text = row.innerText.toLowerCase(); row.style.display = text.includes(q) ? '' : 'none'; } }); }
+        
+        // MODIFIED: Updated filterTable to use Category Dropdown along with text search
+        function filterTable() { 
+            const q = document.getElementById('searchInput').value.toLowerCase(); 
+            const cat = document.getElementById('masterCategoryFilter').value;
+            
+            document.querySelectorAll('#inventoryBody tr').forEach(row => { 
+                if(row.cells.length > 1) { 
+                    const text = row.innerText.toLowerCase(); 
+                    const rowCat = row.cells[0].innerText.trim(); 
+                    
+                    const matchText = text.includes(q);
+                    const matchCat = (cat === 'ALL' || rowCat === cat);
+                    
+                    row.style.display = (matchText && matchCat) ? '' : 'none'; 
+                } 
+            }); 
+        }
 
         function renderViewerTable() {
             const viewSearch = document.getElementById('viewerSearch').value.toLowerCase(); const viewCategory = document.getElementById('viewerCategory').value; const viewStatus = document.getElementById('viewerStatus').value; const viewSort = document.getElementById('viewerSort').value;
@@ -1004,19 +1059,25 @@
             const tbody = document.getElementById('viewerBody'); tbody.innerHTML = ''; document.getElementById('viewerResultCount').innerText = filtered.length;
             if (filtered.length === 0) { tbody.innerHTML = `<div class="p-10 text-center text-slate-400/70 text-[10px] uppercase tracking-[0.3em] font-black">No Match Found</div>`; return; }
 
+            const isComp = viewMode === 'compact';
+            const cardPad = isComp ? 'p-1.5 md:p-2 mb-1.5 gap-2' : 'p-3 md:p-4 mb-3 gap-3 md:gap-5';
+            const nameTxt = isComp ? 'text-xs' : 'text-sm md:text-base';
+            const boxPad = isComp ? 'p-1' : 'p-2';
+            const numTxt = isComp ? 'text-sm md:text-base' : 'text-lg md:text-xl';
+
             filtered.forEach(item => {
                 const totalQty = item.godownQty + item.officeQty; let statusBadge = '';
                 if (totalQty === 0) { statusBadge = `<span class="bg-retro-rose/20 text-retro-rose px-2 md:px-2.5 py-0.5 rounded shadow-inner text-[8px] md:text-[9px] font-black border border-retro-rose/30 uppercase tracking-widest">🔴 Depleted</span>`; } 
                 else if (totalQty <= 10) { statusBadge = `<span class="bg-retro-mustard/20 text-retro-mustard px-2 md:px-2.5 py-0.5 rounded shadow-inner text-[8px] md:text-[9px] font-black border border-retro-mustard/30 uppercase tracking-widest">🟠 Critical</span>`; } 
                 else { statusBadge = `<span class="bg-retro-teal/20 text-retro-teal px-2 md:px-2.5 py-0.5 rounded shadow-inner text-[8px] md:text-[9px] font-black border border-retro-teal/30 uppercase tracking-widest">🟢 Optimal</span>`; }
-                let nameDisplayHTML = `<div class="font-extrabold text-sm md:text-base">${item.name}</div>`;
-                if(item.image && item.image.trim() !== '') { nameDisplayHTML = `<a href="${item.image}" target="_blank" class="font-extrabold text-sm md:text-base text-retro-slate hover:opacity-70 transition flex items-center gap-1.5">⎋ ${item.name}</a>`; }
+                let nameDisplayHTML = `<div class="font-extrabold ${nameTxt}">${item.name}</div>`;
+                if(item.image && item.image.trim() !== '') { nameDisplayHTML = `<a href="${item.image}" target="_blank" class="font-extrabold ${nameTxt} text-retro-slate hover:opacity-70 transition flex items-center gap-1.5">⎋ ${item.name}</a>`; }
                 let colGodown = item.godownQty <= 10 ? "text-retro-rose" : "text-retro-teal"; let colOffice = item.officeQty <= 10 ? "text-retro-rose" : "text-retro-mustard";
                 
                 let borderColor = (item.godownQty <= 10 || item.officeQty <= 10) ? 'border-retro-rose' : 'border-retro-teal';
 
                 tbody.innerHTML += `
-                    <div class="glass-input mb-3 p-3 md:p-4 hover:bg-white/40 dark:hover:bg-white/5 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-5 border-l-4 ${borderColor} shadow-sm anim-scale-in">
+                    <div class="glass-input ${cardPad} hover:bg-white/40 dark:hover:bg-white/5 transition-colors flex flex-col md:flex-row md:items-center justify-between border-l-4 ${borderColor} shadow-sm anim-scale-in">
                         <div class="flex flex-col w-full md:w-2/5 gap-1.5">
                             <div class="flex items-center gap-2">
                                 <span class="text-[8px] md:text-[9px] font-black text-slate-500 uppercase tracking-widest bg-white/60 dark:bg-black/40 shadow-inner px-2 py-0.5 rounded">${item.category}</span>
@@ -1025,17 +1086,17 @@
                             ${nameDisplayHTML}
                         </div>
                         <div class="flex flex-row justify-between w-full md:w-3/5 items-center gap-2 mt-1 md:mt-0">
-                            <div class="flex flex-col items-center flex-1 bg-retro-teal/5 border border-retro-teal/10 rounded-lg p-2 shadow-inner">
+                            <div class="flex flex-col items-center flex-1 bg-retro-teal/5 border border-retro-teal/10 rounded-lg ${boxPad} shadow-inner">
                                 <span class="text-[8px] md:text-[9px] font-black text-retro-teal uppercase tracking-widest mb-0.5">Bawana</span>
-                                <span class="font-mono font-black text-lg md:text-xl ${colGodown}">${item.godownQty}</span>
+                                <span class="font-mono font-black ${numTxt} ${colGodown}">${item.godownQty}</span>
                             </div>
-                            <div class="flex flex-col items-center flex-1 bg-retro-mustard/5 border border-retro-mustard/10 rounded-lg p-2 shadow-inner">
+                            <div class="flex flex-col items-center flex-1 bg-retro-mustard/5 border border-retro-mustard/10 rounded-lg ${boxPad} shadow-inner">
                                 <span class="text-[8px] md:text-[9px] font-black text-retro-mustard uppercase tracking-widest mb-0.5">Office</span>
-                                <span class="font-mono font-black text-lg md:text-xl ${colOffice}">${item.officeQty}</span>
+                                <span class="font-mono font-black ${numTxt} ${colOffice}">${item.officeQty}</span>
                             </div>
-                            <div class="flex flex-col items-center flex-1 bg-slate-400/10 border border-slate-400/20 rounded-lg p-2 shadow-inner">
+                            <div class="flex flex-col items-center flex-1 bg-slate-400/10 border border-slate-400/20 rounded-lg ${boxPad} shadow-inner">
                                 <span class="text-[8px] md:text-[9px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest mb-0.5">Total</span>
-                                <span class="font-mono font-black text-xl md:text-2xl text-slate-700 dark:text-white">${totalQty}</span>
+                                <span class="font-mono font-black ${numTxt} text-slate-700 dark:text-white">${totalQty}</span>
                             </div>
                         </div>
                     </div>`;
