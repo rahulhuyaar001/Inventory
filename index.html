@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOZY StockPro | Barcode Ready</title>
+    <title>DOZY StockPro | Ledger Automation Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -211,6 +211,10 @@
                         <input type="file" id="importExcelGlobal" accept=".xlsx, .xls" class="hidden" onchange="importAllDataExcel(event)">
                         <button onclick="document.getElementById('importExcelGlobal').click()" class="bg-gradient-to-r from-retro-teal to-emerald-400 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all transform hover:-translate-y-1 shadow-[0_5px_15px_-5px_rgba(20,184,166,0.5)] uppercase tracking-wide">📥 Import</button>
                         <button onclick="openExportModal()" class="bg-gradient-to-r from-retro-slate to-indigo-400 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all transform hover:-translate-y-1 shadow-[0_5px_15px_-5px_rgba(99,102,241,0.5)] uppercase tracking-wide">📤 Export</button>
+                        
+                        <!-- MASS TRANSACTION LEDGER BUTTON -->
+                        <button onclick="openBatchLedgerModal()" class="bg-gradient-to-r from-retro-mustard to-amber-500 text-white px-4 py-2 rounded-xl text-xs font-black transition-all transform hover:-translate-y-1 shadow-[0_5px_15px_-5px_rgba(245,158,11,0.5)] uppercase tracking-wider flex items-center gap-1"><span>⚡</span> Batch Entry</button>
+
                         <button onclick="clearHistory()" class="glass-btn px-4 py-2 rounded-xl text-xs font-bold transition-all uppercase tracking-wide hidden md:block text-slate-600 dark:text-slate-300">Clean Logs</button>
                         <button onclick="clearAllBackendData()" class="bg-gradient-to-r from-retro-rose to-red-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all transform hover:-translate-y-1 shadow-[0_5px_15px_-5px_rgba(244,63,94,0.5)] uppercase tracking-wide">🚨 Reset</button>
                     </div>
@@ -384,7 +388,6 @@
                             <button onclick="toggleFullScreen('masterCard')" class="glass-btn px-2.5 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-transform hover:scale-110">⛶</button>
                         </div>
                         <div class="flex flex-col gap-3 w-full lg:w-auto">
-                            <!-- MODIFIED: Added Category Filter in Master Catalog -->
                             <div class="flex flex-col sm:flex-row gap-2 w-full">
                                 <select id="masterCategoryFilter" onchange="filterTable()" class="glass-input p-2.5 md:p-3 text-xs md:text-sm font-bold text-center text-slate-700 dark:text-slate-200 shadow-sm w-full sm:w-1/3">
                                     <option value="ALL">All Categories</option>
@@ -461,13 +464,14 @@
                         <button onclick="toggleFullScreen('viewerTableCard')" class="glass-btn px-2 py-1 md:px-3 md:py-1.5 rounded-lg text-[9px] md:text-[10px] font-bold uppercase tracking-widest shadow-sm transition-transform hover:scale-110">⛶ Fullscreen</button>
                     </div>
                     <div class="overflow-x-hidden overflow-y-auto h-[40rem] md:h-[45rem] max-h-[75vh] custom-scrollbar p-3 md:p-5" id="viewerBody">
-                        </div>
+                    </div>
                 </div>
             </div>
 
         </div>
     </div> 
 
+    <!-- EXPORT MODAL -->
     <div id="exportModal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/10 dark:bg-black/40">
         <div class="glass-panel p-6 md:p-8 w-[28rem] max-w-[95vw] animate-fade-in-up">
             <h3 class="text-lg md:text-xl font-black mb-4 md:mb-6 border-b border-slate-200/50 dark:border-slate-700/50 pb-3 md:pb-4 uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-3">
@@ -498,6 +502,7 @@
         </div>
     </div>
 
+    <!-- EDIT MASTER MODAL -->
     <div id="editMasterModal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/10 dark:bg-black/40">
         <div class="glass-panel p-6 md:p-8 w-[28rem] max-w-[95vw] animate-fade-in-up">
             <h3 class="text-lg md:text-xl font-black mb-4 md:mb-6 border-b border-slate-200/50 dark:border-slate-700/50 pb-3 md:pb-4 uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-3">
@@ -520,6 +525,7 @@
         </div>
     </div>
 
+    <!-- EDIT HISTORY MODAL -->
     <div id="editHistoryModal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/10 dark:bg-black/40">
         <div class="glass-panel p-6 md:p-8 w-[28rem] max-w-[95vw] animate-fade-in-up">
             <h3 class="text-lg md:text-xl font-black mb-4 md:mb-6 border-b border-slate-200/50 dark:border-slate-700/50 pb-3 md:pb-4 uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-3">
@@ -537,6 +543,54 @@
             <div class="flex justify-end gap-3 md:gap-4 mt-6 md:mt-8">
                 <button onclick="closeEditHistoryModal()" class="glass-btn px-4 md:px-6 py-2 md:py-2.5 text-[10px] md:text-xs font-black uppercase tracking-widest rounded-xl text-slate-600 dark:text-slate-300">Cancel</button>
                 <button onclick="saveEditHistory()" class="bg-gradient-to-r from-retro-mustard to-orange-500 text-white px-4 md:px-6 py-2 md:py-2.5 text-[10px] md:text-xs font-black uppercase tracking-widest rounded-xl shadow-[0_5px_15px_-5px_rgba(245,158,11,0.5)] transform hover:-translate-y-1 transition-all">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW BATCH TRANSACTION LEDGER MODAL -->
+    <div id="batchLedgerModal" class="hidden fixed inset-0 z-[10000] items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/10 dark:bg-black/40 overflow-y-auto">
+        <div class="glass-panel p-6 md:p-8 w-[36rem] max-w-[95vw] animate-fade-in-up my-auto">
+            <div class="flex justify-between items-center border-b border-slate-200/50 dark:border-slate-700/50 pb-3 md:pb-4 mb-4 md:mb-6">
+                <h3 class="text-lg md:text-xl font-black uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-3">
+                    <span class="p-1.5 md:p-2 bg-retro-mustard/10 rounded-lg">⚡</span> Batch Ledger Entry
+                </h3>
+                <button onclick="closeBatchLedgerModal()" class="text-retro-rose font-bold text-lg hover:scale-125 transition-transform px-1">✕</button>
+            </div>
+
+            <div class="space-y-5 text-slate-700 dark:text-slate-200">
+                
+                <!-- STEP 1: Select Transaction Type -->
+                <div>
+                    <label class="block text-[9px] md:text-[10px] font-black text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-widest">1️⃣ Step 1: Pick Action Type for this Batch</label>
+                    <select id="bulkLedgerActionSelect" class="glass-input w-full p-3 text-xs md:text-sm font-bold shadow-sm text-slate-800 dark:text-slate-100 cursor-pointer border-retro-mustard/50 bg-white/80 dark:bg-black/40">
+                    </select>
+                </div>
+
+                <!-- STEP 2: Download Template -->
+                <div class="glass-input p-4 rounded-xl bg-white/40 dark:bg-black/20 border border-slate-400/20">
+                    <div class="flex items-center gap-2 mb-1.5 font-black text-xs uppercase tracking-widest text-slate-700 dark:text-slate-200">
+                        <span>2️⃣</span> Step 2: Download Entry Sheet
+                    </div>
+                    <p class="text-xs mb-3 text-slate-500 dark:text-slate-400 font-medium">Download the sheet. Type exact quantities against the respective products and save.</p>
+                    <div class="flex flex-col sm:flex-row gap-2.5">
+                        <button onclick="downloadLedgerTemplate('empty')" class="glass-btn flex-1 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-lg text-slate-700 dark:text-slate-200">📄 4-Col Blank Sheet</button>
+                        <button onclick="downloadLedgerTemplate('prefilled')" class="bg-gradient-to-r from-retro-slate to-indigo-500 text-white flex-1 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-lg shadow-md hover:opacity-90 transition-opacity">📋 Catalog Prefilled (Best)</button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Upload -->
+                <div class="glass-input p-4 rounded-xl bg-white/40 dark:bg-black/20 border border-retro-teal/30">
+                    <div class="flex items-center gap-2 mb-1.5 font-black text-xs uppercase tracking-widest text-retro-teal">
+                        <span>3️⃣</span> Step 3: Commit Saved File
+                    </div>
+                    <p class="text-xs mb-3 text-slate-500 dark:text-slate-400 font-medium">System will commit positive quantities to live inventory, check combo math, and write logs.</p>
+                    
+                    <input type="file" id="ledgerExcelFileInput" accept=".xlsx, .xls" class="hidden" onchange="executeLedgerExcelUpload(event)">
+                    <button onclick="document.getElementById('ledgerExcelFileInput').click()" class="w-full bg-gradient-to-r from-retro-teal to-emerald-400 text-white font-black py-3 rounded-xl shadow-md hover:opacity-90 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2 transform hover:-translate-y-0.5">
+                        <span>📤</span> Process Excel Batch
+                    </button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -610,6 +664,7 @@
             
             const whActionSelect = document.getElementById('warehouseAction');
             const whRadioGroup = document.getElementById('whRadioGroup');
+            const bulkActionSelect = document.getElementById('bulkLedgerActionSelect');
 
             if (currentRole === 'office') {
                 document.querySelectorAll('.admin-only-section').forEach(el => el.classList.add('hidden'));
@@ -621,6 +676,17 @@
                         ${createRadioBtn('whActionRadio', 'GODOWN_TO_OFFICE', '🚚 Pull: Bawana ➔ Office', true, 'wh', 'retro-teal')}
                         ${createRadioBtn('whActionRadio', 'OFFICE_RETURN', '🔙 Return: Office ➔ Bawana', false, 'wh', 'retro-teal')}
                     </div>
+                `;
+
+                bulkActionSelect.innerHTML = `
+                    <optgroup label="🛒 SALES & RETURNS">
+                        <option value="SALE" selected>📤 Bulk Sale (Dispatch from Office)</option>
+                        <option value="CUST_RETURN">🔄 Customer Return (Received at Office)</option>
+                    </optgroup>
+                    <optgroup label="🚚 INTERNAL TRANSFERS">
+                        <option value="GODOWN_TO_OFFICE">🚚 Pull Maal: Bawana ➔ Office</option>
+                        <option value="OFFICE_RETURN">🔙 Send Back: Office ➔ Bawana</option>
+                    </optgroup>
                 `;
             } else {
                 document.querySelectorAll('.admin-only-section').forEach(el => el.classList.remove('hidden'));
@@ -634,6 +700,25 @@
                         ${createRadioBtn('whActionRadio', 'GODOWN_TO_OFFICE', '🚚 Bawana ➔ Office', false, 'wh', 'retro-teal')}
                         ${createRadioBtn('whActionRadio', 'OFFICE_RETURN', '🔙 Office ➔ Bawana', false, 'wh', 'retro-teal')}
                     </div>
+                `;
+
+                bulkActionSelect.innerHTML = `
+                    <optgroup label="🛒 CUSTOMER SALES">
+                        <option value="SALE" selected>📤 Bulk Sale (Dispatch from Office)</option>
+                        <option value="SALE_GODOWN">📤 Bulk Sale (Dispatch directly from Bawana)</option>
+                    </optgroup>
+                    <optgroup label="🔄 CUSTOMER RETURNS">
+                        <option value="CUST_RETURN">🔄 Customer Return (Received at Office)</option>
+                        <option value="CUST_RETURN_GODOWN">🔄 Customer Return (Received at Bawana)</option>
+                    </optgroup>
+                    <optgroup label="🚚 INTERNAL TRANSFERS">
+                        <option value="GODOWN_TO_OFFICE">🚚 Pull Maal: Bawana ➔ Office</option>
+                        <option value="OFFICE_RETURN">🔙 Send Back: Office ➔ Bawana</option>
+                    </optgroup>
+                    <optgroup label="🏭 FACTORY OPERATIONS">
+                        <option value="MFR_RECEIVE">📥 Receive New Maal from Factory (to Bawana)</option>
+                        <option value="MFR_RETURN">📤 Return Rejected/Surplus to Factory (from Bawana)</option>
+                    </optgroup>
                 `;
             }
             switchView('admin');
@@ -701,7 +786,6 @@
             .catch(e => { document.getElementById('syncStatus').innerText = "Sync Failed"; });
         }
 
-        // MODIFIED: added Master Category update
         function extractCategories() {
             uniqueCategories = [...new Set(inventory.map(i => i.category || 'General'))].sort();
             
@@ -1031,7 +1115,6 @@
             });
         }
         
-        // MODIFIED: Updated filterTable to use Category Dropdown along with text search
         function filterTable() { 
             const q = document.getElementById('searchInput').value.toLowerCase(); 
             const cat = document.getElementById('masterCategoryFilter').value;
@@ -1172,6 +1255,147 @@
             const id = document.getElementById('editHistoryId').value; const log = historyLog.find(h => h.id === id); if(!log) return;
             log.qty = parseInt(document.getElementById('editHistoryQty').value) || 0; log.platform = document.getElementById('editHistoryPlatform').value.trim(); log.comment = document.getElementById('editHistoryComment').value.trim();
             closeEditHistoryModal(); saveAndRender(true);
+        }
+
+        // --- NEW BATCH TRANSACTION LEDGER AUTOMATION ---
+        function openBatchLedgerModal() { document.getElementById('batchLedgerModal').classList.remove('hidden'); document.getElementById('batchLedgerModal').classList.add('flex'); }
+        function closeBatchLedgerModal() { document.getElementById('batchLedgerModal').classList.add('hidden'); document.getElementById('batchLedgerModal').classList.remove('flex'); }
+
+        function downloadLedgerTemplate(type) {
+            let templateRows = [];
+            const selectedAction = document.getElementById('bulkLedgerActionSelect').value;
+            
+            if (type === 'prefilled' && inventory.length > 0) {
+                templateRows = inventory.map(item => ({
+                    "Item Name": item.name,
+                    "Category": item.category || "General",
+                    "Quantity": "",
+                    "Platform / Ref No.": "",
+                    "Remarks / Order ID": ""
+                }));
+            } else {
+                templateRows = [
+                    { "Item Name": "Sample Guide Product", "Category": "Art Supplies", "Quantity": 5, "Platform / Ref No.": "Amazon", "Important Remarks": "Delete this guide row before filling" }
+                ];
+            }
+
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.json_to_sheet(templateRows);
+            ws['!cols'] = [{wch: 32}, {wch: 16}, {wch: 12}, {wch: 18}, {wch: 28}]; 
+            XLSX.utils.book_append_sheet(wb, ws, "Batch_Ledger_Entry");
+            XLSX.writeFile(wb, `DOZY_Batch_${selectedAction}.xlsx`);
+        }
+
+        function executeLedgerExcelUpload(event) {
+            const file = event.target.files[0]; if(!file) return;
+            const action = document.getElementById('bulkLedgerActionSelect').value;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+                    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+
+                    if (rows.length === 0) return alert("Uploaded sheet is empty!");
+
+                    let successCount = 0; let skippedCount = 0; let errors = [];
+                    const { dateString, timeString } = getFormattedRealTime();
+
+                    rows.forEach((row, idx) => {
+                        const name = row["Item Name"] ? String(row["Item Name"]).trim() : "";
+                        const qty = parseInt(row["Quantity"]);
+                        const ref = row["Platform / Ref No."] ? String(row["Platform / Ref No."]).trim() : "";
+                        const comment = row["Remarks / Order ID"] ? String(row["Remarks / Order ID"]).trim() : "";
+
+                        if (!name || name === "Sample Guide Product" || isNaN(qty) || qty <= 0) {
+                            return; // Skip empty rows or blank quantities instantly
+                        }
+
+                        const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase());
+                        if (!item) {
+                            errors.push(`Row ${idx+2}: Item "${name}" not found in Master Catalog.`); skippedCount++; return;
+                        }
+
+                        // Capacity Check for Outgoing actions
+                        if (action === 'SALE' && item.officeQty < qty) { errors.push(`[Office Out of Stock] "${item.name}" has only ${item.officeQty} units.`); skippedCount++; return; }
+                        if (action === 'SALE_GODOWN' && item.godownQty < qty) { errors.push(`[Bawana Out of Stock] "${item.name}" has only ${item.godownQty} units.`); skippedCount++; return; }
+                        if (action === 'GODOWN_TO_OFFICE' && item.godownQty < qty) { errors.push(`[Bawana Deficit] "${item.name}" has only ${item.godownQty} units to pull.`); skippedCount++; return; }
+                        if (action === 'OFFICE_RETURN' && item.officeQty < qty) { errors.push(`[Office Deficit] "${item.name}" has only ${item.officeQty} units to send back.`); skippedCount++; return; }
+                        if (action === 'MFR_RETURN' && item.godownQty < qty) { errors.push(`[Bawana Deficit] "${item.name}" has only ${item.godownQty} units to return.`); skippedCount++; return; }
+
+                        // Combo breakdown math test
+                        const match = item.name.match(/\(([^)]+)\)/);
+                        let validCombo = true; let autoComboItems = [];
+                        if (match) {
+                            const numbers = match[1].split(/[+,&]/).map(n => n.trim()).filter(n => n);
+                            for (let num of numbers) {
+                                const reg = new RegExp('^' + num + '([^a-zA-Z0-9]|$)', 'i');
+                                const bItem = inventory.find(i => reg.test(i.name) && i.category && (i.category.toLowerCase().includes('kitchen') || i.category.toLowerCase().includes('kichen')));
+                                if (bItem) {
+                                    if (action === 'SALE' && bItem.officeQty < qty) { errors.push(`Combo failed: "${bItem.name}" has only ${bItem.officeQty} in Office.`); validCombo = false; break; }
+                                    if (action === 'SALE_GODOWN' && bItem.godownQty < qty) { errors.push(`Combo failed: "${bItem.name}" has only ${bItem.godownQty} in Bawana.`); validCombo = false; break; }
+                                    if (action === 'GODOWN_TO_OFFICE' && bItem.godownQty < qty) { errors.push(`Combo failed: "${bItem.name}" has only ${bItem.godownQty} in Bawana.`); validCombo = false; break; }
+                                    if (action === 'OFFICE_RETURN' && bItem.officeQty < qty) { errors.push(`Combo failed: "${bItem.name}" has only ${bItem.officeQty} in Office.`); validCombo = false; break; }
+                                    if (action === 'MFR_RETURN' && bItem.godownQty < qty) { errors.push(`Combo failed: "${bItem.name}" has only ${bItem.godownQty} in Bawana.`); validCombo = false; break; }
+                                    autoComboItems.push(bItem);
+                                }
+                            }
+                        }
+
+                        if (!validCombo) { skippedCount++; return; }
+
+                        // Apply Math to Main item
+                        let actionText = "";
+                        if (action === 'SALE') { item.officeQty -= qty; actionText = 'Sale (Office Out)'; }
+                        else if (action === 'SALE_GODOWN') { item.godownQty -= qty; actionText = 'Sale (Bawana Out)'; }
+                        else if (action === 'CUST_RETURN') { item.officeQty += qty; actionText = 'Return (Office In)'; }
+                        else if (action === 'CUST_RETURN_GODOWN') { item.godownQty += qty; actionText = 'Return (Bawana In)'; }
+                        else if (action === 'GODOWN_TO_OFFICE') { item.godownQty -= qty; item.officeQty += qty; actionText = 'Bawana ➔ Office'; }
+                        else if (action === 'OFFICE_RETURN') { item.officeQty -= qty; item.godownQty += qty; actionText = 'Office ➔ Bawana'; }
+                        else if (action === 'MFR_RECEIVE') { item.godownQty += qty; actionText = 'Mfr ➔ Bawana'; }
+                        else if (action === 'MFR_RETURN') { item.godownQty -= qty; actionText = 'Bawana ➔ Mfr'; }
+
+                        historyLog.unshift({
+                            id: "L_BAT_" + Date.now().toString() + Math.random().toString(36).substr(2,4) + successCount,
+                            dateString, timeString, name: item.name, action, actionText, qty, platform: ref, comment
+                        });
+
+                        // Apply Math to Combo breakdown items
+                        autoComboItems.forEach((bcItem, cIdx) => {
+                            if (action === 'SALE') bcItem.officeQty -= qty;
+                            else if (action === 'SALE_GODOWN') bcItem.godownQty -= qty;
+                            else if (action === 'CUST_RETURN') bcItem.officeQty += qty;
+                            else if (action === 'CUST_RETURN_GODOWN') bcItem.godownQty += qty;
+                            else if (action === 'GODOWN_TO_OFFICE') { bcItem.godownQty -= qty; bcItem.officeQty += qty; }
+                            else if (action === 'OFFICE_RETURN') { bcItem.officeQty -= qty; bcItem.godownQty += qty; }
+                            else if (action === 'MFR_RECEIVE') bcItem.godownQty += qty;
+                            else if (action === 'MFR_RETURN') bcItem.godownQty -= qty;
+
+                            historyLog.unshift({
+                                id: "L_BAT_AUT_" + Date.now().toString() + Math.random().toString(36).substr(2,4) + successCount + "_" + cIdx,
+                                dateString, timeString, name: bcItem.name, action,
+                                actionText: `⚡ Auto (${item.name})`, qty, platform: ref,
+                                comment: comment ? `[Combo: ${item.name}] ${comment}` : `[Combo: ${item.name}]`
+                            });
+                        });
+
+                        successCount++;
+                    });
+
+                    saveAndRender(true);
+                    closeBatchLedgerModal();
+                    event.target.value = '';
+
+                    let finalAlertMsg = `🎉 BATCH TRANSACTION COMMITTED!\n\n📦 Processed Successfully: ${successCount} transactions.`;
+                    if (skippedCount > 0) {
+                        finalAlertMsg += `\n\n⚠️ SKIPPED ${skippedCount} items due to errors:\n` + errors.slice(0, 4).join('\n');
+                        if (errors.length > 4) finalAlertMsg += `\n...and ${errors.length - 4} more warnings.`;
+                    }
+                    alert(finalAlertMsg);
+
+                } catch (err) { alert("❌ Excel structure corrupted! Don't change the column headings of the downloaded template."); }
+            };
+            reader.readAsArrayBuffer(file);
         }
     </script>
 </body>
