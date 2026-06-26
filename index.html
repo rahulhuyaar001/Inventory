@@ -51,7 +51,7 @@
             background-color: #f4f0eb;
             color: #334155;
             font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            overflow: hidden; /* Prevent full body scroll for sidebar layout */
+            overflow: hidden; 
         }
         .dark body { background-color: #0f172a; color: #e2e8f0; }
 
@@ -243,7 +243,7 @@
             <div class="flex-1 overflow-y-auto p-3 md:p-4 custom-scrollbar pb-20">
                 
                 <div id="section-dashboard" class="nav-section animate-fade-in-up space-y-6">
-                    <div id="kpiDashboard" class="glass-panel liquid-hover p-4 md:p-6 flex flex-col admin-only-section">
+                    <div id="kpiDashboard" class="glass-panel liquid-hover p-4 md:p-6 flex flex-col">
                         <div class="flex justify-between items-center mb-4 md:mb-6 shrink-0 border-b border-slate-200/50 dark:border-slate-700/50 pb-3 md:pb-4">
                             <h2 class="text-lg md:text-xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight flex items-center gap-2"><span class="p-1.5 bg-white/60 dark:bg-white/10 rounded-lg shadow-sm">📊</span> Overview</h2>
                         </div>
@@ -259,7 +259,7 @@
                         </div>
                     </div>
                     
-                    <div class="glass-panel p-4 md:p-6 flex flex-col liquid-hover admin-only-section">
+                    <div class="glass-panel p-4 md:p-6 flex flex-col liquid-hover" id="stockAlertsDashboard">
                         <div class="flex justify-between items-center mb-4 border-b border-slate-200/50 dark:border-slate-700/50 pb-3">
                             <h2 class="text-lg md:text-xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight flex items-center gap-2"><span class="p-1.5 bg-white/60 dark:bg-white/10 rounded-lg shadow-sm">🚨</span> Stock Alerts</h2>
                             <select id="dashboardAlertCategory" onchange="renderDashboardAlerts()" class="glass-input p-2.5 text-xs md:text-sm font-bold text-center text-slate-700 dark:text-slate-200 shadow-sm cursor-pointer w-40 md:w-48">
@@ -538,26 +538,19 @@
             saveAndRender(false);
         }
 
-        /* --- NEW NAVIGATION LOGIC --- */
         function navigateSection(sectionId) {
-            // Hide all sections
             document.querySelectorAll('.nav-section').forEach(el => el.classList.add('hidden'));
-            
-            // Remove active state from all buttons
             document.querySelectorAll('.sidebar-btn').forEach(el => {
                 el.classList.remove('sidebar-active');
             });
 
-            // Show selected section
             document.getElementById(`section-${sectionId}`).classList.remove('hidden');
             
-            // Add active state to clicked button
             const activeBtn = document.getElementById(`nav-${sectionId}`);
             if(activeBtn) activeBtn.classList.add('sidebar-active');
 
             if(sectionId === 'viewer') renderViewerTable();
             
-            // Auto-close mobile sidebar if open
             if(window.innerWidth < 1024 && !document.getElementById('sidebar').classList.contains('hidden')) {
                 toggleMobileSidebar();
             }
@@ -573,7 +566,6 @@
             sidebar.classList.toggle('bg-white');
             sidebar.classList.toggle('dark:bg-slate-900');
         }
-        /* -------------------------- */
 
         function attemptLogin() {
             const role = document.querySelector('input[name="loginRole"]:checked').value; 
@@ -590,7 +582,6 @@
             document.getElementById('mainApp').classList.remove('hidden');
             document.getElementById('userRoleBadge').innerText = 'Viewer';
             
-            // Hide admin stuff in sidebar & header
             document.querySelectorAll('.admin-only-section').forEach(el => el.classList.add('hidden'));
             document.getElementById('nav-dashboard').classList.add('hidden');
             document.getElementById('nav-entries').classList.add('hidden');
@@ -607,7 +598,6 @@
             document.getElementById('loginOverlay').classList.remove('hidden'); 
             document.getElementById('loginError').classList.add('hidden'); 
             
-            // Reset hidden states for next login
             document.querySelectorAll('.admin-only-section').forEach(el => el.classList.remove('hidden'));
             document.getElementById('nav-dashboard').classList.remove('hidden');
             document.getElementById('nav-entries').classList.remove('hidden');
@@ -635,6 +625,10 @@
             if (currentRole === 'office') {
                 document.querySelectorAll('.admin-only-section').forEach(el => el.classList.add('hidden'));
                 
+                // CHANGED: Office wale ke liye dono Dashboard Panels dikhane ka permission code
+                document.getElementById('kpiDashboard').classList.remove('hidden');
+                document.getElementById('stockAlertsDashboard').classList.remove('hidden');
+
                 whActionSelect.innerHTML = `<option value="GODOWN_TO_OFFICE" selected>GODOWN_TO_OFFICE</option><option value="OFFICE_RETURN">OFFICE_RETURN</option>`;
                 whRadioGroup.innerHTML = `
                     <div class="flex gap-2 w-full p-1 bg-white/40 dark:bg-black/30 rounded-xl shadow-inner">
@@ -755,7 +749,6 @@
                 if(uniqueCategories.includes(currentMasterVal)) masterCat.value = currentMasterVal;
             }
 
-            // Update Dashboard Alerts Category Filter
             const dashCat = document.getElementById('dashboardAlertCategory');
             if(dashCat) {
                 const currentDashVal = dashCat.value;
@@ -827,7 +820,6 @@
             document.getElementById('kpi-oos').innerText = outOfStock.toLocaleString(); document.getElementById('kpi-sales').innerText = salesToday.toLocaleString();
             document.getElementById('kpi-transfers').innerText = transfersToday.toLocaleString(); document.getElementById('kpi-returns').innerText = returnsToday.toLocaleString();
             
-            // Call renderDashboardAlerts to refresh the lists
             renderDashboardAlerts();
         }
 
@@ -888,7 +880,6 @@
             if (hasItems) { previewBox.innerHTML = html; previewBox.classList.remove('hidden'); } else { previewBox.classList.add('hidden'); }
         }
 
-        // ENTRY SUBMISSION LOGIC STAYS EXACTLY SAME
         function addTowhBatch() {
             const name = document.getElementById('whSelect').value.trim(); const qty = parseInt(document.getElementById('whQty').value); const action = document.getElementById('warehouseAction').value; const platform = document.getElementById('whPlatform').value.trim(); const comment = document.getElementById('whComment').value.trim();
             if (!name || isNaN(qty) || qty <= 0) return; const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase()); if (!item) return alert("Item not found in catalog.");
@@ -1274,8 +1265,6 @@
                     });
 
                     saveAndRender(true); closeBatchLedgerModal(); event.target.value = '';
-                    
-                    // Open Naya Scrollable Report Modal instead of normal alert()
                     openBatchReportModal(successCount, skippedCount, errors);
 
                 } catch (err) { alert("❌ Excel structure corrupted! Don't change the column headings of the downloaded template."); }
