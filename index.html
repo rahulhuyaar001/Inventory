@@ -488,6 +488,38 @@
         </div>
     </div>
 
+    <div id="batchReportModal" class="hidden fixed inset-0 z-[10020] items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/40 dark:bg-black/70">
+        <div class="glass-panel p-6 md:p-8 w-[38rem] max-w-[95vw] max-h-[85vh] flex flex-col animate-fade-in-up border-2 border-retro-rose/30">
+            
+            <div class="flex justify-between items-center border-b border-slate-200/50 dark:border-slate-700/50 pb-3 mb-4 shrink-0">
+                <h3 class="text-lg md:text-xl font-black uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                    <span>📑</span> Batch Execution Report
+                </h3>
+                <button onclick="closeBatchReportModal()" class="text-retro-rose font-black text-2xl hover:scale-125 transition-transform px-2 py-0.5 bg-retro-rose/10 rounded-lg">✕</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar space-y-4 pr-1.5 text-slate-700 dark:text-slate-200">
+                <div id="repSuccessBox" class="p-3.5 rounded-xl bg-retro-teal/15 border border-retro-teal/30 text-retro-teal font-black text-xs md:text-sm flex justify-between items-center">
+                    <span>📦 Successful Entries Committed:</span>
+                    <span id="repSuccessCount" class="font-mono text-lg bg-retro-teal text-white px-2.5 py-0.5 rounded shadow">0</span>
+                </div>
+                
+                <div id="repFailSection" class="hidden space-y-2">
+                    <div class="text-[10px] font-black text-retro-rose uppercase tracking-widest flex justify-between items-center bg-retro-rose/10 p-2 rounded-lg">
+                        <span>⚠️ Failed / Skipped Entries:</span>
+                        <span id="repFailCount" class="font-mono bg-retro-rose text-white px-2 py-0.5 rounded text-xs">0</span>
+                    </div>
+                    <div id="repErrorsList" class="space-y-1.5 pt-1"></div>
+                </div>
+            </div>
+
+            <div class="mt-5 pt-3 border-t border-slate-200/50 dark:border-slate-700/50 flex justify-end shrink-0">
+                <button onclick="closeBatchReportModal()" class="bg-gradient-to-r from-retro-slate to-slate-800 text-white px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-xl shadow-md hover:opacity-90">Dismiss Report</button>
+            </div>
+
+        </div>
+    </div>
+
     <script>
         const PASSWORDS = { admin: "12", office: "1" };
         let currentRole = null; 
@@ -1241,14 +1273,40 @@
                     });
 
                     saveAndRender(true); closeBatchLedgerModal(); event.target.value = '';
-                    let finalAlertMsg = `🎉 BATCH TRANSACTION COMMITTED!\n\n📦 Processed Successfully: ${successCount} transactions.`;
-                    if (skippedCount > 0) {
-                        finalAlertMsg += `\n\n⚠️ SKIPPED ${skippedCount} items due to errors:\n` + errors.slice(0, 4).join('\n');
-                        if (errors.length > 4) finalAlertMsg += `\n...and ${errors.length - 4} more warnings.`;
-                    }
-                    alert(finalAlertMsg);
+                    
+                    // Open Naya Scrollable Report Modal instead of normal alert()
+                    openBatchReportModal(successCount, skippedCount, errors);
+
                 } catch (err) { alert("❌ Excel structure corrupted! Don't change the column headings of the downloaded template."); }
             }; reader.readAsArrayBuffer(file);
+        }
+
+        function openBatchReportModal(successCount, skippedCount, errors) {
+            document.getElementById('repSuccessCount').innerText = successCount;
+            const failSec = document.getElementById('repFailSection');
+            const failList = document.getElementById('repErrorsList');
+
+            if (skippedCount > 0) {
+                document.getElementById('repFailCount').innerText = skippedCount;
+                failList.innerHTML = errors.map(err => `
+                    <div class="p-2.5 bg-white/60 dark:bg-black/30 border-l-4 border-retro-rose rounded-r-lg text-[11px] font-bold shadow-sm leading-tight text-slate-700 dark:text-slate-200 break-words">
+                        ${err}
+                    </div>
+                `).join('');
+                failSec.classList.remove('hidden');
+            } else {
+                failSec.classList.add('hidden');
+            }
+
+            const modal = document.getElementById('batchReportModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeBatchReportModal() {
+            const modal = document.getElementById('batchReportModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
         }
     </script>
 </body>
