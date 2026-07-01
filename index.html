@@ -124,7 +124,7 @@
 <div id="sidebarBackdrop" onclick="closeMobileSidebar()" style="display: none;"></div>
 
 <div id="loginOverlay" class="fixed inset-0 z-[10000] flex items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/30 dark:bg-black/50 overflow-y-auto" style="display: flex;">
-    <div class="glass-panel p-8 md:p-10 max-w-sm w-full animate-fade-in-up my-auto">
+    <div class="glass-panel p-8 md:p-10 max-w-md w-full animate-fade-in-up my-auto">
         <div class="text-center mb-8">
             <div class="inline-block p-4 rounded-full bg-white/60 dark:bg-white/10 shadow-inner mb-4"><span class="text-5xl block" style="animation: blob 3s infinite alternate;">📦</span></div>
             <h2 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-retro-slate to-retro-rose tracking-tight">DOZY StockPro</h2>
@@ -134,16 +134,20 @@
             <div class="flex gap-2 w-full p-1 bg-white/50 dark:bg-black/40 rounded-xl shadow-inner mb-2">
                 <label class="flex-1 cursor-pointer">
                     <input type="radio" name="loginRole" value="office" class="peer hidden" checked>
-                    <div class="h-full flex items-center justify-center text-center px-2 py-3 rounded-lg text-[10px] md:text-xs font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-slate peer-checked:shadow-sm text-slate-500 hover:bg-white/50 dark:hover:bg-white/10 border border-transparent peer-checked:border-retro-slate/20">🏢 Office</div>
+                    <div class="h-full flex items-center justify-center text-center px-1 py-3 rounded-lg text-[10px] md:text-xs font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-slate peer-checked:shadow-sm text-slate-500 hover:bg-white/50 dark:hover:bg-white/10 border border-transparent peer-checked:border-retro-slate/20">🏢 Office</div>
+                </label>
+                <label class="flex-1 cursor-pointer">
+                    <input type="radio" name="loginRole" value="bawana" class="peer hidden">
+                    <div class="h-full flex items-center justify-center text-center px-1 py-3 rounded-lg text-[10px] md:text-xs font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-teal peer-checked:shadow-sm text-slate-500 hover:bg-white/50 dark:hover:bg-white/10 border border-transparent peer-checked:border-retro-teal/20">🏭 Bawana</div>
                 </label>
                 <label class="flex-1 cursor-pointer">
                     <input type="radio" name="loginRole" value="admin" class="peer hidden">
-                    <div class="h-full flex items-center justify-center text-center px-2 py-3 rounded-lg text-[10px] md:text-xs font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-slate peer-checked:shadow-sm text-slate-500 hover:bg-white/50 dark:hover:bg-white/10 border border-transparent peer-checked:border-retro-slate/20">⚙️ RAHUL</div>
+                    <div class="h-full flex items-center justify-center text-center px-1 py-3 rounded-lg text-[10px] md:text-xs font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-rose peer-checked:shadow-sm text-slate-500 hover:bg-white/50 dark:hover:bg-white/10 border border-transparent peer-checked:border-retro-rose/20">⚙️ RAHUL</div>
                 </label>
             </div>
             <div>
-                <input type="" id="login" placeholder="Enter " class="glass-input w-full p-3.5 font-bold tracking-widest text-center text-slate-700 dark:text-slate-200 shadow-sm text-sm" onkeypress="if(event.key === 'Enter') attemptLogin()">
-                <p id="loginError" class="text-retro-rose text-xs mt-2 font-bold text-center" style="display: none;">⚠️ Incorrect </p>
+                <input type="password" id="loginPassword" placeholder="Enter Password" class="glass-input w-full p-3.5 font-bold tracking-widest text-center text-slate-700 dark:text-slate-200 shadow-sm text-sm" onkeypress="if(event.key === 'Enter') attemptLogin()">
+                <p id="loginError" class="text-retro-rose text-xs mt-2 font-bold text-center" style="display: none;">⚠️ Incorrect Password</p>
             </div>
             <button onclick="attemptLogin()" class="w-full bg-gradient-to-r from-retro-slate to-indigo-500 hover:from-indigo-600 hover:to-retro-slate text-white font-bold py-3.5 rounded-xl transition-all duration-300 shadow-md transform hover:-translate-y-1 uppercase tracking-widest text-sm mt-2">Login</button>
             <div class="flex items-center gap-3 my-4"><div class="h-px bg-slate-300 dark:bg-slate-600 flex-1"></div><span class="text-xs font-bold text-slate-400 uppercase tracking-widest">OR</span><div class="h-px bg-slate-300 dark:bg-slate-600 flex-1"></div></div>
@@ -358,12 +362,10 @@
                         </div>
                         <div class="flex flex-col gap-3 shrink-0">
                             <select id="salesAction" style="display: none;" oninput="updatePreview('sl')"><option value="SALE" selected>SALE</option><option value="SALE_GODOWN">SALE_GODOWN</option><option value="CUST_RETURN">CUST_RETURN</option><option value="CUST_RETURN_GODOWN">CUST_RETURN_GODOWN</option></select>
-                            <div class="grid grid-cols-2 gap-2 w-full p-1 bg-white/50 dark:bg-black/40 rounded-xl shadow-inner mb-2" id="slRadioGroup">
-                                <label class="cursor-pointer"><input type="radio" name="slActionRadio" value="SALE" class="peer hidden" checked onchange="document.getElementById('salesAction').value=this.value; updatePreview('sl');"><div class="h-full flex items-center justify-center text-center px-2 py-2.5 rounded-lg text-[10px] md:text-[11px] font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-slate peer-checked:shadow-sm text-slate-500 hover:bg-white/60 border border-transparent peer-checked:border-retro-slate/20">📤 Sale (Office)</div></label>
-                                <label class="cursor-pointer"><input type="radio" name="slActionRadio" value="CUST_RETURN" class="peer hidden" onchange="document.getElementById('salesAction').value=this.value; updatePreview('sl');"><div class="h-full flex items-center justify-center text-center px-2 py-2.5 rounded-lg text-[10px] md:text-[11px] font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-slate peer-checked:shadow-sm text-slate-500 hover:bg-white/60 border border-transparent peer-checked:border-retro-slate/20">🔄 Return (Office)</div></label>
-                                <label class="cursor-pointer admin-only-section"><input type="radio" name="slActionRadio" value="SALE_GODOWN" class="peer hidden" onchange="document.getElementById('salesAction').value=this.value; updatePreview('sl');"><div class="h-full flex items-center justify-center text-center px-2 py-2.5 rounded-lg text-[10px] md:text-[11px] font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-teal peer-checked:shadow-sm text-slate-500 hover:bg-white/60 border border-transparent peer-checked:border-retro-teal/20">📤 Sale (Bawana)</div></label>
-                                <label class="cursor-pointer admin-only-section"><input type="radio" name="slActionRadio" value="CUST_RETURN_GODOWN" class="peer hidden" onchange="document.getElementById('salesAction').value=this.value; updatePreview('sl');"><div class="h-full flex items-center justify-center text-center px-2 py-2.5 rounded-lg text-[10px] md:text-[11px] font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-teal peer-checked:shadow-sm text-slate-500 hover:bg-white/60 border border-transparent peer-checked:border-retro-teal/20">🔄 Return (Bawana)</div></label>
-                            </div>
+                            
+                            <!-- Dynamic Sales Radio Buttons -->
+                            <div class="grid grid-cols-2 gap-2 w-full p-1 bg-white/50 dark:bg-black/40 rounded-xl shadow-inner mb-2" id="slRadioGroup"></div>
+                            
                             <div class="relative w-full" id="slDropdownContainer">
                                 <input type="text" id="slSelect" oninput="filterDropdown('slSelect', 'slList'); updatePreview('sl')" onfocus="openDropdown('whList')" onclick="openDropdown('slList')" placeholder="🔍 Scan Barcode or Type Name..." autocomplete="off" class="glass-input w-full p-3 text-xs md:text-sm shadow-sm border-retro-slate/40">
                                 <ul id="slList" style="display: none;" class="absolute z-50 w-full mt-2 glass-panel shadow-2xl max-h-56 overflow-y-auto py-2 custom-scrollbar flex-col text-slate-700 dark:text-slate-200 font-medium"></ul>
@@ -520,14 +522,14 @@
     // ============================================================
     const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbwaEyoCkumfEteIuqcgLFcLhYEl7vzCs0krb-8CmavWYLmlHAc_jKtKXm6GJMy9Kg0NJw/exec"; 
     
-    const PASSWORDS = { admin: "11", office: "1" };
+    // Yaha PASSWORDS update kiye gaye hain 👇
+    const PASSWORDS = { admin: "12", office: "1", bawana: "17" };
     let currentRole = null;
     let inventory = [], historyLog = [], baawanOrders = [], pendingWh = [], pendingSl = [], uniqueCategories = [];
     let sortConfig = { key: 'createdAt', dir: 'asc' };
     let viewMode = localStorage.getItem('dozy_view') || 'comfortable';
 
     // === 🆕 1. CROSS-TAB INSTANT SYNC ===
-    // (Bina refresh kiye, doosre tab mein automatically reflect hoga)
     const syncChannel = new BroadcastChannel('dozy_sync_channel');
     syncChannel.onmessage = (event) => {
         if (event.data === 'data_updated' && currentRole) {
@@ -551,7 +553,7 @@
         if (currentRole) {
             loadData(true); // Silent refresh in background
         }
-    }, 15000); // 15,000 ms = 15 seconds
+    }, 15000);
 
     // === 🆕 4. MANUAL REFRESH BUTTON ===
     function manualRefresh() {
@@ -620,6 +622,7 @@
         const pass = document.getElementById('loginPassword').value;
         if (role === 'admin' && pass === PASSWORDS.admin) { currentRole = 'admin'; localStorage.setItem('dozy_current_role', 'admin'); grantAccess(); }
         else if (role === 'office' && pass === PASSWORDS.office) { currentRole = 'office'; localStorage.setItem('dozy_current_role', 'office'); grantAccess(); }
+        else if (role === 'bawana' && pass === PASSWORDS.bawana) { currentRole = 'bawana'; localStorage.setItem('dozy_current_role', 'bawana'); grantAccess(); }
         else { document.getElementById('loginError').style.display = 'block'; document.getElementById('loginPassword').classList.add('border-retro-rose'); setTimeout(() => document.getElementById('loginPassword').classList.remove('border-retro-rose'), 2000); }
     }
     function guestLogin() {
@@ -633,22 +636,55 @@
         document.querySelectorAll('.admin-only-section').forEach(el => el.style.display = '');
         document.getElementById('nav-dashboard').style.display = ''; document.getElementById('nav-entries').style.display = ''; document.getElementById('nav-history').style.display = ''; document.getElementById('nav-baawan').style.display = '';
     }
+
     function createRadioBtn(name, value, label, checked, type, colorClass) {
         const targetSelect = type === 'wh' ? 'warehouseAction' : 'salesAction';
         return `<label class="flex-1 cursor-pointer"><input type="radio" name="${name}" value="${value}" class="peer hidden" ${checked ? 'checked' : ''} onchange="document.getElementById('${targetSelect}').value=this.value; updatePreview('${type}');"><div class="h-full flex items-center justify-center text-center px-2 py-2.5 rounded-lg text-[10px] md:text-[11px] font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-${colorClass} peer-checked:shadow-sm text-slate-500 dark:text-slate-400 hover:bg-white/50 dark:hover:bg-white/10 border border-transparent peer-checked:border-${colorClass}/20">${label}</div></label>`;
     }
+
+    // Role Based Setup
     function grantAccess() {
         document.getElementById('loginError').style.display = 'none'; document.getElementById('loginOverlay').style.display = 'none'; document.getElementById('mainApp').style.display = 'flex'; document.getElementById('userRoleBadge').innerText = currentRole;
+        
         const whActionSelect = document.getElementById('warehouseAction'), whRadioGroup = document.getElementById('whRadioGroup'), bulkActionSelect = document.getElementById('bulkLedgerActionSelect');
+        const slActionSelect = document.getElementById('salesAction'), slRadioGroup = document.getElementById('slRadioGroup');
+        
         if (currentRole === 'office') {
             document.querySelectorAll('.admin-only-section').forEach(el => el.style.display = 'none'); document.getElementById('kpiDashboard').classList.remove('hidden'); document.getElementById('stockAlertsDashboard').classList.remove('hidden');
+            
+            // Office sees only Office Pull / Return
             whActionSelect.innerHTML = `<option value="GODOWN_TO_OFFICE" selected>GODOWN_TO_OFFICE</option><option value="OFFICE_RETURN">OFFICE_RETURN</option>`;
             whRadioGroup.innerHTML = `<div class="flex gap-2 w-full p-1 bg-white/40 dark:bg-black/30 rounded-xl shadow-inner">${createRadioBtn('whActionRadio', 'GODOWN_TO_OFFICE', '🚚 Pull: Bawana ➔ Office', true, 'wh', 'retro-teal')}${createRadioBtn('whActionRadio', 'OFFICE_RETURN', '🔙 Return: Office ➔ Bawana', false, 'wh', 'retro-teal')}</div>`;
+            
+            // Office sees only Office Sales
+            slActionSelect.innerHTML = `<option value="SALE" selected>SALE</option><option value="CUST_RETURN">CUST_RETURN</option>`;
+            slRadioGroup.innerHTML = `${createRadioBtn('slActionRadio', 'SALE', '📤 Sale (Office)', true, 'sl', 'retro-slate')}${createRadioBtn('slActionRadio', 'CUST_RETURN', '🔄 Return (Office)', false, 'sl', 'retro-slate')}`;
+
             bulkActionSelect.innerHTML = `<optgroup label="🛒 SALES & RETURNS"><option value="SALE" selected>📤 Bulk Sale (Office)</option><option value="CUST_RETURN">🔄 Customer Return (Office)</option></optgroup><optgroup label="🚚 INTERNAL TRANSFERS"><option value="GODOWN_TO_OFFICE">🚚 Pull: Bawana ➔ Office</option><option value="OFFICE_RETURN">🔙 Send Back: Office ➔ Bawana</option></optgroup>`;
-        } else {
+        } 
+        else if (currentRole === 'bawana') {
+            document.querySelectorAll('.admin-only-section').forEach(el => el.style.display = 'none'); document.getElementById('kpiDashboard').classList.remove('hidden'); document.getElementById('stockAlertsDashboard').classList.remove('hidden');
+            
+            // Bawana sees Factory Operations & Sending to Office
+            whActionSelect.innerHTML = `<option value="MFR_RECEIVE" selected>MFR_RECEIVE</option><option value="MFR_RETURN">MFR_RETURN</option><option value="GODOWN_TO_OFFICE">GODOWN_TO_OFFICE</option>`;
+            whRadioGroup.innerHTML = `<div class="grid grid-cols-3 gap-2 w-full p-1 bg-white/40 dark:bg-black/30 rounded-xl shadow-inner">${createRadioBtn('whActionRadio', 'MFR_RECEIVE', '📥 Mfr ➔ Bawana', true, 'wh', 'retro-teal')}${createRadioBtn('whActionRadio', 'MFR_RETURN', '📤 Bawana ➔ Mfr', false, 'wh', 'retro-teal')}${createRadioBtn('whActionRadio', 'GODOWN_TO_OFFICE', '🚚 Bawana ➔ Office', false, 'wh', 'retro-teal')}</div>`;
+            
+            // Bawana sees only Bawana Sales
+            slActionSelect.innerHTML = `<option value="SALE_GODOWN" selected>SALE_GODOWN</option><option value="CUST_RETURN_GODOWN">CUST_RETURN_GODOWN</option>`;
+            slRadioGroup.innerHTML = `${createRadioBtn('slActionRadio', 'SALE_GODOWN', '📤 Sale (Bawana)', true, 'sl', 'retro-teal')}${createRadioBtn('slActionRadio', 'CUST_RETURN_GODOWN', '🔄 Return (Bawana)', false, 'sl', 'retro-teal')}`;
+
+            bulkActionSelect.innerHTML = `<optgroup label="🏭 FACTORY OPS"><option value="MFR_RECEIVE" selected>📥 Receive from Factory (Bawana)</option><option value="MFR_RETURN">📤 Return to Factory (Bawana)</option></optgroup><optgroup label="🚚 TRANSFERS"><option value="GODOWN_TO_OFFICE">🚚 Send to Office</option></optgroup><optgroup label="🛒 BAWANA SALES"><option value="SALE_GODOWN">📤 Bulk Sale (Bawana)</option><option value="CUST_RETURN_GODOWN">🔄 Return (Bawana)</option></optgroup>`;
+        }
+        else { 
+            // Admin sees Everything
             document.querySelectorAll('.admin-only-section').forEach(el => el.style.display = '');
+            
             whActionSelect.innerHTML = `<option value="MFR_RECEIVE" selected>MFR_RECEIVE</option><option value="MFR_RETURN">MFR_RETURN</option><option value="GODOWN_TO_OFFICE">GODOWN_TO_OFFICE</option><option value="OFFICE_RETURN">OFFICE_RETURN</option>`;
             whRadioGroup.innerHTML = `<div class="grid grid-cols-2 gap-2 w-full p-1 bg-white/40 dark:bg-black/30 rounded-xl shadow-inner">${createRadioBtn('whActionRadio', 'MFR_RECEIVE', '📥 Mfr ➔ Bawana', true, 'wh', 'retro-teal')}${createRadioBtn('whActionRadio', 'MFR_RETURN', '📤 Bawana ➔ Mfr', false, 'wh', 'retro-teal')}${createRadioBtn('whActionRadio', 'GODOWN_TO_OFFICE', '🚚 Bawana ➔ Office', false, 'wh', 'retro-teal')}${createRadioBtn('whActionRadio', 'OFFICE_RETURN', '🔙 Office ➔ Bawana', false, 'wh', 'retro-teal')}</div>`;
+            
+            slActionSelect.innerHTML = `<option value="SALE" selected>SALE</option><option value="SALE_GODOWN">SALE_GODOWN</option><option value="CUST_RETURN">CUST_RETURN</option><option value="CUST_RETURN_GODOWN">CUST_RETURN_GODOWN</option>`;
+            slRadioGroup.innerHTML = `${createRadioBtn('slActionRadio', 'SALE', '📤 Sale (Office)', true, 'sl', 'retro-slate')}${createRadioBtn('slActionRadio', 'SALE_GODOWN', '📤 Sale (Bawana)', false, 'sl', 'retro-teal')}${createRadioBtn('slActionRadio', 'CUST_RETURN', '🔄 Return (Office)', false, 'sl', 'retro-slate')}${createRadioBtn('slActionRadio', 'CUST_RETURN_GODOWN', '🔄 Return (Bawana)', false, 'sl', 'retro-teal')}`;
+
             bulkActionSelect.innerHTML = `<optgroup label="🛒 CUSTOMER SALES"><option value="SALE" selected>📤 Bulk Sale (Office)</option><option value="SALE_GODOWN">📤 Bulk Sale (Bawana)</option></optgroup><optgroup label="🔄 CUSTOMER RETURNS"><option value="CUST_RETURN">🔄 Return (Office)</option><option value="CUST_RETURN_GODOWN">🔄 Return (Bawana)</option></optgroup><optgroup label="🚚 INTERNAL TRANSFERS"><option value="GODOWN_TO_OFFICE">🚚 Bawana ➔ Office</option><option value="OFFICE_RETURN">🔙 Office ➔ Bawana</option></optgroup><optgroup label="🏭 FACTORY OPS"><option value="MFR_RECEIVE">📥 Receive from Factory (Bawana)</option><option value="MFR_RETURN">📤 Return to Factory (Bawana)</option></optgroup>`;
         }
         navigateSection('dashboard'); loadData();
@@ -734,7 +770,6 @@
         .then(() => { 
             dotEl.className = 'status-dot status-online'; statusEl.innerText = "Saved"; 
             setTimeout(() => { statusEl.innerText = ""; }, 1500); 
-            // 🚀 Tell other tabs to refresh their data instantly!
             syncChannel.postMessage('data_updated'); 
         })
         .catch(() => { dotEl.className = 'status-dot status-error'; statusEl.innerText = "Sync Failed"; showToast("Sync failed.", 'error'); });
@@ -752,7 +787,7 @@
         inventory.sort((a, b) => { let va = a[sortConfig.key === 'total' ? 'godownQty' : sortConfig.key], vb = b[sortConfig.key === 'total' ? 'godownQty' : sortConfig.key]; if (sortConfig.key === 'total') { va = a.godownQty + a.officeQty; vb = b.godownQty + b.officeQty; } if (sortConfig.key === 'name' || sortConfig.key === 'category') { return sortConfig.dir === 'asc' ? String(va || '').localeCompare(String(vb || '')) : String(vb || '').localeCompare(String(va || '')); } return sortConfig.dir === 'asc' ? (va || 0) - (vb || 0) : (vb || 0) - (va || 0); });
         if (triggerSave) persistData(targetKey);
         extractCategories(); renderTable(); renderCustomDropdowns(); renderHistory(); renderBaawanOrders();
-        if (currentRole === 'admin' || currentRole === 'office') updateDashboard();
+        if (currentRole === 'admin' || currentRole === 'office' || currentRole === 'bawana') updateDashboard();
         renderViewerTable();
         document.getElementById('catalogCountLabel').innerText = `${inventory.length} Products`;
     }
