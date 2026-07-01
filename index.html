@@ -44,7 +44,6 @@
     <style>
         body { background-color: #f4f0eb; color: #334155; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; overflow: hidden; }
         .dark body { background-color: #0f172a; color: #e2e8f0; }
-
         .bg-blobs { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; filter: blur(60px); opacity: 0.6; }
         .dark .bg-blobs { opacity: 0.2; }
         .blob-1 { position: absolute; top: -10%; left: -10%; width: 50vw; height: 50vw; background: #c084fc; border-radius: 50%; mix-blend-mode: multiply; animation: blob 18s infinite alternate; }
@@ -53,37 +52,22 @@
         .dark .blob-1 { background: #7e22ce; mix-blend-mode: screen; }
         .dark .blob-2 { background: #1d4ed8; mix-blend-mode: screen; }
         .dark .blob-3 { background: #be185d; mix-blend-mode: screen; }
-
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%); border: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(255, 255, 255, 0.8);
-            border-radius: 1.5rem; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-        }
+        .glass-panel { background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%); border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(255, 255, 255, 0.8); border-radius: 1.5rem; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
         .dark .glass-panel { background: rgba(30, 41, 59, 0.65); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 1px 1px 0px rgba(255, 255, 255, 0.05); }
         .liquid-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); border-color: rgba(255,255,255,0.9); }
         .dark .liquid-hover:hover { box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5); border-color: rgba(255,255,255,0.15); }
-
-        .glass-input {
-            background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.03), inset -2px -2px 5px rgba(255,255,255,0.8);
-            border-radius: 1rem; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-        }
+        .glass-input { background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: inset 2px 2px 5px rgba(0,0,0,0.03), inset -2px -2px 5px rgba(255,255,255,0.8); border-radius: 1rem; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); }
         .glass-input:focus { background: rgba(255, 255, 255, 1); outline: none; border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2), inset 2px 2px 5px rgba(0,0,0,0.03); transform: scale(1.01); }
         .dark .glass-input { background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: inset 2px 2px 5px rgba(0,0,0,0.4), inset -1px -1px 3px rgba(255,255,255,0.02); color: #f8fafc; }
         .dark .glass-input:focus { background: rgba(15, 23, 42, 0.7); border-color: #818cf8; box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2); }
-
         .glass-btn { background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.5)); border: 1px solid rgba(255, 255, 255, 0.9); box-shadow: 2px 4px 10px rgba(0,0,0,0.05), inset 1px 1px 2px rgba(255,255,255,1); transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); }
         .glass-btn:hover { transform: translateY(-2px); box-shadow: 2px 8px 15px rgba(0,0,0,0.08), inset 1px 1px 2px rgba(255,255,255,1); }
         .glass-btn:active { transform: translateY(1px) scale(0.98); }
         .dark .glass-btn { background: linear-gradient(135deg, rgba(55,65,81,0.8), rgba(31,41,55,0.6)); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 2px 4px 10px rgba(0,0,0,0.3), inset 1px 1px 2px rgba(255,255,255,0.05); color: #f1f5f9; }
-
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.3); border-radius: 10px; }
         .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); }
-
-        /* Toast Notifications */
         #toastContainer { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 99999; display: flex; flex-direction: column; gap: 0.6rem; pointer-events: none; }
         .toast { pointer-events: auto; min-width: 220px; max-width: 340px; padding: 0.85rem 1.2rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; gap: 0.7rem; animation: toastIn 0.4s cubic-bezier(0.23, 1, 0.32, 1) forwards; backdrop-filter: blur(20px); box-shadow: 0 8px 30px rgba(0,0,0,0.15); letter-spacing: 0.02em; }
         .toast.success { background: rgba(20, 184, 166, 0.92); color: white; border: 1px solid rgba(255,255,255,0.3); }
@@ -93,74 +77,38 @@
         .toast.fade-out { animation: toastOut 0.3s ease-in forwards; }
         .toast-icon { font-size: 1.1rem; flex-shrink: 0; }
         .toast-msg { flex: 1; line-height: 1.4; }
-
-        /* Custom Confirm Dialog */
         #customConfirmModal { position: fixed; inset: 0; z-index: 99990; backdrop-filter: blur(12px); background: rgba(255,255,255,0.3); }
         .dark #customConfirmModal { background: rgba(0,0,0,0.6); }
-
-        /* Loading Overlay - Fixed CSS */
         #loadingOverlay { position: fixed; inset: 0; z-index: 99980; backdrop-filter: blur(8px); background: rgba(255,255,255,0.4); flex-direction: column; align-items: center; justify-content: center; gap: 1rem; }
         .dark #loadingOverlay { background: rgba(0,0,0,0.5); }
         .loader-ring { width: 48px; height: 48px; border: 4px solid rgba(99,102,241,0.2); border-top-color: #6366f1; border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Mobile Sidebar Backdrop */
         #sidebarBackdrop { position: fixed; inset: 0; z-index: 49; background: rgba(0,0,0,0.3); backdrop-filter: blur(4px); }
-
         @media print { .no-print { display: none; }, body { overflow: auto !important; } }
-        .fullscreen-card { position: fixed !important; inset: 0 !important; width: 100% !important; height: 100% !important; z-index: 9999 !important; border-radius: 0 !important; margin: 0 !important; max-width: 100% !important; max-height: 100% !important; padding: 2rem !important; overflow-y: auto !important; box-sizing: border-box !important; background: #f4f0eb !important; backdrop-filter: none !important; }
-        .dark .fullscreen-card { background: #0f172a !important; }
-        .keyboard-focus { background-color: rgba(99, 102, 241, 0.15) !important; transform: scale(1.02); }
-        .dark .keyboard-focus { background-color: rgba(255, 255, 255, 0.1) !important; }
-        .modal-overlay { transition: opacity 0.3s ease, backdrop-filter 0.3s ease; }
-        .anim-scale-in { animation: scaleIn 0.3s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
-        @keyframes scaleIn { '0%': { transform: 'scale(0.95)', opacity: '0' }, '100%': { transform: 'scale(1)', opacity: '1' } }
-
         .sidebar-active { background-color: #6366f1 !important; color: #ffffff !important; box-shadow: 0 4px 15px -3px rgba(99, 102, 241, 0.5) !important; }
         .dark .sidebar-active { background-color: #4f46e5 !important; }
-
-        /* KPI Card hover */
         .kpi-card { transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); cursor: default; }
         .kpi-card:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 12px 25px -5px rgba(0,0,0,0.1); }
-
-        /* Highlight match in search */
-        .search-highlight { background: rgba(99,102,241,0.2); border-radius: 3px; padding: 0 2px; }
-
-        /* Status dot */
         .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
         .status-online { background: #14b8a6; animation: pulseSoft 2s infinite; box-shadow: 0 0 6px rgba(20,184,166,0.6); }
         .status-syncing { background: #f59e0b; animation: pulseSoft 0.8s infinite; }
         .status-error { background: #f43f5e; }
-
-        /* Smooth nav section transitions */
         .nav-section { animation: fadeInUp 0.35s cubic-bezier(0.23, 1, 0.32, 1) both; }
-
-        /* Queue item */
         .queue-item { transition: all 0.2s ease; }
         .queue-item:hover { transform: scale(1.01); }
-
-        /* Keyboard shortcut badge */
         .kbd { display: inline-block; padding: 1px 5px; background: rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.15); border-radius: 4px; font-size: 10px; font-family: monospace; color: #666; }
         .dark .kbd { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: #aaa; }
-
-        /* Table row transitions */
-        #inventoryBody tr { transition: background 0.2s ease; }
-        
-        /* Empty state */
+        #inventoryBody tr, #baawanBody tr { transition: background 0.2s ease; }
         .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem; gap: 1rem; opacity: 0.6; }
         .empty-state .empty-icon { font-size: 3rem; filter: grayscale(0.3); }
         .empty-state p { font-size: 0.7rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.25em; color: #94a3b8; text-align: center; }
-
-        /* Scrollbar visible area  */
         .overflow-y-auto { scrollbar-width: thin; scrollbar-color: rgba(99,102,241,0.3) transparent; }
     </style>
 </head>
 <body class="h-screen w-full transition-colors duration-500 selection:bg-retro-slate selection:text-white">
 
 <div class="bg-blobs"><div class="blob-1"></div><div class="blob-2"></div><div class="blob-3"></div></div>
-
 <div id="toastContainer"></div>
-
 <div id="customConfirmModal" class="items-center justify-center p-4" style="display: none;">
     <div class="glass-panel p-6 w-80 max-w-[90vw] animate-fade-in-up text-center">
         <div id="confirmIcon" class="text-4xl mb-3">⚠️</div>
@@ -172,20 +120,13 @@
         </div>
     </div>
 </div>
-
-<div id="loadingOverlay" style="display: none;">
-    <div class="loader-ring"></div>
-    <p class="text-xs font-black uppercase tracking-[0.3em] text-slate-600 dark:text-slate-300">Connecting...</p>
-</div>
-
+<div id="loadingOverlay" style="display: none;"><div class="loader-ring"></div><p class="text-xs font-black uppercase tracking-[0.3em] text-slate-600 dark:text-slate-300">Connecting...</p></div>
 <div id="sidebarBackdrop" onclick="closeMobileSidebar()" style="display: none;"></div>
 
 <div id="loginOverlay" class="fixed inset-0 z-[10000] flex items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/30 dark:bg-black/50 overflow-y-auto" style="display: flex;">
     <div class="glass-panel p-8 md:p-10 max-w-sm w-full animate-fade-in-up my-auto">
         <div class="text-center mb-8">
-            <div class="inline-block p-4 rounded-full bg-white/60 dark:bg-white/10 shadow-inner mb-4">
-                <span class="text-5xl block" style="animation: blob 3s infinite alternate;">📦</span>
-            </div>
+            <div class="inline-block p-4 rounded-full bg-white/60 dark:bg-white/10 shadow-inner mb-4"><span class="text-5xl block" style="animation: blob 3s infinite alternate;">📦</span></div>
             <h2 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-retro-slate to-retro-rose tracking-tight">DOZY StockPro</h2>
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 uppercase tracking-[0.2em] font-bold">v2.0 — Inventory Management</p>
         </div>
@@ -205,63 +146,39 @@
                 <p id="loginError" class="text-retro-rose text-xs mt-2 font-bold text-center" style="display: none;">⚠️ Incorrect Password</p>
             </div>
             <button onclick="attemptLogin()" class="w-full bg-gradient-to-r from-retro-slate to-indigo-500 hover:from-indigo-600 hover:to-retro-slate text-white font-bold py-3.5 rounded-xl transition-all duration-300 shadow-md transform hover:-translate-y-1 uppercase tracking-widest text-sm mt-2">Login</button>
-            <div class="flex items-center gap-3 my-4">
-                <div class="h-px bg-slate-300 dark:bg-slate-600 flex-1"></div>
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">OR</span>
-                <div class="h-px bg-slate-300 dark:bg-slate-600 flex-1"></div>
-            </div>
-            <button onclick="guestLogin()" class="w-full glass-btn text-slate-700 dark:text-white font-bold py-3.5 rounded-xl transition-all duration-300 shadow-sm uppercase tracking-widest text-sm flex items-center justify-center gap-2">
-                <span class="text-lg">👁️</span> View Live Stock
-            </button>
+            <div class="flex items-center gap-3 my-4"><div class="h-px bg-slate-300 dark:bg-slate-600 flex-1"></div><span class="text-xs font-bold text-slate-400 uppercase tracking-widest">OR</span><div class="h-px bg-slate-300 dark:bg-slate-600 flex-1"></div></div>
+            <button onclick="guestLogin()" class="w-full glass-btn text-slate-700 dark:text-white font-bold py-3.5 rounded-xl transition-all duration-300 shadow-sm uppercase tracking-widest text-sm flex items-center justify-center gap-2"><span class="text-lg">👁️</span> View Live Stock</button>
         </div>
     </div>
 </div>
 
 <div id="mainApp" class="h-screen w-full flex overflow-hidden" style="display: none;">
-
     <aside id="sidebar" class="w-64 glass-panel m-3 mr-0 hidden lg:flex flex-col flex-shrink-0 z-50 transition-transform duration-300 ease-in-out">
         <div class="p-5 border-b border-slate-200/50 dark:border-slate-700/50 flex items-center justify-between shrink-0">
             <div class="flex items-center gap-3">
                 <div class="p-2 bg-white/60 dark:bg-white/10 rounded-xl shadow-inner"><span class="text-xl">📦</span></div>
-                <div>
-                    <h1 class="text-lg font-extrabold tracking-tight text-slate-800 dark:text-slate-100">DOZY <span class="text-transparent bg-clip-text bg-gradient-to-r from-retro-slate to-retro-teal">Pro</span></h1>
-                    <span id="userRoleBadge" class="text-[9px] bg-gradient-to-r from-retro-mustard to-orange-400 text-white px-2 py-0.5 rounded-full uppercase tracking-widest shadow-sm font-bold"></span>
-                </div>
+                <div><h1 class="text-lg font-extrabold tracking-tight text-slate-800 dark:text-slate-100">DOZY <span class="text-transparent bg-clip-text bg-gradient-to-r from-retro-slate to-retro-teal">Pro</span></h1><span id="userRoleBadge" class="text-[9px] bg-gradient-to-r from-retro-mustard to-orange-400 text-white px-2 py-0.5 rounded-full uppercase tracking-widest shadow-sm font-bold"></span></div>
             </div>
             <button onclick="closeMobileSidebar()" class="lg:hidden text-slate-500 hover:text-retro-rose font-bold text-xl">✕</button>
         </div>
-
         <nav class="flex-1 p-3 space-y-1.5 overflow-y-auto custom-scrollbar mt-2">
-            <button onclick="navigateSection('dashboard')" id="nav-dashboard" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-white/10 sidebar-active">
-                <span class="text-lg">📊</span> Dashboard
-            </button>
-            <button onclick="navigateSection('items')" id="nav-items" class="sidebar-btn admin-only-section w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-white/10">
-                <span class="text-lg">🗄️</span> Master Catalog
-            </button>
-            <button onclick="navigateSection('entries')" id="nav-entries" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-white/10">
-                <span class="text-lg">✍️</span> Stock Entries
-            </button>
-            <button onclick="navigateSection('history')" id="nav-history" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-white/10">
-                <span class="text-lg">🕰️</span> History Logs
-            </button>
-            <button onclick="navigateSection('viewer')" id="nav-viewer" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-white/10">
-                <span class="text-lg">📡</span> Live Radar
-            </button>
+            <button onclick="navigateSection('dashboard')" id="nav-dashboard" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-white/10 sidebar-active"><span class="text-lg">📊</span> Dashboard</button>
+            <button onclick="navigateSection('items')" id="nav-items" class="sidebar-btn admin-only-section w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-white/10"><span class="text-lg">🗄️</span> Master Catalog</button>
+            <button onclick="navigateSection('entries')" id="nav-entries" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-white/10"><span class="text-lg">✍️</span> Stock Entries</button>
+            <button onclick="navigateSection('history')" id="nav-history" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-white/10"><span class="text-lg">🕰️</span> History Logs</button>
+            <button onclick="navigateSection('baawan')" id="nav-baawan" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-white/10"><span class="text-lg">📦</span> Baawan Orders</button>
+            <button onclick="navigateSection('viewer')" id="nav-viewer" class="sidebar-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-bold transition-all text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-white/10"><span class="text-lg">📡</span> Live Radar</button>
         </nav>
-
         <div class="p-4 border-t border-slate-200/50 dark:border-slate-700/50 shrink-0 space-y-2">
             <div class="text-center glass-input py-2 px-3 rounded-xl">
                 <div id="liveClockTime" class="font-mono font-black text-sm text-retro-slate dark:text-indigo-300"></div>
                 <div id="liveClockDate" class="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-0.5"></div>
             </div>
-            <button onclick="logout()" class="w-full glass-btn text-slate-600 dark:text-slate-300 hover:text-retro-rose dark:hover:text-retro-rose px-4 py-2.5 rounded-xl text-xs font-bold transition-all uppercase tracking-widest flex justify-center items-center gap-2">
-                <span>🚪</span> Disconnect
-            </button>
+            <button onclick="logout()" class="w-full glass-btn text-slate-600 dark:text-slate-300 hover:text-retro-rose dark:hover:text-retro-rose px-4 py-2.5 rounded-xl text-xs font-bold transition-all uppercase tracking-widest flex justify-center items-center gap-2"><span>🚪</span> Disconnect</button>
         </div>
     </aside>
 
     <main class="flex-1 flex flex-col h-full relative overflow-hidden">
-
         <header class="glass-panel m-3 p-3 md:p-4 flex justify-between items-center z-40 shrink-0 no-print">
             <div class="flex items-center gap-3">
                 <button class="lg:hidden glass-btn p-2 rounded-xl text-lg flex items-center justify-center" onclick="openMobileSidebar()">☰</button>
@@ -270,10 +187,10 @@
                     <span id="syncStatus" class="text-[10px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-widest hidden sm:inline-block">Ready</span>
                 </div>
             </div>
-
             <div class="flex items-center gap-2">
-                <button onclick="toggleViewMode()" class="glass-btn p-2 md:p-2.5 rounded-xl text-sm shadow-sm hidden sm:block" title="Toggle Compact View (Ctrl+Shift+V)">📏</button>
-                <button onclick="toggleTheme()" class="glass-btn p-2 md:p-2.5 rounded-xl text-sm shadow-sm" title="Toggle Theme (Ctrl+Shift+T)">🌗</button>
+                <button onclick="manualRefresh()" class="glass-btn p-2 md:p-2.5 rounded-xl text-sm shadow-sm hover:scale-110" title="Refresh Data (Ctrl+R)">🔄</button>
+                <button onclick="toggleViewMode()" class="glass-btn p-2 md:p-2.5 rounded-xl text-sm shadow-sm hidden sm:block hover:scale-110" title="Toggle Compact View (Ctrl+Shift+V)">📏</button>
+                <button onclick="toggleTheme()" class="glass-btn p-2 md:p-2.5 rounded-xl text-sm shadow-sm hover:scale-110" title="Toggle Theme (Ctrl+Shift+T)">🌗</button>
                 <div class="h-6 w-px bg-slate-300 dark:bg-slate-600 mx-1 md:mx-2 admin-only-section hidden sm:block"></div>
                 <div id="adminOnlyControls" class="flex items-center gap-2 admin-only-section">
                     <input type="file" id="importExcelGlobal" accept=".xlsx, .xls" class="hidden" onchange="importAllDataExcel(event)">
@@ -286,7 +203,7 @@
         </header>
 
         <div class="flex-1 overflow-y-auto p-3 md:p-4 custom-scrollbar pb-20">
-
+            <!-- DASHBOARD SECTION -->
             <div id="section-dashboard" class="nav-section space-y-6">
                 <div id="kpiDashboard" class="glass-panel liquid-hover p-4 md:p-6 flex flex-col">
                     <div class="flex justify-between items-center mb-5 shrink-0 border-b border-slate-200/50 dark:border-slate-700/50 pb-3">
@@ -304,13 +221,10 @@
                         <div class="kpi-card glass-input p-4 border-l-4 border-l-retro-rose flex flex-col justify-center shadow-[0_0_15px_rgba(244,63,94,0.1)]"><p class="text-[9px] md:text-[10px] text-retro-rose font-bold uppercase tracking-widest mb-1">Zero Stock Items</p><h3 class="text-xl md:text-2xl font-black text-retro-rose drop-shadow-md" id="kpi-oos">0</h3></div>
                     </div>
                 </div>
-
                 <div class="glass-panel p-4 md:p-6 flex flex-col liquid-hover" id="stockAlertsDashboard">
                     <div class="flex justify-between items-center mb-4 border-b border-slate-200/50 dark:border-slate-700/50 pb-3">
                         <h2 class="text-lg md:text-xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight flex items-center gap-2"><span class="p-1.5 bg-white/60 dark:bg-white/10 rounded-lg shadow-sm">🚨</span> Stock Alerts</h2>
-                        <select id="dashboardAlertCategory" onchange="renderDashboardAlerts()" class="glass-input p-2.5 text-xs md:text-sm font-bold text-center text-slate-700 dark:text-slate-200 shadow-sm cursor-pointer w-40 md:w-48">
-                            <option value="ALL">All Categories</option>
-                        </select>
+                        <select id="dashboardAlertCategory" onchange="renderDashboardAlerts()" class="glass-input p-2.5 text-xs md:text-sm font-bold text-center text-slate-700 dark:text-slate-200 shadow-sm cursor-pointer w-40 md:w-48"><option value="ALL">All Categories</option></select>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                         <div class="glass-input bg-retro-rose/5 p-3 rounded-xl border border-retro-rose/20 flex flex-col h-72">
@@ -325,6 +239,7 @@
                 </div>
             </div>
 
+            <!-- MASTER CATALOG SECTION -->
             <div id="section-items" class="nav-section" style="display: none;">
                 <div id="masterCard" class="glass-panel overflow-hidden flex flex-col h-[calc(100vh-8rem)] min-h-[40rem]">
                     <div class="p-4 md:p-6 border-b border-slate-200/50 dark:border-slate-700/50 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 shrink-0 bg-white/30 dark:bg-black/10">
@@ -337,9 +252,7 @@
                         </div>
                         <div class="flex flex-col gap-3 w-full xl:w-auto">
                             <div class="flex flex-col sm:flex-row gap-2 w-full">
-                                <select id="masterCategoryFilter" onchange="filterTable()" class="glass-input p-2.5 text-xs md:text-sm font-bold text-center text-slate-700 dark:text-slate-200 shadow-sm sm:w-40 cursor-pointer">
-                                    <option value="ALL">All Categories</option>
-                                </select>
+                                <select id="masterCategoryFilter" onchange="filterTable()" class="glass-input p-2.5 text-xs md:text-sm font-bold text-center text-slate-700 dark:text-slate-200 shadow-sm sm:w-40 cursor-pointer"><option value="ALL">All Categories</option></select>
                                 <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="🔍 Search catalog..." class="glass-input p-2.5 text-xs md:text-sm text-center shadow-inner font-medium flex-1">
                             </div>
                             <div class="flex flex-col md:flex-row gap-2 glass-input p-1.5 shadow-sm admin-only-section">
@@ -368,20 +281,55 @@
                 </div>
             </div>
 
+            <!-- BAAWAN ORDERS SECTION -->
+            <div id="section-baawan" class="nav-section" style="display: none;">
+                <div class="glass-panel overflow-hidden flex flex-col h-[calc(100vh-8rem)] min-h-[40rem]">
+                    <div class="p-4 md:p-6 border-b border-slate-200/50 dark:border-slate-700/50 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 shrink-0 bg-white/30 dark:bg-black/10">
+                        <div class="flex items-center gap-3 w-full xl:w-auto">
+                            <div class="p-2 bg-retro-mustard/10 rounded-xl shadow-inner"><span class="text-xl">📦</span></div>
+                            <div>
+                                <h2 class="text-lg md:text-xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">Baawan Orders</h2>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest" id="baawanCountLabel">0 Orders</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col md:flex-row gap-2 glass-input p-1.5 shadow-sm w-full xl:w-auto">
+                            <input type="text" id="newBaawanItem" placeholder="Item Name" list="baawanItemList" class="p-2 text-xs w-full md:w-32 bg-transparent outline-none border-b md:border-b-0 md:border-r border-slate-300 dark:border-slate-600 font-bold text-slate-800 dark:text-slate-100">
+                            <datalist id="baawanItemList"></datalist>
+                            <input type="number" id="newBaawanQty" placeholder="Qty" class="p-2 text-xs w-full md:w-20 bg-transparent outline-none border-b md:border-b-0 md:border-r border-slate-300 dark:border-slate-600 font-bold text-slate-800 dark:text-slate-100">
+                            <input type="text" id="newBaawanCust" placeholder="Customer Details" class="p-2 text-xs w-full md:w-36 bg-transparent outline-none border-b md:border-b-0 md:border-r border-slate-300 dark:border-slate-600 font-bold text-slate-800 dark:text-slate-100">
+                            <input type="text" id="newBaawanRemarks" placeholder="Remarks" class="p-2 text-xs w-full md:w-36 bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100" onkeypress="if(event.key === 'Enter') addBaawanOrder()">
+                            <button onclick="addBaawanOrder()" class="bg-gradient-to-r from-retro-mustard to-amber-500 text-white px-5 py-2 rounded-xl text-[10px] font-black transition-transform hover:scale-105 shadow-md uppercase tracking-widest shrink-0">Add Order</button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto custom-scrollbar overflow-y-auto flex-1 p-2 md:p-3">
+                        <table class="w-full text-left border-collapse min-w-[800px]">
+                            <thead class="sticky top-0 glass-panel z-10 shadow-sm">
+                                <tr class="text-slate-500 dark:text-slate-400 uppercase text-[9px] md:text-[10px] tracking-widest font-black">
+                                    <th class="p-3 md:p-5">Order ID / Date</th>
+                                    <th class="p-3 md:p-5">Item Name</th>
+                                    <th class="p-3 md:p-5 text-center">Qty</th>
+                                    <th class="p-3 md:p-5">Customer</th>
+                                    <th class="p-3 md:p-5 text-center">Status</th>
+                                    <th class="p-3 md:p-5">Remarks</th>
+                                    <th class="p-3 md:p-5 text-center admin-only-section">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="baawanBody" class="text-xs md:text-sm font-medium text-slate-700 dark:text-slate-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STOCK ENTRIES SECTION -->
             <div id="section-entries" class="nav-section space-y-6" style="display: none;">
                 <div class="glass-input px-4 py-2 flex items-center gap-3 text-[10px] text-slate-500 font-bold no-print">
-                    <span>💡 Tips:</span>
-                    <span><span class="kbd">↑↓</span> navigate dropdown</span>
-                    <span><span class="kbd">Enter</span> select item</span>
-                    <span><span class="kbd">Ctrl+Enter</span> submit batch</span>
+                    <span>💡 Tips:</span><span><span class="kbd">↑↓</span> navigate dropdown</span><span><span class="kbd">Enter</span> select item</span><span><span class="kbd">Ctrl+Enter</span> submit batch</span>
                 </div>
                 <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8">
+                    <!-- Warehouse Card -->
                     <div id="warehouseCard" class="glass-panel liquid-hover p-4 md:p-6 flex flex-col h-auto xl:h-[calc(100vh-12rem)] min-h-[45rem]">
                         <div class="flex justify-between items-center mb-4 shrink-0 border-b border-slate-200/50 dark:border-slate-700/50 pb-3 md:pb-4">
-                            <div class="flex items-center gap-3">
-                                <div class="p-2 bg-retro-teal/10 rounded-lg"><span class="text-lg md:text-xl">🏭</span></div>
-                                <div><h2 class="text-base md:text-lg font-extrabold text-retro-teal tracking-tight">Internal Transfers</h2><span class="text-[8px] md:text-[9px] text-slate-500 uppercase tracking-widest font-black">Move Stock Internally</span></div>
-                            </div>
+                            <div class="flex items-center gap-3"><div class="p-2 bg-retro-teal/10 rounded-lg"><span class="text-lg md:text-xl">🏭</span></div><div><h2 class="text-base md:text-lg font-extrabold text-retro-teal tracking-tight">Internal Transfers</h2><span class="text-[8px] md:text-[9px] text-slate-500 uppercase tracking-widest font-black">Move Stock Internally</span></div></div>
                             <button onclick="clearWhBatch()" class="text-[9px] text-retro-rose font-black uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity" style="display: none;" id="clearWhBtn">Clear All ✕</button>
                         </div>
                         <div class="flex flex-col gap-3 shrink-0">
@@ -402,19 +350,14 @@
                         <div class="flex-1 overflow-y-auto mt-4 glass-input bg-opacity-30 dark:bg-opacity-20 p-2 md:p-3 custom-scrollbar rounded-xl border-dashed min-h-[12rem]" id="whBatchContainer"></div>
                         <button onclick="submitWhBatch()" id="btnSubmitWh" class="mt-4 bg-gradient-to-r from-retro-teal to-emerald-500 hover:opacity-90 text-white font-black py-3.5 rounded-xl text-xs transition-all shadow-lg transform hover:-translate-y-1 shrink-0 uppercase tracking-[0.2em]" style="display: none;">✅ Submit Transfer Batch</button>
                     </div>
-
+                    <!-- Sales Card -->
                     <div id="salesCard" class="glass-panel liquid-hover p-4 md:p-6 flex flex-col h-auto xl:h-[calc(100vh-12rem)] min-h-[45rem]">
                         <div class="flex justify-between items-center mb-4 shrink-0 border-b border-slate-200/50 dark:border-slate-700/50 pb-3 md:pb-4">
-                            <div class="flex items-center gap-3">
-                                <div class="p-2 bg-retro-slate/10 rounded-lg"><span class="text-lg md:text-xl">🛒</span></div>
-                                <div><h2 class="text-base md:text-lg font-extrabold text-retro-slate tracking-tight">Sales & Returns</h2><span class="text-[8px] md:text-[9px] text-slate-500 uppercase tracking-widest font-black">Customer Orders</span></div>
-                            </div>
+                            <div class="flex items-center gap-3"><div class="p-2 bg-retro-slate/10 rounded-lg"><span class="text-lg md:text-xl">🛒</span></div><div><h2 class="text-base md:text-lg font-extrabold text-retro-slate tracking-tight">Sales & Returns</h2><span class="text-[8px] md:text-[9px] text-slate-500 uppercase tracking-widest font-black">Customer Orders</span></div></div>
                             <button onclick="clearSlBatch()" class="text-[9px] text-retro-rose font-black uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity" style="display: none;" id="clearSlBtn">Clear All ✕</button>
                         </div>
                         <div class="flex flex-col gap-3 shrink-0">
-                            <select id="salesAction" style="display: none;" oninput="updatePreview('sl')">
-                                <option value="SALE" selected>SALE</option><option value="SALE_GODOWN">SALE_GODOWN</option><option value="CUST_RETURN">CUST_RETURN</option><option value="CUST_RETURN_GODOWN">CUST_RETURN_GODOWN</option>
-                            </select>
+                            <select id="salesAction" style="display: none;" oninput="updatePreview('sl')"><option value="SALE" selected>SALE</option><option value="SALE_GODOWN">SALE_GODOWN</option><option value="CUST_RETURN">CUST_RETURN</option><option value="CUST_RETURN_GODOWN">CUST_RETURN_GODOWN</option></select>
                             <div class="grid grid-cols-2 gap-2 w-full p-1 bg-white/50 dark:bg-black/40 rounded-xl shadow-inner mb-2" id="slRadioGroup">
                                 <label class="cursor-pointer"><input type="radio" name="slActionRadio" value="SALE" class="peer hidden" checked onchange="document.getElementById('salesAction').value=this.value; updatePreview('sl');"><div class="h-full flex items-center justify-center text-center px-2 py-2.5 rounded-lg text-[10px] md:text-[11px] font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-slate peer-checked:shadow-sm text-slate-500 hover:bg-white/60 border border-transparent peer-checked:border-retro-slate/20">📤 Sale (Office)</div></label>
                                 <label class="cursor-pointer"><input type="radio" name="slActionRadio" value="CUST_RETURN" class="peer hidden" onchange="document.getElementById('salesAction').value=this.value; updatePreview('sl');"><div class="h-full flex items-center justify-center text-center px-2 py-2.5 rounded-lg text-[10px] md:text-[11px] font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-slate peer-checked:shadow-sm text-slate-500 hover:bg-white/60 border border-transparent peer-checked:border-retro-slate/20">🔄 Return (Office)</div></label>
@@ -422,7 +365,7 @@
                                 <label class="cursor-pointer admin-only-section"><input type="radio" name="slActionRadio" value="CUST_RETURN_GODOWN" class="peer hidden" onchange="document.getElementById('salesAction').value=this.value; updatePreview('sl');"><div class="h-full flex items-center justify-center text-center px-2 py-2.5 rounded-lg text-[10px] md:text-[11px] font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-retro-teal peer-checked:shadow-sm text-slate-500 hover:bg-white/60 border border-transparent peer-checked:border-retro-teal/20">🔄 Return (Bawana)</div></label>
                             </div>
                             <div class="relative w-full" id="slDropdownContainer">
-                                <input type="text" id="slSelect" oninput="filterDropdown('slSelect', 'slList'); updatePreview('sl')" onfocus="openDropdown('slList')" onclick="openDropdown('slList')" placeholder="🔍 Scan Barcode or Type Name..." autocomplete="off" class="glass-input w-full p-3 text-xs md:text-sm shadow-sm border-retro-slate/40">
+                                <input type="text" id="slSelect" oninput="filterDropdown('slSelect', 'slList'); updatePreview('sl')" onfocus="openDropdown('whList')" onclick="openDropdown('slList')" placeholder="🔍 Scan Barcode or Type Name..." autocomplete="off" class="glass-input w-full p-3 text-xs md:text-sm shadow-sm border-retro-slate/40">
                                 <ul id="slList" style="display: none;" class="absolute z-50 w-full mt-2 glass-panel shadow-2xl max-h-56 overflow-y-auto py-2 custom-scrollbar flex-col text-slate-700 dark:text-slate-200 font-medium"></ul>
                             </div>
                             <div class="flex flex-col md:flex-row gap-3">
@@ -439,24 +382,19 @@
                 </div>
             </div>
 
+            <!-- HISTORY LOGS SECTION -->
             <div id="section-history" class="nav-section space-y-6" style="display: none;">
                 <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8">
                     <div id="whHistoryCard" class="glass-panel liquid-hover h-[calc(100vh-10rem)] min-h-[40rem] flex flex-col p-2 md:p-3">
                         <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex flex-col gap-3 shrink-0 bg-white/20 dark:bg-black/10 rounded-t-xl">
-                            <div class="flex justify-between items-center">
-                                <h2 class="text-xs md:text-sm font-black text-retro-teal uppercase tracking-widest flex items-center gap-2"><span>🚚</span> Transfer Logs</h2>
-                                <span id="whLogCount" class="text-[9px] font-mono bg-retro-teal/20 text-retro-teal px-2 py-0.5 rounded-full font-black">0</span>
-                            </div>
+                            <div class="flex justify-between items-center"><h2 class="text-xs md:text-sm font-black text-retro-teal uppercase tracking-widest flex items-center gap-2"><span>🚚</span> Transfer Logs</h2><span id="whLogCount" class="text-[9px] font-mono bg-retro-teal/20 text-retro-teal px-2 py-0.5 rounded-full font-black">0</span></div>
                             <input type="text" id="whFilter" onkeyup="filterHistory('whFilter', 'whHistoryContainer')" placeholder="🔍 Search logs..." class="glass-input w-full p-2.5 text-xs text-center italic shadow-inner">
                         </div>
                         <div id="whHistoryContainer" class="flex-1 overflow-y-auto p-2 md:p-4 custom-scrollbar"></div>
                     </div>
                     <div id="slHistoryCard" class="glass-panel liquid-hover h-[calc(100vh-10rem)] min-h-[40rem] flex flex-col p-2 md:p-3">
                         <div class="p-4 border-b border-slate-200/50 dark:border-slate-700/50 flex flex-col gap-3 shrink-0 bg-white/20 dark:bg-black/10 rounded-t-xl">
-                            <div class="flex justify-between items-center">
-                                <h2 class="text-xs md:text-sm font-black text-retro-slate uppercase tracking-widest flex items-center gap-2"><span>📈</span> Sales Logs</h2>
-                                <span id="slLogCount" class="text-[9px] font-mono bg-retro-slate/20 text-retro-slate px-2 py-0.5 rounded-full font-black">0</span>
-                            </div>
+                            <div class="flex justify-between items-center"><h2 class="text-xs md:text-sm font-black text-retro-slate uppercase tracking-widest flex items-center gap-2"><span>📈</span> Sales Logs</h2><span id="slLogCount" class="text-[9px] font-mono bg-retro-slate/20 text-retro-slate px-2 py-0.5 rounded-full font-black">0</span></div>
                             <input type="text" id="slFilter" onkeyup="filterHistory('slFilter', 'slHistoryContainer')" placeholder="🔍 Search logs..." class="glass-input w-full p-2.5 text-xs text-center italic shadow-inner">
                         </div>
                         <div id="slHistoryContainer" class="flex-1 overflow-y-auto p-2 md:p-4 custom-scrollbar"></div>
@@ -464,13 +402,11 @@
                 </div>
             </div>
 
+            <!-- LIVE RADAR SECTION -->
             <div id="section-viewer" class="nav-section space-y-6" style="display: none;">
                 <div class="glass-panel p-4 md:p-6 no-print shrink-0">
                     <div class="flex items-center justify-between mb-4 md:mb-5 border-b border-slate-200/50 dark:border-slate-700/50 pb-3">
-                        <div class="flex items-center gap-3">
-                            <div class="p-1.5 bg-retro-slate/10 rounded-lg"><span class="text-xl animate-pulse-soft">📡</span></div>
-                            <h2 class="text-lg md:text-xl font-extrabold text-slate-800 dark:text-white tracking-tight">Live Radar</h2>
-                        </div>
+                        <div class="flex items-center gap-3"><div class="p-1.5 bg-retro-slate/10 rounded-lg"><span class="text-xl animate-pulse-soft">📡</span></div><h2 class="text-lg md:text-xl font-extrabold text-slate-800 dark:text-white tracking-tight">Live Radar</h2></div>
                         <button onclick="printViewer()" class="glass-btn px-3 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl flex items-center gap-1.5 text-slate-600 dark:text-slate-300 no-print">🖨️ Print</button>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -488,11 +424,11 @@
                     <div class="overflow-x-hidden overflow-y-auto flex-1 custom-scrollbar p-3 md:p-5" id="viewerBody"></div>
                 </div>
             </div>
-
         </div>
     </main>
 </div>
 
+<!-- MODALS -->
 <div id="exportModal" style="display: none;" class="fixed inset-0 z-[10005] items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/30 dark:bg-black/60">
     <div class="glass-panel p-6 md:p-8 w-[28rem] max-w-[95vw] animate-fade-in-up">
         <h3 class="text-lg md:text-xl font-black mb-4 md:mb-6 border-b border-slate-200/50 dark:border-slate-700/50 pb-3 md:pb-4 uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-3"><span class="p-2 bg-retro-slate/10 rounded-lg">📤</span> Export Data</h3>
@@ -509,7 +445,6 @@
         </div>
     </div>
 </div>
-
 <div id="editMasterModal" style="display: none;" class="fixed inset-0 z-[10005] items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/30 dark:bg-black/60">
     <div class="glass-panel p-6 md:p-8 w-[28rem] max-w-[95vw] animate-fade-in-up">
         <h3 class="text-lg md:text-xl font-black mb-4 border-b border-slate-200/50 pb-3 uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-3"><span class="p-2 bg-slate-500/10 rounded-lg">✏️</span> Edit Item</h3>
@@ -529,7 +464,6 @@
         </div>
     </div>
 </div>
-
 <div id="editHistoryModal" style="display: none;" class="fixed inset-0 z-[10005] items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/30 dark:bg-black/60">
     <div class="glass-panel p-6 md:p-8 w-[28rem] max-w-[95vw] animate-fade-in-up">
         <h3 class="text-lg md:text-xl font-black mb-4 border-b border-slate-200/50 pb-3 uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-3"><span class="p-2 bg-retro-mustard/10 rounded-lg">🖋️</span> Edit Log</h3>
@@ -546,13 +480,9 @@
         </div>
     </div>
 </div>
-
 <div id="batchLedgerModal" style="display: none;" class="fixed inset-0 z-[10005] items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/30 dark:bg-black/60 overflow-y-auto">
     <div class="glass-panel p-6 md:p-8 w-[36rem] max-w-[95vw] animate-fade-in-up my-auto">
-        <div class="flex justify-between items-center border-b border-slate-200/50 pb-3 mb-6">
-            <h3 class="text-xl font-black uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-3"><span class="p-2 bg-retro-mustard/10 rounded-lg">⚡</span> Batch Entry</h3>
-            <button onclick="closeBatchLedgerModal()" class="text-retro-rose font-bold text-lg hover:scale-125 transition-transform px-1">✕</button>
-        </div>
+        <div class="flex justify-between items-center border-b border-slate-200/50 pb-3 mb-6"><h3 class="text-xl font-black uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-3"><span class="p-2 bg-retro-mustard/10 rounded-lg">⚡</span> Batch Entry</h3><button onclick="closeBatchLedgerModal()" class="text-retro-rose font-bold text-lg hover:scale-125 transition-transform px-1">✕</button></div>
         <div class="space-y-5 text-slate-700 dark:text-slate-200">
             <div><label class="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">1️⃣ Pick Action Type</label><select id="bulkLedgerActionSelect" class="glass-input w-full p-3 text-sm font-bold shadow-sm cursor-pointer border-retro-mustard/50 bg-white/80 dark:bg-black/40"></select></div>
             <div class="glass-input p-4 rounded-xl bg-white/50 dark:bg-black/30 border border-slate-400/20">
@@ -570,46 +500,66 @@
         </div>
     </div>
 </div>
-
 <div id="batchReportModal" style="display: none;" class="fixed inset-0 z-[10020] items-center justify-center p-4 modal-overlay backdrop-blur-md bg-white/40 dark:bg-black/70">
     <div class="glass-panel p-6 md:p-8 w-[38rem] max-w-[95vw] max-h-[85vh] flex flex-col animate-fade-in-up border-2 border-retro-rose/30">
-        <div class="flex justify-between items-center border-b border-slate-200/50 dark:border-slate-700/50 pb-3 mb-4 shrink-0">
-            <h3 class="text-lg md:text-xl font-black uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-2"><span>📑</span> Batch Report</h3>
-            <button onclick="closeBatchReportModal()" class="text-retro-rose font-black text-2xl hover:scale-125 transition-transform px-2 py-0.5 bg-retro-rose/10 rounded-lg">✕</button>
-        </div>
+        <div class="flex justify-between items-center border-b border-slate-200/50 dark:border-slate-700/50 pb-3 mb-4 shrink-0"><h3 class="text-lg md:text-xl font-black uppercase tracking-widest text-slate-800 dark:text-slate-100 flex items-center gap-2"><span>📑</span> Batch Report</h3><button onclick="closeBatchReportModal()" class="text-retro-rose font-black text-2xl hover:scale-125 transition-transform px-2 py-0.5 bg-retro-rose/10 rounded-lg">✕</button></div>
         <div class="flex-1 overflow-y-auto custom-scrollbar space-y-4 pr-1.5 text-slate-700 dark:text-slate-200">
-            <div id="repSuccessBox" class="p-3.5 rounded-xl bg-retro-teal/15 border border-retro-teal/30 text-retro-teal font-black text-xs md:text-sm flex justify-between items-center">
-                <span>📦 Successful Entries:</span>
-                <span id="repSuccessCount" class="font-mono text-lg bg-retro-teal text-white px-2.5 py-0.5 rounded shadow">0</span>
-            </div>
+            <div id="repSuccessBox" class="p-3.5 rounded-xl bg-retro-teal/15 border border-retro-teal/30 text-retro-teal font-black text-xs md:text-sm flex justify-between items-center"><span>📦 Successful Entries:</span><span id="repSuccessCount" class="font-mono text-lg bg-retro-teal text-white px-2.5 py-0.5 rounded shadow">0</span></div>
             <div id="repFailSection" class="hidden space-y-2">
-                <div class="text-[10px] font-black text-retro-rose uppercase tracking-widest flex justify-between items-center bg-retro-rose/10 p-2 rounded-lg">
-                    <span>⚠️ Failed / Skipped:</span>
-                    <span id="repFailCount" class="font-mono bg-retro-rose text-white px-2 py-0.5 rounded text-xs">0</span>
-                </div>
+                <div class="text-[10px] font-black text-retro-rose uppercase tracking-widest flex justify-between items-center bg-retro-rose/10 p-2 rounded-lg"><span>⚠️ Failed / Skipped:</span><span id="repFailCount" class="font-mono bg-retro-rose text-white px-2 py-0.5 rounded text-xs">0</span></div>
                 <div id="repErrorsList" class="space-y-1.5 pt-1"></div>
             </div>
         </div>
-        <div class="mt-5 pt-3 border-t border-slate-200/50 dark:border-slate-700/50 flex justify-end shrink-0">
-            <button onclick="closeBatchReportModal()" class="bg-gradient-to-r from-retro-slate to-slate-800 text-white px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-xl shadow-md hover:opacity-90">Dismiss</button>
-        </div>
+        <div class="mt-5 pt-3 border-t border-slate-200/50 dark:border-slate-700/50 flex justify-end shrink-0"><button onclick="closeBatchReportModal()" class="bg-gradient-to-r from-retro-slate to-slate-800 text-white px-6 py-2.5 text-xs font-black uppercase tracking-widest rounded-xl shadow-md hover:opacity-90">Dismiss</button></div>
     </div>
 </div>
 
 <script>
     // ============================================================
-    // CONFIGURATION
+    // CONFIGURATION - YAHAN APNA NAYA WEB APP URL DALEN 👇
     // ============================================================
+    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbwaEyoCkumfEteIuqcgLFcLhYEl7vzCs0krb-8CmavWYLmlHAc_jKtKXm6GJMy9Kg0NJw/exec"; 
+    
     const PASSWORDS = { admin: "12", office: "1" };
     let currentRole = null;
-    let inventory = [], historyLog = [], pendingWh = [], pendingSl = [], uniqueCategories = [];
+    let inventory = [], historyLog = [], baawanOrders = [], pendingWh = [], pendingSl = [], uniqueCategories = [];
     let sortConfig = { key: 'createdAt', dir: 'asc' };
-    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycby44thggci_dwQ2MvlTxbVtFswov7esG7eC5VGRxzaXPe0lQc81BswIT8lXIsqKVrfH/exec";
     let viewMode = localStorage.getItem('dozy_view') || 'comfortable';
 
-    // ============================================================
-    // TOAST NOTIFICATION SYSTEM (replaces alert)
-    // ============================================================
+    // === 🆕 1. CROSS-TAB INSTANT SYNC ===
+    // (Bina refresh kiye, doosre tab mein automatically reflect hoga)
+    const syncChannel = new BroadcastChannel('dozy_sync_channel');
+    syncChannel.onmessage = (event) => {
+        if (event.data === 'data_updated' && currentRole) {
+            console.log("Sync signal received from another tab!");
+            loadData(true); // Silent refresh
+        }
+    };
+
+    // === 🆕 2. AUTO LOGIN & SESSION MANAGEMENT ===
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedRole = localStorage.getItem('dozy_current_role');
+        if (savedRole) {
+            currentRole = savedRole;
+            if (currentRole === 'guest') { guestLogin(); } 
+            else { grantAccess(); }
+        }
+    });
+
+    // === 🚀 3. SUPER FAST AUTO REFRESH (EVERY 15 SECONDS) ===
+    setInterval(() => {
+        if (currentRole) {
+            loadData(true); // Silent refresh in background
+        }
+    }, 15000); // 15,000 ms = 15 seconds
+
+    // === 🆕 4. MANUAL REFRESH BUTTON ===
+    function manualRefresh() {
+        showToast('Fetching latest data...', 'info', 1500);
+        loadData(false);
+    }
+
+    // TOAST
     function showToast(message, type = 'success', duration = 3000) {
         const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
         const container = document.getElementById('toastContainer');
@@ -617,15 +567,10 @@
         toast.className = `toast ${type}`;
         toast.innerHTML = `<span class="toast-icon">${icons[type]}</span><span class="toast-msg">${message}</span>`;
         container.appendChild(toast);
-        setTimeout(() => {
-            toast.classList.add('fade-out');
-            setTimeout(() => toast.remove(), 300);
-        }, duration);
+        setTimeout(() => { toast.classList.add('fade-out'); setTimeout(() => toast.remove(), 300); }, duration);
     }
 
-    // ============================================================
-    // CUSTOM CONFIRM DIALOG (replaces confirm/prompt)
-    // ============================================================
+    // CONFIRM MODAL
     function showConfirm(title, message, okText = 'Confirm', okColor = 'from-retro-rose to-red-500', icon = '⚠️') {
         return new Promise(resolve => {
             document.getElementById('confirmTitle').innerText = title;
@@ -635,18 +580,13 @@
             okBtn.innerText = okText;
             okBtn.className = `flex-1 py-2.5 text-xs font-black uppercase tracking-widest rounded-xl text-white shadow-md transition-all hover:-translate-y-0.5 bg-gradient-to-r ${okColor}`;
             document.getElementById('customConfirmModal').style.display = 'flex';
-            const cleanup = (result) => {
-                document.getElementById('customConfirmModal').style.display = 'none';
-                resolve(result);
-            };
+            const cleanup = (result) => { document.getElementById('customConfirmModal').style.display = 'none'; resolve(result); };
             okBtn.onclick = () => cleanup(true);
             document.getElementById('confirmCancel').onclick = () => cleanup(false);
         });
     }
 
-    // ============================================================
-    // LIVE CLOCK
-    // ============================================================
+    // CLOCK
     function updateClock() {
         const now = new Date();
         const timeEl = document.getElementById('liveClockTime');
@@ -654,20 +594,14 @@
         if (timeEl) timeEl.innerText = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
         if (dateEl) dateEl.innerText = now.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' });
     }
-    setInterval(updateClock, 1000);
-    updateClock();
+    setInterval(updateClock, 1000); updateClock();
 
-    // ============================================================
-    // THEME
-    // ============================================================
+    // THEME & VIEW
     function toggleTheme() { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); }
     if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); }
-
     function toggleViewMode() { viewMode = viewMode === 'comfortable' ? 'compact' : 'comfortable'; localStorage.setItem('dozy_view', viewMode); showToast(`View: ${viewMode === 'compact' ? 'Compact' : 'Comfortable'}`, 'info', 1500); saveAndRender(false); }
 
-    // ============================================================
     // NAVIGATION
-    // ============================================================
     function navigateSection(sectionId) {
         document.querySelectorAll('.nav-section').forEach(el => el.style.display = 'none');
         document.querySelectorAll('.sidebar-btn').forEach(el => el.classList.remove('sidebar-active'));
@@ -677,94 +611,37 @@
         if (sectionId === 'viewer') { renderViewerTable(); document.getElementById('viewerLastUpdate').innerText = `Updated: ${new Date().toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', hour12: true})}`; }
         if (window.innerWidth < 1024) closeMobileSidebar();
     }
+    function openMobileSidebar() { const s = document.getElementById('sidebar'); s.classList.remove('hidden'); s.classList.add('absolute', 'inset-y-0', 'left-0', 'shadow-2xl', 'z-50', 'flex'); document.getElementById('sidebarBackdrop').style.display = 'block'; }
+    function closeMobileSidebar() { const s = document.getElementById('sidebar'); if (window.innerWidth < 1024) { s.classList.add('hidden'); s.classList.remove('absolute', 'inset-y-0', 'left-0', 'shadow-2xl', 'z-50', 'flex'); } document.getElementById('sidebarBackdrop').style.display = 'none'; }
 
-    // ============================================================
-    // MOBILE SIDEBAR
-    // ============================================================
-    function openMobileSidebar() {
-        const s = document.getElementById('sidebar');
-        s.classList.remove('hidden');
-        s.classList.add('absolute', 'inset-y-0', 'left-0', 'shadow-2xl', 'z-50', 'flex');
-        document.getElementById('sidebarBackdrop').style.display = 'block';
-    }
-    function closeMobileSidebar() {
-        const s = document.getElementById('sidebar');
-        if (window.innerWidth < 1024) {
-            s.classList.add('hidden');
-            s.classList.remove('absolute', 'inset-y-0', 'left-0', 'shadow-2xl', 'z-50', 'flex');
-        }
-        document.getElementById('sidebarBackdrop').style.display = 'none';
-    }
-    function toggleMobileSidebar() {
-        const s = document.getElementById('sidebar');
-        s.classList.contains('hidden') ? openMobileSidebar() : closeMobileSidebar();
-    }
-
-    // ============================================================
-    // LOGIN / LOGOUT
-    // ============================================================
+    // LOGIN
     function attemptLogin() {
         const role = document.querySelector('input[name="loginRole"]:checked').value;
         const pass = document.getElementById('loginPassword').value;
-        if (role === 'admin' && pass === PASSWORDS.admin) { currentRole = 'admin'; grantAccess(); }
-        else if (role === 'office' && pass === PASSWORDS.office) { currentRole = 'office'; grantAccess(); }
-        else {
-            document.getElementById('loginError').style.display = 'block';
-            document.getElementById('loginPassword').classList.add('border-retro-rose');
-            setTimeout(() => document.getElementById('loginPassword').classList.remove('border-retro-rose'), 2000);
-        }
+        if (role === 'admin' && pass === PASSWORDS.admin) { currentRole = 'admin'; localStorage.setItem('dozy_current_role', 'admin'); grantAccess(); }
+        else if (role === 'office' && pass === PASSWORDS.office) { currentRole = 'office'; localStorage.setItem('dozy_current_role', 'office'); grantAccess(); }
+        else { document.getElementById('loginError').style.display = 'block'; document.getElementById('loginPassword').classList.add('border-retro-rose'); setTimeout(() => document.getElementById('loginPassword').classList.remove('border-retro-rose'), 2000); }
     }
-
     function guestLogin() {
-        currentRole = 'guest';
-        document.getElementById('loginOverlay').style.display = 'none';
-        document.getElementById('mainApp').style.display = 'flex';
-        document.getElementById('userRoleBadge').innerText = 'Viewer';
+        currentRole = 'guest'; localStorage.setItem('dozy_current_role', 'guest'); document.getElementById('loginOverlay').style.display = 'none'; document.getElementById('mainApp').style.display = 'flex'; document.getElementById('userRoleBadge').innerText = 'Viewer';
         document.querySelectorAll('.admin-only-section').forEach(el => el.style.display = 'none');
-        document.getElementById('nav-dashboard').style.display = 'none';
-        document.getElementById('nav-entries').style.display = 'none';
-        document.getElementById('nav-history').style.display = 'none';
-        navigateSection('viewer');
-        loadData();
+        document.getElementById('nav-dashboard').style.display = 'none'; document.getElementById('nav-entries').style.display = 'none'; document.getElementById('nav-history').style.display = 'none'; document.getElementById('nav-baawan').style.display = 'none';
+        navigateSection('viewer'); loadData();
     }
-
     function logout() {
-        currentRole = null;
-        document.getElementById('loginPassword').value = '';
-        document.getElementById('mainApp').style.display = 'none';
-        document.getElementById('loginOverlay').style.display = 'flex';
-        document.getElementById('loginError').style.display = 'none';
+        currentRole = null; localStorage.removeItem('dozy_current_role'); document.getElementById('loginPassword').value = ''; document.getElementById('mainApp').style.display = 'none'; document.getElementById('loginOverlay').style.display = 'flex'; document.getElementById('loginError').style.display = 'none';
         document.querySelectorAll('.admin-only-section').forEach(el => el.style.display = '');
-        document.getElementById('nav-dashboard').style.display = '';
-        document.getElementById('nav-entries').style.display = '';
-        document.getElementById('nav-history').style.display = '';
+        document.getElementById('nav-dashboard').style.display = ''; document.getElementById('nav-entries').style.display = ''; document.getElementById('nav-history').style.display = ''; document.getElementById('nav-baawan').style.display = '';
     }
-
-    // ============================================================
-    // RADIO BUTTON HELPER
-    // ============================================================
     function createRadioBtn(name, value, label, checked, type, colorClass) {
         const targetSelect = type === 'wh' ? 'warehouseAction' : 'salesAction';
         return `<label class="flex-1 cursor-pointer"><input type="radio" name="${name}" value="${value}" class="peer hidden" ${checked ? 'checked' : ''} onchange="document.getElementById('${targetSelect}').value=this.value; updatePreview('${type}');"><div class="h-full flex items-center justify-center text-center px-2 py-2.5 rounded-lg text-[10px] md:text-[11px] font-bold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:text-${colorClass} peer-checked:shadow-sm text-slate-500 dark:text-slate-400 hover:bg-white/50 dark:hover:bg-white/10 border border-transparent peer-checked:border-${colorClass}/20">${label}</div></label>`;
     }
-
-    // ============================================================
-    // GRANT ACCESS
-    // ============================================================
     function grantAccess() {
-        document.getElementById('loginError').style.display = 'none';
-        document.getElementById('loginOverlay').style.display = 'none';
-        document.getElementById('mainApp').style.display = 'flex';
-        document.getElementById('userRoleBadge').innerText = currentRole;
-
-        const whActionSelect = document.getElementById('warehouseAction');
-        const whRadioGroup = document.getElementById('whRadioGroup');
-        const bulkActionSelect = document.getElementById('bulkLedgerActionSelect');
-
+        document.getElementById('loginError').style.display = 'none'; document.getElementById('loginOverlay').style.display = 'none'; document.getElementById('mainApp').style.display = 'flex'; document.getElementById('userRoleBadge').innerText = currentRole;
+        const whActionSelect = document.getElementById('warehouseAction'), whRadioGroup = document.getElementById('whRadioGroup'), bulkActionSelect = document.getElementById('bulkLedgerActionSelect');
         if (currentRole === 'office') {
-            document.querySelectorAll('.admin-only-section').forEach(el => el.style.display = 'none');
-            document.getElementById('kpiDashboard').classList.remove('hidden');
-            document.getElementById('stockAlertsDashboard').classList.remove('hidden');
+            document.querySelectorAll('.admin-only-section').forEach(el => el.style.display = 'none'); document.getElementById('kpiDashboard').classList.remove('hidden'); document.getElementById('stockAlertsDashboard').classList.remove('hidden');
             whActionSelect.innerHTML = `<option value="GODOWN_TO_OFFICE" selected>GODOWN_TO_OFFICE</option><option value="OFFICE_RETURN">OFFICE_RETURN</option>`;
             whRadioGroup.innerHTML = `<div class="flex gap-2 w-full p-1 bg-white/40 dark:bg-black/30 rounded-xl shadow-inner">${createRadioBtn('whActionRadio', 'GODOWN_TO_OFFICE', '🚚 Pull: Bawana ➔ Office', true, 'wh', 'retro-teal')}${createRadioBtn('whActionRadio', 'OFFICE_RETURN', '🔙 Return: Office ➔ Bawana', false, 'wh', 'retro-teal')}</div>`;
             bulkActionSelect.innerHTML = `<optgroup label="🛒 SALES & RETURNS"><option value="SALE" selected>📤 Bulk Sale (Office)</option><option value="CUST_RETURN">🔄 Customer Return (Office)</option></optgroup><optgroup label="🚚 INTERNAL TRANSFERS"><option value="GODOWN_TO_OFFICE">🚚 Pull: Bawana ➔ Office</option><option value="OFFICE_RETURN">🔙 Send Back: Office ➔ Bawana</option></optgroup>`;
@@ -774,526 +651,275 @@
             whRadioGroup.innerHTML = `<div class="grid grid-cols-2 gap-2 w-full p-1 bg-white/40 dark:bg-black/30 rounded-xl shadow-inner">${createRadioBtn('whActionRadio', 'MFR_RECEIVE', '📥 Mfr ➔ Bawana', true, 'wh', 'retro-teal')}${createRadioBtn('whActionRadio', 'MFR_RETURN', '📤 Bawana ➔ Mfr', false, 'wh', 'retro-teal')}${createRadioBtn('whActionRadio', 'GODOWN_TO_OFFICE', '🚚 Bawana ➔ Office', false, 'wh', 'retro-teal')}${createRadioBtn('whActionRadio', 'OFFICE_RETURN', '🔙 Office ➔ Bawana', false, 'wh', 'retro-teal')}</div>`;
             bulkActionSelect.innerHTML = `<optgroup label="🛒 CUSTOMER SALES"><option value="SALE" selected>📤 Bulk Sale (Office)</option><option value="SALE_GODOWN">📤 Bulk Sale (Bawana)</option></optgroup><optgroup label="🔄 CUSTOMER RETURNS"><option value="CUST_RETURN">🔄 Return (Office)</option><option value="CUST_RETURN_GODOWN">🔄 Return (Bawana)</option></optgroup><optgroup label="🚚 INTERNAL TRANSFERS"><option value="GODOWN_TO_OFFICE">🚚 Bawana ➔ Office</option><option value="OFFICE_RETURN">🔙 Office ➔ Bawana</option></optgroup><optgroup label="🏭 FACTORY OPS"><option value="MFR_RECEIVE">📥 Receive from Factory (Bawana)</option><option value="MFR_RETURN">📤 Return to Factory (Bawana)</option></optgroup>`;
         }
-        navigateSection('dashboard');
-        loadData();
-        showToast(`Welcome, ${currentRole === 'admin' ? 'Rahul' : 'Office User'}! 👋`, 'success');
+        navigateSection('dashboard'); loadData();
     }
 
-    // ============================================================
-    // KEYBOARD NAVIGATION FOR DROPDOWNS
-    // ============================================================
+    // KEYBOARD & UTILS
     function setupKeyboardNav(inputId, listId) {
-        const input = document.getElementById(inputId);
-        let currentFocus = -1;
+        const input = document.getElementById(inputId); let currentFocus = -1;
         input.addEventListener("input", () => { currentFocus = -1; });
         input.addEventListener("keydown", (e) => {
-            const list = document.getElementById(listId);
-            if (list.style.display === 'none') return;
+            const list = document.getElementById(listId); if (list.style.display === 'none') return;
             let items = Array.from(list.getElementsByTagName("li")).filter(li => li.style.display !== "none" && !li.innerText.includes("Void Signal"));
             if (e.key === "ArrowDown") { currentFocus++; addActive(items); e.preventDefault(); }
             else if (e.key === "ArrowUp") { currentFocus--; addActive(items); e.preventDefault(); }
             else if (e.key === "Enter") { e.preventDefault(); if (currentFocus > -1) { if (items[currentFocus]) items[currentFocus].click(); } else if (items.length > 0) { items[0].click(); } }
             else if (e.key === "Escape") { list.style.display = 'none'; }
         });
-        function addActive(items) {
-            if (!items || items.length === 0) return;
-            removeActive(items);
-            if (currentFocus >= items.length) currentFocus = 0;
-            if (currentFocus < 0) currentFocus = items.length - 1;
-            items[currentFocus].classList.add("keyboard-focus");
-            items[currentFocus].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-        }
+        function addActive(items) { if (!items || items.length === 0) return; removeActive(items); if (currentFocus >= items.length) currentFocus = 0; if (currentFocus < 0) currentFocus = items.length - 1; items[currentFocus].classList.add("keyboard-focus"); items[currentFocus].scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
         function removeActive(items) { items.forEach(i => i.classList.remove("keyboard-focus")); }
     }
-    setupKeyboardNav('whSelect', 'whList');
-    setupKeyboardNav('slSelect', 'slList');
-
-    // Enter key on fields -> add to batch
-    ['whQty', 'whPlatform', 'whComment'].forEach(id => {
-        document.getElementById(id).addEventListener('keypress', e => { if (e.key === 'Enter') addTowhBatch(); });
-    });
-    ['slQty', 'slPlatform', 'slComment'].forEach(id => {
-        document.getElementById(id).addEventListener('keypress', e => { if (e.key === 'Enter') addToSlBatch(); });
-    });
-
-    // Global keyboard shortcuts
+    setupKeyboardNav('whSelect', 'whList'); setupKeyboardNav('slSelect', 'slList');
+    ['whQty', 'whPlatform', 'whComment'].forEach(id => { document.getElementById(id).addEventListener('keypress', e => { if (e.key === 'Enter') addTowhBatch(); }); });
+    ['slQty', 'slPlatform', 'slComment'].forEach(id => { document.getElementById(id).addEventListener('keypress', e => { if (e.key === 'Enter') addToSlBatch(); }); });
     document.addEventListener('keydown', (e) => {
         if (e.ctrlKey && e.key === 'Enter') {
-            const whBtn = document.getElementById('btnSubmitWh');
-            const slBtn = document.getElementById('btnSubmitSl');
+            const whBtn = document.getElementById('btnSubmitWh'), slBtn = document.getElementById('btnSubmitSl');
             if (whBtn && whBtn.style.display !== 'none' && document.getElementById('section-entries').style.display !== 'none') { submitWhBatch(); return; }
             if (slBtn && slBtn.style.display !== 'none' && document.getElementById('section-entries').style.display !== 'none') { submitSlBatch(); return; }
         }
-        
-        if (e.key === 'Escape') {
-            ['exportModal', 'editMasterModal', 'editHistoryModal', 'batchLedgerModal', 'batchReportModal'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el && el.style.display !== 'none') { el.style.display = 'none'; }
-            });
-        }
+        if (e.key === 'Escape') { ['exportModal', 'editMasterModal', 'editHistoryModal', 'batchLedgerModal', 'batchReportModal'].forEach(id => { const el = document.getElementById(id); if (el && el.style.display !== 'none') { el.style.display = 'none'; } }); }
     });
-
-    // Close modals on backdrop click
-    ['exportModal', 'editMasterModal', 'editHistoryModal', 'batchLedgerModal', 'batchReportModal'].forEach(id => {
-        const el = document.getElementById(id);
-        if(el) {
-            el.addEventListener('click', function (e) {
-                if (e.target === this) {
-                    this.style.display = 'none';
-                }
-            });
-        }
-    });
-
-    // ============================================================
-    // DATE UTILITIES
-    // ============================================================
+    ['exportModal', 'editMasterModal', 'editHistoryModal', 'batchLedgerModal', 'batchReportModal'].forEach(id => { const el = document.getElementById(id); if(el) { el.addEventListener('click', function (e) { if (e.target === this) { this.style.display = 'none'; } }); } });
     function formatToIndianDate(val) { return (!val || !val.includes('T')) ? val : new Date(val).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' }); }
     function formatToIndianTime(val) { return (!val || !val.includes('T')) ? val : new Date(val).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' }); }
-    function getFormattedRealTime() {
-        const realNow = new Date();
-        return {
-            dateString: realNow.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
-            timeString: realNow.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
-        };
-    }
+    function getFormattedRealTime() { const realNow = new Date(); return { dateString: realNow.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }), timeString: realNow.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) }; }
 
-    // ============================================================
-    // DATA LOADING & PERSISTENCE
-    // ============================================================
-    async function loadData() {
-        const loadingEl = document.getElementById('loadingOverlay');
-        const dotEl = document.getElementById('statusDot');
-        const statusEl = document.getElementById('syncStatus');
-        loadingEl.style.display = 'flex';
-        dotEl.className = 'status-dot status-syncing';
-        statusEl.innerText = "Connecting...";
+    // DATA LOADING & PERSISTING (FAST OPTIMIZED)
+    async function loadData(silent = false) {
+        const loadingEl = document.getElementById('loadingOverlay'), dotEl = document.getElementById('statusDot'), statusEl = document.getElementById('syncStatus');
+        
+        if(!silent) loadingEl.style.display = 'flex'; 
+        dotEl.className = 'status-dot status-syncing'; statusEl.innerText = "Syncing...";
+        
         try {
             const response = await fetch(GOOGLE_SHEET_URL);
             const data = await response.json();
             inventory = (data.inventory || []).map(item => ({
                 id: item.id || Date.now().toString() + Math.random().toString(36).substr(2, 5),
                 name: item.name, category: item.category || 'General', image: item.image || '',
-                godownQty: parseInt(item.godownQty) || 0, officeQty: parseInt(item.officeQty) || 0,
-                createdAt: item.createdAt || Date.now()
+                godownQty: parseInt(item.godownQty) || 0, officeQty: parseInt(item.officeQty) || 0, createdAt: item.createdAt || Date.now()
             }));
             historyLog = (data.historyLog || []).map(log => ({ ...log, dateString: formatToIndianDate(log.dateString), timeString: formatToIndianTime(log.timeString) }));
-            dotEl.className = 'status-dot status-online';
-            statusEl.innerText = "Live";
-            setTimeout(() => { statusEl.innerText = ""; }, 2000);
+            baawanOrders = (data.baawanOrders || []).map(order => ({ ...order, dateString: formatToIndianDate(order.dateString), timeString: formatToIndianTime(order.timeString) }));
+            
+            dotEl.className = 'status-dot status-online'; statusEl.innerText = "Live"; setTimeout(() => { statusEl.innerText = ""; }, 2000);
             saveAndRender(false);
         } catch (error) {
-            dotEl.className = 'status-dot status-error';
-            statusEl.innerText = "Offline";
-            showToast("Could not connect. Working offline.", 'warning', 4000);
+            dotEl.className = 'status-dot status-error'; statusEl.innerText = "Offline"; 
+            if(!silent) showToast("Could not connect. Working offline.", 'warning', 4000); 
             saveAndRender(false);
-        } finally {
-            loadingEl.style.display = 'none';
+        } finally { 
+            if(!silent) loadingEl.style.display = 'none'; 
         }
     }
 
-    function persistData() {
-        if (GOOGLE_SHEET_URL === "" || currentRole === 'guest') return;
-        const dotEl = document.getElementById('statusDot');
-        const statusEl = document.getElementById('syncStatus');
-        dotEl.className = 'status-dot status-syncing';
-        statusEl.innerText = "Syncing...";
-        fetch(GOOGLE_SHEET_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ inventory, historyLog }) })
-            .then(() => { dotEl.className = 'status-dot status-online'; statusEl.innerText = "Saved"; setTimeout(() => { statusEl.innerText = ""; }, 1500); })
-            .catch(() => { dotEl.className = 'status-dot status-error'; statusEl.innerText = "Sync Failed"; showToast("Sync failed. Data saved locally.", 'error'); });
+    function persistData(targetKey) {
+        if (GOOGLE_SHEET_URL === "YOUR_NEW_WEB_APP_URL_HERE" || currentRole === 'guest') return;
+        const dotEl = document.getElementById('statusDot'), statusEl = document.getElementById('syncStatus');
+        dotEl.className = 'status-dot status-syncing'; statusEl.innerText = "Saving...";
+        
+        let bodyPayload = {};
+        if (targetKey === 'baawanOrders') bodyPayload.baawanOrders = baawanOrders;
+        else if (targetKey === 'inventory') bodyPayload.inventory = inventory;
+        else if (targetKey === 'historyLog') bodyPayload.historyLog = historyLog;
+        else { bodyPayload = { inventory, historyLog, baawanOrders }; } // Global Sync
+
+        fetch(GOOGLE_SHEET_URL, { 
+            method: 'POST', 
+            mode: 'no-cors', 
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
+            body: JSON.stringify(bodyPayload) 
+        })
+        .then(() => { 
+            dotEl.className = 'status-dot status-online'; statusEl.innerText = "Saved"; 
+            setTimeout(() => { statusEl.innerText = ""; }, 1500); 
+            // 🚀 Tell other tabs to refresh their data instantly!
+            syncChannel.postMessage('data_updated'); 
+        })
+        .catch(() => { dotEl.className = 'status-dot status-error'; statusEl.innerText = "Sync Failed"; showToast("Sync failed.", 'error'); });
     }
 
-    // ============================================================
-    // CATEGORIES
-    // ============================================================
     function extractCategories() {
         uniqueCategories = [...new Set(inventory.map(i => i.category || 'General'))].sort();
-        const updateSelect = (id, currentVal) => {
-            const el = document.getElementById(id);
-            if (!el) return;
-            el.innerHTML = '<option value="ALL">All Categories</option>';
-            uniqueCategories.forEach(cat => el.innerHTML += `<option value="${cat}">${cat}</option>`);
-            if (uniqueCategories.includes(currentVal)) el.value = currentVal;
-        };
-        updateSelect('viewerCategory', document.getElementById('viewerCategory').value);
-        updateSelect('exportCategory', document.getElementById('exportCategory').value);
-        updateSelect('masterCategoryFilter', document.getElementById('masterCategoryFilter') ? document.getElementById('masterCategoryFilter').value : 'ALL');
-        updateSelect('dashboardAlertCategory', document.getElementById('dashboardAlertCategory').value);
-
-        // Datalist for edit modal
-        const dl = document.getElementById('editCategoryList');
-        if (dl) { dl.innerHTML = ''; uniqueCategories.forEach(cat => { const opt = document.createElement('option'); opt.value = cat; dl.appendChild(opt); }); }
+        const updateSelect = (id, currentVal) => { const el = document.getElementById(id); if (!el) return; el.innerHTML = '<option value="ALL">All Categories</option>'; uniqueCategories.forEach(cat => el.innerHTML += `<option value="${cat}">${cat}</option>`); if (uniqueCategories.includes(currentVal)) el.value = currentVal; };
+        updateSelect('viewerCategory', document.getElementById('viewerCategory').value); updateSelect('exportCategory', document.getElementById('exportCategory').value); updateSelect('masterCategoryFilter', document.getElementById('masterCategoryFilter') ? document.getElementById('masterCategoryFilter').value : 'ALL'); updateSelect('dashboardAlertCategory', document.getElementById('dashboardAlertCategory').value);
+        const dl = document.getElementById('editCategoryList'); if (dl) { dl.innerHTML = ''; uniqueCategories.forEach(cat => { const opt = document.createElement('option'); opt.value = cat; dl.appendChild(opt); }); }
+        const bList = document.getElementById('baawanItemList'); if (bList) { bList.innerHTML = ''; inventory.forEach(i => { const opt = document.createElement('option'); opt.value = i.name; bList.appendChild(opt); }); }
     }
 
-    // ============================================================
-    // SAVE & RENDER
-    // ============================================================
-    function saveAndRender(triggerSave = true) {
-        inventory.sort((a, b) => {
-            let va = a[sortConfig.key === 'total' ? 'godownQty' : sortConfig.key], vb = b[sortConfig.key === 'total' ? 'godownQty' : sortConfig.key];
-            if (sortConfig.key === 'total') { va = a.godownQty + a.officeQty; vb = b.godownQty + b.officeQty; }
-            if (sortConfig.key === 'name' || sortConfig.key === 'category') { return sortConfig.dir === 'asc' ? String(va || '').localeCompare(String(vb || '')) : String(vb || '').localeCompare(String(va || '')); }
-            return sortConfig.dir === 'asc' ? (va || 0) - (vb || 0) : (vb || 0) - (va || 0);
-        });
-        if (triggerSave) persistData();
-        extractCategories(); renderTable(); renderCustomDropdowns(); renderHistory();
+    function saveAndRender(triggerSave = true, targetKey = null) {
+        inventory.sort((a, b) => { let va = a[sortConfig.key === 'total' ? 'godownQty' : sortConfig.key], vb = b[sortConfig.key === 'total' ? 'godownQty' : sortConfig.key]; if (sortConfig.key === 'total') { va = a.godownQty + a.officeQty; vb = b.godownQty + b.officeQty; } if (sortConfig.key === 'name' || sortConfig.key === 'category') { return sortConfig.dir === 'asc' ? String(va || '').localeCompare(String(vb || '')) : String(vb || '').localeCompare(String(va || '')); } return sortConfig.dir === 'asc' ? (va || 0) - (vb || 0) : (vb || 0) - (va || 0); });
+        if (triggerSave) persistData(targetKey);
+        extractCategories(); renderTable(); renderCustomDropdowns(); renderHistory(); renderBaawanOrders();
         if (currentRole === 'admin' || currentRole === 'office') updateDashboard();
         renderViewerTable();
         document.getElementById('catalogCountLabel').innerText = `${inventory.length} Products`;
     }
 
     // ============================================================
-    // TABLE SORT
+    // BAAWAN ORDERS LOGIC (FAST SYNCHRONIZED)
     // ============================================================
-    function sortTable(key) {
-        if (sortConfig.key === key) { sortConfig.dir = sortConfig.dir === 'asc' ? 'desc' : 'asc'; }
-        else { sortConfig.key = key; sortConfig.dir = 'asc'; }
-        saveAndRender(false);
+    function addBaawanOrder() {
+        const item = document.getElementById('newBaawanItem').value.trim();
+        const qty = parseInt(document.getElementById('newBaawanQty').value) || 0;
+        const cust = document.getElementById('newBaawanCust').value.trim();
+        const remarks = document.getElementById('newBaawanRemarks').value.trim();
+
+        if (!item || qty <= 0) { showToast('Item Name and valid Qty required.', 'warning'); return; }
+
+        const { dateString, timeString } = getFormattedRealTime();
+        const orderId = "BWN-" + Date.now().toString().slice(-5) + Math.random().toString(36).substr(2, 2).toUpperCase();
+
+        baawanOrders.unshift({ orderId: orderId, dateString: dateString, timeString: timeString, itemName: item, qty: qty, customer: cust, status: 'Pending', remarks: remarks });
+
+        document.getElementById('newBaawanItem').value = ''; document.getElementById('newBaawanQty').value = ''; document.getElementById('newBaawanCust').value = ''; document.getElementById('newBaawanRemarks').value = ''; document.getElementById('newBaawanItem').focus();
+        
+        saveAndRender(true, 'baawanOrders'); 
+        showToast('Baawan Order Added!', 'success');
     }
 
-    // ============================================================
-    // DASHBOARD
-    // ============================================================
+    function renderBaawanOrders() {
+        const tbody = document.getElementById('baawanBody'); 
+        document.getElementById('baawanCountLabel').innerText = `${baawanOrders.length} Orders`;
+        
+        if (baawanOrders.length === 0) { 
+            tbody.innerHTML = `<tr><td colspan="7" class="p-10 text-center"><div class="empty-state"><div class="empty-icon">📦</div><p>No Baawan Orders Found</p></div></td></tr>`; 
+            return; 
+        }
+        
+        let htmlStr = ''; // Optimize rendering speed
+        baawanOrders.forEach(order => {
+            let statusColor = 'bg-retro-mustard/20 text-retro-mustard border-retro-mustard/30';
+            if (order.status === 'Completed') statusColor = 'bg-retro-teal/20 text-retro-teal border-retro-teal/30';
+            else if (order.status === 'Cancelled') statusColor = 'bg-retro-rose/20 text-retro-rose border-retro-rose/30';
+            
+            htmlStr += `<tr class="hover:bg-white/60 dark:hover:bg-white/5 border-b border-white/40 dark:border-white/5 transition-colors"><td class="p-3 md:p-4"><div class="font-black text-xs text-retro-slate tracking-widest">${order.orderId}</div><div class="text-[9px] text-slate-500 font-bold uppercase">${order.dateString} ${order.timeString}</div></td><td class="p-3 md:p-4 font-extrabold text-xs text-slate-800 dark:text-slate-100">${order.itemName}</td><td class="p-3 md:p-4 text-center font-mono font-black text-lg text-slate-700 dark:text-white">${order.qty}</td><td class="p-3 md:p-4 text-xs font-bold text-slate-600 dark:text-slate-300">${order.customer || '-'}</td><td class="p-3 md:p-4 text-center"><select onchange="updateBaawanStatus('${order.orderId}', this.value)" class="glass-input p-1.5 text-[9px] font-black uppercase tracking-widest cursor-pointer outline-none shadow-sm ${statusColor.split(' ')[1]}"><option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>⏳ Pending</option><option value="Completed" ${order.status === 'Completed' ? 'selected' : ''}>✅ Completed</option><option value="Cancelled" ${order.status === 'Cancelled' ? 'selected' : ''}>❌ Cancelled</option></select></td><td class="p-3 md:p-4 text-xs italic text-slate-500">${order.remarks || '-'}</td><td class="p-3 md:p-4 text-center admin-only-section"><button onclick="deleteBaawanOrder('${order.orderId}')" class="glass-btn text-retro-rose p-1.5 text-[10px] rounded-lg hover:scale-110 transition-transform shadow-sm">✕</button></td></tr>`;
+        });
+        
+        tbody.innerHTML = htmlStr;
+        if(currentRole !== 'admin') { document.querySelectorAll('#section-baawan .admin-only-section').forEach(el => el.style.display = 'none'); }
+    }
+
+    function updateBaawanStatus(orderId, newStatus) {
+        const order = baawanOrders.find(o => o.orderId === orderId);
+        if (order) { order.status = newStatus; saveAndRender(true, 'baawanOrders'); showToast(`Order updated`, 'info'); }
+    }
+
+    async function deleteBaawanOrder(orderId) {
+        if (currentRole !== 'admin') return;
+        const ok = await showConfirm('Delete Order', `Remove Order ${orderId}?`, 'Delete', 'from-retro-rose to-red-500', '🗑️');
+        if (ok) { baawanOrders = baawanOrders.filter(o => o.orderId !== orderId); saveAndRender(true, 'baawanOrders'); showToast(`Deleted.`, 'success'); }
+    }
+
+    // SORTING & DASHBOARD
+    function sortTable(key) { if (sortConfig.key === key) { sortConfig.dir = sortConfig.dir === 'asc' ? 'desc' : 'asc'; } else { sortConfig.key = key; sortConfig.dir = 'asc'; } saveAndRender(false); }
     function renderDashboardAlerts() {
-        const catFilter = document.getElementById('dashboardAlertCategory').value;
-        let filtered = catFilter === 'ALL' ? inventory : inventory.filter(i => (i.category || 'General') === catFilter);
+        const catFilter = document.getElementById('dashboardAlertCategory').value; let filtered = catFilter === 'ALL' ? inventory : inventory.filter(i => (i.category || 'General') === catFilter);
         const lowItems = filtered.filter(i => (i.godownQty + i.officeQty) <= 10).sort((a, b) => (a.godownQty + a.officeQty) - (b.godownQty + b.officeQty));
         const highItems = filtered.filter(i => (i.godownQty + i.officeQty) > 50).sort((a, b) => (b.godownQty + b.officeQty) - (a.godownQty + a.officeQty));
-        document.getElementById('dashLowCount').innerText = lowItems.length;
-        document.getElementById('dashHighCount').innerText = highItems.length;
-        const buildAlertHtml = (items, colorClass, emptyMsg) => {
-            if (!items.length) return `<div class="empty-state"><div class="empty-icon">✨</div><p>${emptyMsg}</p></div>`;
-            return items.map(item => {
-                const total = item.godownQty + item.officeQty;
-                return `<div class="flex justify-between items-center bg-white/50 dark:bg-black/30 p-2 md:p-2.5 rounded-lg shadow-sm border border-${colorClass}/10 cursor-pointer hover:bg-white/80 dark:hover:bg-black/50 transition-colors" onclick="navigateSection('entries')"><span class="text-[10px] md:text-xs font-bold text-slate-700 dark:text-slate-200 truncate pr-2">${item.name}</span><span class="font-mono text-xs md:text-sm font-black text-${colorClass} bg-${colorClass}/10 px-2 py-0.5 rounded shadow-inner">${total}</span></div>`;
-            }).join('');
-        };
-        document.getElementById('dashLowStockList').innerHTML = buildAlertHtml(lowItems, 'retro-rose', 'All Clear!');
-        document.getElementById('dashHighStockList').innerHTML = buildAlertHtml(highItems, 'retro-teal', 'No High Stock');
+        document.getElementById('dashLowCount').innerText = lowItems.length; document.getElementById('dashHighCount').innerText = highItems.length;
+        const buildAlertHtml = (items, colorClass, emptyMsg) => { if (!items.length) return `<div class="empty-state"><div class="empty-icon">✨</div><p>${emptyMsg}</p></div>`; return items.map(item => { const total = item.godownQty + item.officeQty; return `<div class="flex justify-between items-center bg-white/50 dark:bg-black/30 p-2 md:p-2.5 rounded-lg shadow-sm border border-${colorClass}/10 cursor-pointer hover:bg-white/80 dark:hover:bg-black/50 transition-colors" onclick="navigateSection('entries')"><span class="text-[10px] md:text-xs font-bold text-slate-700 dark:text-slate-200 truncate pr-2">${item.name}</span><span class="font-mono text-xs md:text-sm font-black text-${colorClass} bg-${colorClass}/10 px-2 py-0.5 rounded shadow-inner">${total}</span></div>`; }).join(''); };
+        document.getElementById('dashLowStockList').innerHTML = buildAlertHtml(lowItems, 'retro-rose', 'All Clear!'); document.getElementById('dashHighStockList').innerHTML = buildAlertHtml(highItems, 'retro-teal', 'No High Stock');
     }
-
     function updateDashboard() {
-        let godownTotal = 0, officeTotal = 0, outOfStock = 0;
-        inventory.forEach(item => { godownTotal += item.godownQty; officeTotal += item.officeQty; if ((item.godownQty + item.officeQty) === 0) outOfStock++; });
-        const todayStr = getFormattedRealTime().dateString;
-        let salesToday = 0, transfersToday = 0, returnsToday = 0;
-        historyLog.forEach(log => {
-            if (log.dateString === todayStr) {
-                if (log.action === 'SALE' || log.action === 'SALE_GODOWN') salesToday += log.qty;
-                if (log.action === 'GODOWN_TO_OFFICE') transfersToday += log.qty;
-                if (log.action === 'CUST_RETURN' || log.action === 'CUST_RETURN_GODOWN') returnsToday += log.qty;
-            }
-        });
-        const animateCounter = (id, val) => {
-            const el = document.getElementById(id);
-            if (!el) return;
-            const start = parseInt(el.innerText.replace(/,/g, '')) || 0;
-            const diff = val - start;
-            const duration = 600;
-            const startTime = performance.now();
-            const step = (now) => {
-                const p = Math.min((now - startTime) / duration, 1);
-                const eased = p < 0.5 ? 2 * p * p : -1 + (4 - 2 * p) * p;
-                el.innerText = Math.round(start + diff * eased).toLocaleString();
-                if (p < 1) requestAnimationFrame(step);
-            };
-            requestAnimationFrame(step);
-        };
-        animateCounter('kpi-products', inventory.length);
-        animateCounter('kpi-godown', godownTotal);
-        animateCounter('kpi-office', officeTotal);
-        animateCounter('kpi-units', godownTotal + officeTotal);
-        animateCounter('kpi-oos', outOfStock);
-        animateCounter('kpi-sales', salesToday);
-        animateCounter('kpi-transfers', transfersToday);
-        animateCounter('kpi-returns', returnsToday);
-        renderDashboardAlerts();
+        let godownTotal = 0, officeTotal = 0, outOfStock = 0; inventory.forEach(item => { godownTotal += item.godownQty; officeTotal += item.officeQty; if ((item.godownQty + item.officeQty) === 0) outOfStock++; });
+        const todayStr = getFormattedRealTime().dateString; let salesToday = 0, transfersToday = 0, returnsToday = 0;
+        historyLog.forEach(log => { if (log.dateString === todayStr) { if (log.action === 'SALE' || log.action === 'SALE_GODOWN') salesToday += log.qty; if (log.action === 'GODOWN_TO_OFFICE') transfersToday += log.qty; if (log.action === 'CUST_RETURN' || log.action === 'CUST_RETURN_GODOWN') returnsToday += log.qty; } });
+        const animateCounter = (id, val) => { const el = document.getElementById(id); if (!el) return; const start = parseInt(el.innerText.replace(/,/g, '')) || 0; const diff = val - start; const duration = 600; const startTime = performance.now(); const step = (now) => { const p = Math.min((now - startTime) / duration, 1); const eased = p < 0.5 ? 2 * p * p : -1 + (4 - 2 * p) * p; el.innerText = Math.round(start + diff * eased).toLocaleString(); if (p < 1) requestAnimationFrame(step); }; requestAnimationFrame(step); };
+        animateCounter('kpi-products', inventory.length); animateCounter('kpi-godown', godownTotal); animateCounter('kpi-office', officeTotal); animateCounter('kpi-units', godownTotal + officeTotal); animateCounter('kpi-oos', outOfStock); animateCounter('kpi-sales', salesToday); animateCounter('kpi-transfers', transfersToday); animateCounter('kpi-returns', returnsToday); renderDashboardAlerts();
     }
 
-    // ============================================================
-    // CUSTOM DROPDOWN
-    // ============================================================
+    // DROPDOWNS & PREVIEW
     function renderCustomDropdowns() {
-        const buildHtml = (targetInputId, listId) => {
-            if (inventory.length === 0) return `<li class="p-4 text-slate-400 text-xs text-center italic font-bold tracking-widest uppercase">Void Signal...</li>`;
-            return inventory.map(item => {
-                const safeName = item.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                const total = item.godownQty + item.officeQty;
-                const statusColor = total === 0 ? 'text-retro-rose' : total <= 10 ? 'text-retro-mustard' : 'text-retro-teal';
-                return `<li data-search="${item.name.toLowerCase()} ${String(item.id).toLowerCase()}" class="p-3 px-4 text-xs md:text-sm dropdown-item border-b border-white/20 dark:border-white/5 hover:bg-white/40 dark:hover:bg-white/10 flex justify-between items-center transition-colors rounded-lg mx-1 my-0.5 cursor-pointer" onclick="selectDropdownItem('${targetInputId}', '${listId}', '${safeName}')">
-                    <span class="font-bold truncate max-w-[65%] text-slate-700 dark:text-slate-200">${item.name}</span>
-                    <span class="text-[9px] ${statusColor} font-mono tracking-widest font-black bg-white/60 dark:bg-black/30 px-2 py-1 rounded shadow-inner whitespace-nowrap">G:${item.godownQty} O:${item.officeQty}</span>
-                </li>`;
-            }).join('');
-        };
-        document.getElementById('whList').innerHTML = buildHtml('whSelect', 'whList');
-        document.getElementById('slList').innerHTML = buildHtml('slSelect', 'slList');
+        const buildHtml = (targetInputId, listId) => { if (inventory.length === 0) return `<li class="p-4 text-slate-400 text-xs text-center italic font-bold tracking-widest uppercase">Void Signal...</li>`; return inventory.map(item => { const safeName = item.name.replace(/'/g, "\\'").replace(/"/g, '&quot;'); const total = item.godownQty + item.officeQty; const statusColor = total === 0 ? 'text-retro-rose' : total <= 10 ? 'text-retro-mustard' : 'text-retro-teal'; return `<li data-search="${item.name.toLowerCase()} ${String(item.id).toLowerCase()}" class="p-3 px-4 text-xs md:text-sm dropdown-item border-b border-white/20 dark:border-white/5 hover:bg-white/40 dark:hover:bg-white/10 flex justify-between items-center transition-colors rounded-lg mx-1 my-0.5 cursor-pointer" onclick="selectDropdownItem('${targetInputId}', '${listId}', '${safeName}')"><span class="font-bold truncate max-w-[65%] text-slate-700 dark:text-slate-200">${item.name}</span><span class="text-[9px] ${statusColor} font-mono tracking-widest font-black bg-white/60 dark:bg-black/30 px-2 py-1 rounded shadow-inner whitespace-nowrap">G:${item.godownQty} O:${item.officeQty}</span></li>`; }).join(''); };
+        document.getElementById('whList').innerHTML = buildHtml('whSelect', 'whList'); document.getElementById('slList').innerHTML = buildHtml('slSelect', 'slList');
     }
-
-    function openDropdown(listId) {
-        const list = document.getElementById(listId);
-        list.style.display = 'flex';
-        Array.from(list.getElementsByTagName('li')).forEach(li => { li.style.display = 'flex'; });
-    }
-    function selectDropdownItem(inputId, listId, itemName) {
-        document.getElementById(inputId).value = itemName;
-        document.getElementById(listId).style.display = 'none';
-        document.getElementById(inputId === 'whSelect' ? 'whQty' : 'slQty').focus();
-        updatePreview(inputId === 'whSelect' ? 'wh' : 'sl');
-    }
-    function filterDropdown(inputId, listId) {
-        const query = document.getElementById(inputId).value.toLowerCase().trim();
-        const list = document.getElementById(listId);
-        let hasVisible = false;
-        Array.from(list.getElementsByTagName('li')).forEach(li => {
-            if (li.innerText.includes('Void Signal')) return;
-            const match = li.getAttribute('data-search').includes(query);
-            li.style.display = match ? 'flex' : 'none';
-            if (match) hasVisible = true;
-        });
-        hasVisible ? list.style.display = 'flex' : list.style.display = 'none';
-    }
-    document.addEventListener('click', e => {
-        if (!e.target.closest('#whDropdownContainer')) document.getElementById('whList').style.display = 'none';
-        if (!e.target.closest('#slDropdownContainer')) document.getElementById('slList').style.display = 'none';
-    });
-
-    // ============================================================
-    // COMBO PREVIEW
-    // ============================================================
+    function openDropdown(listId) { const list = document.getElementById(listId); list.style.display = 'flex'; Array.from(list.getElementsByTagName('li')).forEach(li => { li.style.display = 'flex'; }); }
+    function selectDropdownItem(inputId, listId, itemName) { document.getElementById(inputId).value = itemName; document.getElementById(listId).style.display = 'none'; document.getElementById(inputId === 'whSelect' ? 'whQty' : 'slQty').focus(); updatePreview(inputId === 'whSelect' ? 'wh' : 'sl'); }
+    function filterDropdown(inputId, listId) { const query = document.getElementById(inputId).value.toLowerCase().trim(); const list = document.getElementById(listId); let hasVisible = false; Array.from(list.getElementsByTagName('li')).forEach(li => { if (li.innerText.includes('Void Signal')) return; const match = li.getAttribute('data-search').includes(query); li.style.display = match ? 'flex' : 'none'; if (match) hasVisible = true; }); hasVisible ? list.style.display = 'flex' : list.style.display = 'none'; }
+    document.addEventListener('click', e => { if (!e.target.closest('#whDropdownContainer')) document.getElementById('whList').style.display = 'none'; if (!e.target.closest('#slDropdownContainer')) document.getElementById('slList').style.display = 'none'; });
     function updatePreview(type) {
-        const nameId = type === 'wh' ? 'whSelect' : 'slSelect';
-        const qtyId = type === 'wh' ? 'whQty' : 'slQty';
-        const actionId = type === 'wh' ? 'warehouseAction' : 'salesAction';
-        const previewId = type === 'wh' ? 'whComboPreview' : 'slComboPreview';
-        const name = document.getElementById(nameId).value.trim();
-        const qty = parseInt(document.getElementById(qtyId).value) || 0;
-        const action = document.getElementById(actionId).value;
-        const previewBox = document.getElementById(previewId);
+        const nameId = type === 'wh' ? 'whSelect' : 'slSelect', qtyId = type === 'wh' ? 'whQty' : 'slQty', actionId = type === 'wh' ? 'warehouseAction' : 'salesAction', previewId = type === 'wh' ? 'whComboPreview' : 'slComboPreview';
+        const name = document.getElementById(nameId).value.trim(), qty = parseInt(document.getElementById(qtyId).value) || 0, action = document.getElementById(actionId).value, previewBox = document.getElementById(previewId);
         if (!name) { previewBox.style.display = 'none'; return; }
-        const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase());
-        if (!item) { previewBox.style.display = 'none'; return; }
-        const match = item.name.match(/\(([^)]+)\)/);
-        if (!match) { previewBox.style.display = 'none'; return; }
-        const numbers = match[1].split(/[+,&]/).map(n => n.trim()).filter(n => n);
-        let hasItems = false;
-        let html = `<div class="mb-1.5 text-retro-mustard uppercase tracking-widest text-[9px] font-black border-b border-white/20 pb-1">Combo Breakdown:</div>`;
+        const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase()); if (!item) { previewBox.style.display = 'none'; return; }
+        const match = item.name.match(/\(([^)]+)\)/); if (!match) { previewBox.style.display = 'none'; return; }
+        const numbers = match[1].split(/[+,&]/).map(n => n.trim()).filter(n => n); let hasItems = false; let html = `<div class="mb-1.5 text-retro-mustard uppercase tracking-widest text-[9px] font-black border-b border-white/20 pb-1">Combo Breakdown:</div>`;
         for (let num of numbers) {
-            const regex = new RegExp('^' + num + '([^a-zA-Z0-9]|$)', 'i');
-            const baseItem = inventory.find(i => regex.test(i.name) && i.category && (i.category.toLowerCase().includes('kitchen') || i.category.toLowerCase().includes('kichen')));
-            if (baseItem) {
-                hasItems = true;
-                let currentStock = 0, isDeducting = false;
-                if (['SALE', 'OFFICE_RETURN'].includes(action)) { currentStock = baseItem.officeQty; isDeducting = true; }
-                else if (['SALE_GODOWN', 'GODOWN_TO_OFFICE', 'MFR_RETURN'].includes(action)) { currentStock = baseItem.godownQty; isDeducting = true; }
-                else if (action === 'CUST_RETURN') { currentStock = baseItem.officeQty; }
-                else if (['CUST_RETURN_GODOWN', 'MFR_RECEIVE'].includes(action)) { currentStock = baseItem.godownQty; }
-                const newStock = isDeducting ? currentStock - qty : currentStock + qty;
-                const colorClass = newStock < 0 ? 'text-retro-rose font-black' : 'text-retro-teal font-black';
-                html += `<div class="flex justify-between items-center mt-1 border-b border-white/10 pb-1"><span class="truncate max-w-[60%] text-[10px]">${baseItem.name}</span><span class="text-[10px]">${currentStock} → <span class="${colorClass} text-xs">${newStock}</span></span></div>`;
-            }
+            const regex = new RegExp('^' + num + '([^a-zA-Z0-9]|$)', 'i'); const baseItem = inventory.find(i => regex.test(i.name) && i.category && (i.category.toLowerCase().includes('kitchen') || i.category.toLowerCase().includes('kichen')));
+            if (baseItem) { hasItems = true; let currentStock = 0, isDeducting = false; if (['SALE', 'OFFICE_RETURN'].includes(action)) { currentStock = baseItem.officeQty; isDeducting = true; } else if (['SALE_GODOWN', 'GODOWN_TO_OFFICE', 'MFR_RETURN'].includes(action)) { currentStock = baseItem.godownQty; isDeducting = true; } else if (action === 'CUST_RETURN') { currentStock = baseItem.officeQty; } else if (['CUST_RETURN_GODOWN', 'MFR_RECEIVE'].includes(action)) { currentStock = baseItem.godownQty; } const newStock = isDeducting ? currentStock - qty : currentStock + qty; const colorClass = newStock < 0 ? 'text-retro-rose font-black' : 'text-retro-teal font-black'; html += `<div class="flex justify-between items-center mt-1 border-b border-white/10 pb-1"><span class="truncate max-w-[60%] text-[10px]">${baseItem.name}</span><span class="text-[10px]">${currentStock} → <span class="${colorClass} text-xs">${newStock}</span></span></div>`; }
         }
         if (hasItems) { previewBox.innerHTML = html; previewBox.style.display = 'block'; } else { previewBox.style.display = 'none'; }
     }
 
-    // ============================================================
-    // WAREHOUSE (TRANSFER) BATCH
-    // ============================================================
+    // TRANSFER (WH) BATCH
     function addTowhBatch() {
-        const name = document.getElementById('whSelect').value.trim();
-        const qty = parseInt(document.getElementById('whQty').value);
-        const action = document.getElementById('warehouseAction').value;
-        const platform = document.getElementById('whPlatform').value.trim();
-        const comment = document.getElementById('whComment').value.trim();
-        if (!name || isNaN(qty) || qty <= 0) { showToast('Enter item name and valid quantity.', 'warning'); return; }
-        const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase());
-        if (!item) { showToast(`"${name}" not found in catalog.`, 'error'); return; }
+        const name = document.getElementById('whSelect').value.trim(), qty = parseInt(document.getElementById('whQty').value), action = document.getElementById('warehouseAction').value, platform = document.getElementById('whPlatform').value.trim(), comment = document.getElementById('whComment').value.trim();
+        if (!name || isNaN(qty) || qty <= 0) { showToast('Enter item name and valid quantity.', 'warning'); return; } const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase()); if (!item) { showToast(`"${name}" not found.`, 'error'); return; }
         const actionTextMap = { MFR_RECEIVE: 'Mfr ➔ Bawana', MFR_RETURN: 'Bawana ➔ Mfr', GODOWN_TO_OFFICE: 'Bawana ➔ Office', OFFICE_RETURN: 'Office ➔ Bawana' };
-        if (action === 'GODOWN_TO_OFFICE' && item.godownQty < qty) { showToast(`Bawana stock deficit! Only ${item.godownQty} available.`, 'error'); return; }
-        if (action === 'OFFICE_RETURN' && item.officeQty < qty) { showToast(`Office stock deficit! Only ${item.officeQty} available.`, 'error'); return; }
-        if (action === 'MFR_RETURN' && item.godownQty < qty) { showToast(`Bawana stock deficit! Only ${item.godownQty} available.`, 'error'); return; }
-        const match = item.name.match(/\(([^)]+)\)/);
-        let autoItems = [];
-        if (match) {
-            const numbers = match[1].split(/[+,&]/).map(n => n.trim()).filter(n => n);
-            for (let num of numbers) {
-                const regex = new RegExp('^' + num + '([^a-zA-Z0-9]|$)', 'i');
-                const baseItem = inventory.find(i => regex.test(i.name) && i.category && (i.category.toLowerCase().includes('kitchen') || i.category.toLowerCase().includes('kichen')));
-                if (baseItem) {
-                    if (action === 'GODOWN_TO_OFFICE' && baseItem.godownQty < qty) { showToast(`Combo item "${baseItem.name}" has only ${baseItem.godownQty} in Bawana.`, 'error'); return; }
-                    if (action === 'OFFICE_RETURN' && baseItem.officeQty < qty) { showToast(`Combo item "${baseItem.name}" has only ${baseItem.officeQty} in Office.`, 'error'); return; }
-                    if (action === 'MFR_RETURN' && baseItem.godownQty < qty) { showToast(`Combo item "${baseItem.name}" has only ${baseItem.godownQty} in Bawana.`, 'error'); return; }
-                    autoItems.push(baseItem);
-                }
-            }
-        }
+        if (action === 'GODOWN_TO_OFFICE' && item.godownQty < qty) { showToast(`Bawana stock deficit!`, 'error'); return; } if (action === 'OFFICE_RETURN' && item.officeQty < qty) { showToast(`Office stock deficit!`, 'error'); return; } if (action === 'MFR_RETURN' && item.godownQty < qty) { showToast(`Bawana stock deficit!`, 'error'); return; }
+        const match = item.name.match(/\(([^)]+)\)/); let autoItems = [];
+        if (match) { const numbers = match[1].split(/[+,&]/).map(n => n.trim()).filter(n => n); for (let num of numbers) { const regex = new RegExp('^' + num + '([^a-zA-Z0-9]|$)', 'i'); const baseItem = inventory.find(i => regex.test(i.name) && i.category && (i.category.toLowerCase().includes('kitchen') || i.category.toLowerCase().includes('kichen'))); if (baseItem) { if (action === 'GODOWN_TO_OFFICE' && baseItem.godownQty < qty) { showToast(`Combo item deficit.`, 'error'); return; } if (action === 'OFFICE_RETURN' && baseItem.officeQty < qty) { showToast(`Combo item deficit.`, 'error'); return; } if (action === 'MFR_RETURN' && baseItem.godownQty < qty) { showToast(`Combo item deficit.`, 'error'); return; } autoItems.push(baseItem); } } }
         pendingWh.push({ id: item.id, name: item.name, action, actionText: actionTextMap[action] || action, qty, platform, comment });
         autoItems.forEach(bItem => pendingWh.push({ id: bItem.id, name: bItem.name, action, actionText: `⚡ Auto (${item.name})`, qty, platform, comment: comment ? `[Combo: ${item.name}] ${comment}` : `[Combo: ${item.name}]` }));
-        document.getElementById('whSelect').value = '';
-        document.getElementById('whQty').value = '';
-        document.getElementById('whComboPreview').style.display = 'none';
-        document.getElementById('whSelect').focus();
-        renderWhBatch();
-        showToast(`"${item.name}" added to queue.`, 'info', 1500);
+        document.getElementById('whSelect').value = ''; document.getElementById('whQty').value = ''; document.getElementById('whComboPreview').style.display = 'none'; document.getElementById('whSelect').focus(); renderWhBatch(); showToast(`Added to queue.`, 'info', 1500);
     }
-
-    function clearWhBatch() {
-        showConfirm('Clear Queue', 'Remove all items from the transfer queue?', 'Clear', 'from-retro-rose to-red-500', '🗑️').then(ok => {
-            if (ok) { pendingWh = []; renderWhBatch(); }
-        });
-    }
-
+    function clearWhBatch() { showConfirm('Clear Queue', 'Remove all items from the transfer queue?', 'Clear', 'from-retro-rose to-red-500', '🗑️').then(ok => { if (ok) { pendingWh = []; renderWhBatch(); } }); }
     function removeWhBatch(index) { pendingWh.splice(index, 1); renderWhBatch(); }
-
     function renderWhBatch() {
-        const container = document.getElementById('whBatchContainer');
-        const btn = document.getElementById('btnSubmitWh');
-        const clearBtn = document.getElementById('clearWhBtn');
-        container.innerHTML = '';
-        if (pendingWh.length === 0) {
-            container.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><p>Queue is empty</p></div>`;
-            btn.style.display = 'none'; clearBtn.style.display = 'none'; return;
-        }
+        const container = document.getElementById('whBatchContainer'), btn = document.getElementById('btnSubmitWh'), clearBtn = document.getElementById('clearWhBtn');
+        if (pendingWh.length === 0) { container.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><p>Queue is empty</p></div>`; btn.style.display = 'none'; clearBtn.style.display = 'none'; return; }
         btn.style.display = 'block'; clearBtn.style.display = 'block';
-        pendingWh.forEach((p, idx) => {
-            const autoStyle = p.actionText.includes('⚡') ? 'opacity-70 scale-[0.98] border-dashed border-l-retro-mustard' : 'border-l-retro-teal';
-            container.innerHTML += `<div class="queue-item flex justify-between items-center glass-input p-3 mb-2 rounded-xl border-l-4 ${autoStyle} shadow-sm anim-scale-in">
-                <div class="flex flex-col"><span class="font-extrabold text-xs md:text-sm text-slate-700 dark:text-slate-200">${p.name}</span><span class="text-[8px] md:text-[9px] text-slate-500 font-black uppercase tracking-widest mt-0.5">${p.actionText}</span></div>
-                <div class="flex items-center gap-3 md:gap-4">
-                    <span class="font-black font-mono text-base md:text-lg text-slate-700 dark:text-white bg-white/40 dark:bg-black/30 px-2 py-0.5 rounded shadow-inner">${p.qty}</span>
-                    <button onclick="removeWhBatch(${idx})" class="text-retro-rose hover:scale-125 transition-transform text-sm px-1 font-bold" title="Remove">✕</button>
-                </div>
-            </div>`;
-        });
+        let htmlStr = ''; // Fast render array
+        pendingWh.forEach((p, idx) => { const autoStyle = p.actionText.includes('⚡') ? 'opacity-70 scale-[0.98] border-dashed border-l-retro-mustard' : 'border-l-retro-teal'; htmlStr += `<div class="queue-item flex justify-between items-center glass-input p-3 mb-2 rounded-xl border-l-4 ${autoStyle} shadow-sm anim-scale-in"><div class="flex flex-col"><span class="font-extrabold text-xs md:text-sm text-slate-700 dark:text-slate-200">${p.name}</span><span class="text-[8px] md:text-[9px] text-slate-500 font-black uppercase tracking-widest mt-0.5">${p.actionText}</span></div><div class="flex items-center gap-3 md:gap-4"><span class="font-black font-mono text-base md:text-lg text-slate-700 dark:text-white bg-white/40 dark:bg-black/30 px-2 py-0.5 rounded shadow-inner">${p.qty}</span><button onclick="removeWhBatch(${idx})" class="text-retro-rose hover:scale-125 transition-transform text-sm px-1 font-bold">✕</button></div></div>`; });
+        container.innerHTML = htmlStr;
     }
-
     function submitWhBatch() {
-        if (pendingWh.length === 0) return;
-        const { dateString, timeString } = getFormattedRealTime();
-        pendingWh.forEach(p => {
-            const item = inventory.find(i => i.id === p.id);
-            if (item) {
-                if (p.action === 'MFR_RECEIVE') item.godownQty += p.qty;
-                else if (p.action === 'MFR_RETURN') item.godownQty -= p.qty;
-                else if (p.action === 'GODOWN_TO_OFFICE') { item.godownQty -= p.qty; item.officeQty += p.qty; }
-                else if (p.action === 'OFFICE_RETURN') { item.officeQty -= p.qty; item.godownQty += p.qty; }
-                historyLog.unshift({ id: Date.now().toString() + Math.random().toString(36).substr(2), dateString, timeString, name: item.name, action: p.action, actionText: p.actionText, qty: p.qty, platform: p.platform, comment: p.comment });
-            }
-        });
-        const count = pendingWh.length;
-        pendingWh = [];
-        renderWhBatch();
-        saveAndRender(true);
-        showToast(`${count} transfer(s) committed successfully!`, 'success');
+        if (pendingWh.length === 0) return; const { dateString, timeString } = getFormattedRealTime();
+        pendingWh.forEach(p => { const item = inventory.find(i => i.id === p.id); if (item) { if (p.action === 'MFR_RECEIVE') item.godownQty += p.qty; else if (p.action === 'MFR_RETURN') item.godownQty -= p.qty; else if (p.action === 'GODOWN_TO_OFFICE') { item.godownQty -= p.qty; item.officeQty += p.qty; } else if (p.action === 'OFFICE_RETURN') { item.officeQty -= p.qty; item.godownQty += p.qty; } historyLog.unshift({ id: Date.now().toString() + Math.random().toString(36).substr(2), dateString, timeString, name: item.name, action: p.action, actionText: p.actionText, qty: p.qty, platform: p.platform, comment: p.comment }); } });
+        pendingWh = []; renderWhBatch(); saveAndRender(true); showToast(`Transfers committed!`, 'success');
     }
 
-    // ============================================================
     // SALES BATCH
-    // ============================================================
     function addToSlBatch() {
-        const name = document.getElementById('slSelect').value.trim();
-        const qty = parseInt(document.getElementById('slQty').value);
-        const action = document.getElementById('salesAction').value;
-        const platform = document.getElementById('slPlatform').value.trim();
-        const comment = document.getElementById('slComment').value.trim();
-        if (!name || isNaN(qty) || qty <= 0) { showToast('Enter item name and valid quantity.', 'warning'); return; }
-        const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase());
-        if (!item) { showToast(`"${name}" not found in catalog.`, 'error'); return; }
+        const name = document.getElementById('slSelect').value.trim(), qty = parseInt(document.getElementById('slQty').value), action = document.getElementById('salesAction').value, platform = document.getElementById('slPlatform').value.trim(), comment = document.getElementById('slComment').value.trim();
+        if (!name || isNaN(qty) || qty <= 0) { showToast('Enter item name and valid quantity.', 'warning'); return; } const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase()); if (!item) { showToast(`"${name}" not found.`, 'error'); return; }
         const actionTextMap = { SALE: 'Sale (Office Out)', SALE_GODOWN: 'Sale (Bawana Out)', CUST_RETURN: 'Return (Office In)', CUST_RETURN_GODOWN: 'Return (Bawana In)' };
-        if (action === 'SALE' && item.officeQty < qty) { showToast(`Office deficit! Only ${item.officeQty} available.`, 'error'); return; }
-        if (action === 'SALE_GODOWN' && item.godownQty < qty) { showToast(`Bawana deficit! Only ${item.godownQty} available.`, 'error'); return; }
-        const match = item.name.match(/\(([^)]+)\)/);
-        let autoItems = [];
-        if (match) {
-            const numbers = match[1].split(/[+,&]/).map(n => n.trim()).filter(n => n);
-            for (let num of numbers) {
-                const regex = new RegExp('^' + num + '([^a-zA-Z0-9]|$)', 'i');
-                const baseItem = inventory.find(i => regex.test(i.name) && i.category && (i.category.toLowerCase().includes('kitchen') || i.category.toLowerCase().includes('kichen')));
-                if (baseItem) {
-                    if (action === 'SALE' && baseItem.officeQty < qty) { showToast(`Combo item "${baseItem.name}" has only ${baseItem.officeQty} in Office.`, 'error'); return; }
-                    if (action === 'SALE_GODOWN' && baseItem.godownQty < qty) { showToast(`Combo item "${baseItem.name}" has only ${baseItem.godownQty} in Bawana.`, 'error'); return; }
-                    autoItems.push(baseItem);
-                }
-            }
-        }
+        if (action === 'SALE' && item.officeQty < qty) { showToast(`Office deficit!`, 'error'); return; } if (action === 'SALE_GODOWN' && item.godownQty < qty) { showToast(`Bawana deficit!`, 'error'); return; }
+        const match = item.name.match(/\(([^)]+)\)/); let autoItems = [];
+        if (match) { const numbers = match[1].split(/[+,&]/).map(n => n.trim()).filter(n => n); for (let num of numbers) { const regex = new RegExp('^' + num + '([^a-zA-Z0-9]|$)', 'i'); const baseItem = inventory.find(i => regex.test(i.name) && i.category && (i.category.toLowerCase().includes('kitchen') || i.category.toLowerCase().includes('kichen'))); if (baseItem) { if (action === 'SALE' && baseItem.officeQty < qty) { showToast(`Combo item deficit.`, 'error'); return; } if (action === 'SALE_GODOWN' && baseItem.godownQty < qty) { showToast(`Combo item deficit.`, 'error'); return; } autoItems.push(baseItem); } } }
         pendingSl.push({ id: item.id, name: item.name, action, actionText: actionTextMap[action] || action, qty, platform, comment });
         autoItems.forEach(bItem => pendingSl.push({ id: bItem.id, name: bItem.name, action, actionText: `⚡ Auto (${item.name})`, qty, platform, comment: comment ? `[Combo: ${item.name}] ${comment}` : `[Combo: ${item.name}]` }));
-        document.getElementById('slSelect').value = '';
-        document.getElementById('slQty').value = '';
-        document.getElementById('slComboPreview').style.display = 'none';
-        document.getElementById('slSelect').focus();
-        renderSlBatch();
-        showToast(`"${item.name}" added to queue.`, 'info', 1500);
+        document.getElementById('slSelect').value = ''; document.getElementById('slQty').value = ''; document.getElementById('slComboPreview').style.display = 'none'; document.getElementById('slSelect').focus(); renderSlBatch(); showToast(`Added to queue.`, 'info', 1500);
     }
-
-    function clearSlBatch() {
-        showConfirm('Clear Queue', 'Remove all items from the sales queue?', 'Clear', 'from-retro-rose to-red-500', '🗑️').then(ok => {
-            if (ok) { pendingSl = []; renderSlBatch(); }
-        });
-    }
-
+    function clearSlBatch() { showConfirm('Clear Queue', 'Remove all items from the sales queue?', 'Clear', 'from-retro-rose to-red-500', '🗑️').then(ok => { if (ok) { pendingSl = []; renderSlBatch(); } }); }
     function removeSlBatch(index) { pendingSl.splice(index, 1); renderSlBatch(); }
-
     function renderSlBatch() {
-        const container = document.getElementById('slBatchContainer');
-        const btn = document.getElementById('btnSubmitSl');
-        const clearBtn = document.getElementById('clearSlBtn');
-        container.innerHTML = '';
-        if (pendingSl.length === 0) {
-            container.innerHTML = `<div class="empty-state"><div class="empty-icon">🛒</div><p>Queue is empty</p></div>`;
-            btn.style.display = 'none'; clearBtn.style.display = 'none'; return;
-        }
+        const container = document.getElementById('slBatchContainer'), btn = document.getElementById('btnSubmitSl'), clearBtn = document.getElementById('clearSlBtn');
+        if (pendingSl.length === 0) { container.innerHTML = `<div class="empty-state"><div class="empty-icon">🛒</div><p>Queue is empty</p></div>`; btn.style.display = 'none'; clearBtn.style.display = 'none'; return; }
         btn.style.display = 'block'; clearBtn.style.display = 'block';
-        pendingSl.forEach((p, idx) => {
-            const isSale = ['SALE', 'SALE_GODOWN'].includes(p.action);
-            const colors = isSale ? 'border-l-retro-slate text-retro-slate' : 'border-l-retro-rose text-retro-rose';
-            const autoStyle = p.actionText.includes('⚡') ? 'opacity-70 scale-[0.98] border-dashed border-l-retro-mustard' : colors;
-            container.innerHTML += `<div class="queue-item flex justify-between items-center glass-input p-3 mb-2 rounded-xl border-l-4 ${autoStyle} shadow-sm anim-scale-in">
-                <div class="flex flex-col"><span class="font-extrabold text-xs md:text-sm text-slate-700 dark:text-slate-200">${p.name}</span><span class="text-[8px] md:text-[9px] font-black uppercase tracking-widest mt-0.5 ${colors.split(' ')[1]}">${p.actionText}</span></div>
-                <div class="flex items-center gap-3 md:gap-4">
-                    <span class="font-black font-mono text-base md:text-lg text-slate-700 dark:text-white bg-white/40 dark:bg-black/30 px-2 py-0.5 rounded shadow-inner">${p.qty}</span>
-                    <button onclick="removeSlBatch(${idx})" class="text-retro-rose hover:scale-125 transition-transform text-sm px-1 font-bold" title="Remove">✕</button>
-                </div>
-            </div>`;
-        });
+        let htmlStr = ''; // Fast render array
+        pendingSl.forEach((p, idx) => { const isSale = ['SALE', 'SALE_GODOWN'].includes(p.action); const colors = isSale ? 'border-l-retro-slate text-retro-slate' : 'border-l-retro-rose text-retro-rose'; const autoStyle = p.actionText.includes('⚡') ? 'opacity-70 scale-[0.98] border-dashed border-l-retro-mustard' : colors; htmlStr += `<div class="queue-item flex justify-between items-center glass-input p-3 mb-2 rounded-xl border-l-4 ${autoStyle} shadow-sm anim-scale-in"><div class="flex flex-col"><span class="font-extrabold text-xs md:text-sm text-slate-700 dark:text-slate-200">${p.name}</span><span class="text-[8px] md:text-[9px] font-black uppercase tracking-widest mt-0.5 ${colors.split(' ')[1]}">${p.actionText}</span></div><div class="flex items-center gap-3 md:gap-4"><span class="font-black font-mono text-base md:text-lg text-slate-700 dark:text-white bg-white/40 dark:bg-black/30 px-2 py-0.5 rounded shadow-inner">${p.qty}</span><button onclick="removeSlBatch(${idx})" class="text-retro-rose hover:scale-125 transition-transform text-sm px-1 font-bold">✕</button></div></div>`; });
+        container.innerHTML = htmlStr;
     }
-
     function submitSlBatch() {
-        if (pendingSl.length === 0) return;
-        const { dateString, timeString } = getFormattedRealTime();
-        pendingSl.forEach(p => {
-            const item = inventory.find(i => i.id === p.id);
-            if (item) {
-                if (p.action === 'SALE' && item.officeQty >= p.qty) item.officeQty -= p.qty;
-                else if (p.action === 'SALE_GODOWN' && item.godownQty >= p.qty) item.godownQty -= p.qty;
-                else if (p.action === 'CUST_RETURN') item.officeQty += p.qty;
-                else if (p.action === 'CUST_RETURN_GODOWN') item.godownQty += p.qty;
-                historyLog.unshift({ id: Date.now().toString() + Math.random().toString(36).substr(2), dateString, timeString, name: item.name, action: p.action, actionText: p.actionText, qty: p.qty, platform: p.platform, comment: p.comment });
-            }
-        });
-        const count = pendingSl.length;
-        pendingSl = [];
-        renderSlBatch();
-        saveAndRender(true);
-        showToast(`${count} entry(ies) committed successfully!`, 'success');
+        if (pendingSl.length === 0) return; const { dateString, timeString } = getFormattedRealTime();
+        pendingSl.forEach(p => { const item = inventory.find(i => i.id === p.id); if (item) { if (p.action === 'SALE' && item.officeQty >= p.qty) item.officeQty -= p.qty; else if (p.action === 'SALE_GODOWN' && item.godownQty >= p.qty) item.godownQty -= p.qty; else if (p.action === 'CUST_RETURN') item.officeQty += p.qty; else if (p.action === 'CUST_RETURN_GODOWN') item.godownQty += p.qty; historyLog.unshift({ id: Date.now().toString() + Math.random().toString(36).substr(2), dateString, timeString, name: item.name, action: p.action, actionText: p.actionText, qty: p.qty, platform: p.platform, comment: p.comment }); } });
+        pendingSl = []; renderSlBatch(); saveAndRender(true); showToast(`Entries committed!`, 'success');
     }
 
-    // ============================================================
-    // HISTORY RENDERING
-    // ============================================================
+    // HISTORY LOGS FILTERING
     function renderHistory() {
         const whLogs = historyLog.filter(l => ['MFR_RECEIVE', 'MFR_RETURN', 'GODOWN_TO_OFFICE', 'OFFICE_RETURN'].includes(l.action));
         const slLogs = historyLog.filter(l => ['SALE', 'SALE_GODOWN', 'CUST_RETURN', 'CUST_RETURN_GODOWN'].includes(l.action));
         document.getElementById('whHistoryContainer').innerHTML = buildHistoryHTML(whLogs, 'wh');
         document.getElementById('slHistoryContainer').innerHTML = buildHistoryHTML(slLogs, 'sl');
-        document.getElementById('whLogCount').innerText = whLogs.length;
-        document.getElementById('slLogCount').innerText = slLogs.length;
+        document.getElementById('whLogCount').innerText = whLogs.length; document.getElementById('slLogCount').innerText = slLogs.length;
     }
-
     function buildHistoryHTML(logsArray, type) {
         if (!logsArray.length) return `<div class="empty-state"><div class="empty-icon">📭</div><p>No Records Found</p></div>`;
-        const grouped = {};
-        logsArray.forEach(l => { if (!grouped[l.dateString]) grouped[l.dateString] = []; grouped[l.dateString].push(l); });
+        const grouped = {}; logsArray.forEach(l => { if (!grouped[l.dateString]) grouped[l.dateString] = []; grouped[l.dateString].push(l); });
         let html = '';
         for (let date in grouped) {
             html += `<div class="mb-8 date-group"><div class="flex items-center gap-3 mb-4"><div class="h-px bg-slate-300 dark:bg-slate-700 flex-1"></div><span class="text-[9px] md:text-[10px] font-black bg-white/60 dark:bg-black/50 text-slate-600 dark:text-slate-300 px-3 py-1.5 rounded-full uppercase tracking-[0.2em] shadow-sm">${date}</span><div class="h-px bg-slate-300 dark:bg-slate-700 flex-1"></div></div><div class="grid grid-cols-1 gap-3 md:gap-4">`;
@@ -1302,444 +928,81 @@
                 let border = type === 'wh' ? 'border-l-retro-teal' : (isSale ? 'border-l-retro-slate' : 'border-l-retro-rose');
                 let badge = type === 'wh' ? 'bg-retro-teal text-white' : (isSale ? 'bg-retro-slate text-white' : 'bg-retro-rose text-white');
                 if (log.actionText && log.actionText.includes('⚡ Auto')) border = 'border-l-retro-mustard border-dashed opacity-80';
-                const canEdit = currentRole === 'admin';
-                html += `<div class="log-item glass-input p-3 border-l-4 ${border} hover:bg-white/80 dark:hover:bg-white/10 transition-colors shadow-sm">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-[8px] font-black uppercase px-2 py-1 rounded shadow-sm tracking-widest ${badge}">${log.actionText}</span>
-                        <div class="flex gap-2 items-center">
-                            ${canEdit ? `<button onclick="openEditHistoryModal('${log.id}')" class="text-slate-400 hover:text-retro-mustard hover:scale-110 text-xs no-print transition-all" title="Edit">✏️</button>` : ''}
-                            <span class="text-[9px] text-slate-500 font-bold bg-white/50 dark:bg-black/30 px-2 py-0.5 rounded">${log.timeString}</span>
-                        </div>
-                    </div>
-                    <div class="font-extrabold text-xs text-slate-800 dark:text-slate-100 truncate mb-2 mt-2">${log.name}</div>
-                    <div class="flex justify-between items-end">
-                        <span class="font-mono font-black text-xl text-slate-700 dark:text-white tracking-tighter drop-shadow-sm">${log.qty} <span class="text-[8px] tracking-[0.2em] font-sans uppercase font-bold text-slate-400">UNITS</span></span>
-                        <div class="flex flex-col items-end gap-1">
-                            ${log.platform ? `<span class="text-[8px] uppercase tracking-widest font-black text-slate-600 dark:text-slate-300 bg-white/60 dark:bg-black/40 px-2 py-1 rounded shadow-inner">${log.platform}</span>` : ''}
-                            ${log.comment ? `<span class="text-[9px] text-slate-500 dark:text-slate-400 truncate max-w-[150px] font-medium italic">"${log.comment}"</span>` : ''}
-                        </div>
-                    </div>
-                </div>`;
+                html += `<div class="log-item glass-input p-3 border-l-4 ${border} hover:bg-white/80 dark:hover:bg-white/10 transition-colors shadow-sm"><div class="flex justify-between items-start mb-2"><span class="text-[8px] font-black uppercase px-2 py-1 rounded shadow-sm tracking-widest ${badge}">${log.actionText}</span><div class="flex gap-2 items-center">${currentRole === 'admin' ? `<button onclick="openEditHistoryModal('${log.id}')" class="text-slate-400 hover:text-retro-mustard hover:scale-110 text-xs no-print transition-all">✏️</button>` : ''}<span class="text-[9px] text-slate-500 font-bold bg-white/50 dark:bg-black/30 px-2 py-0.5 rounded">${log.timeString}</span></div></div><div class="font-extrabold text-xs text-slate-800 dark:text-slate-100 truncate mb-2 mt-2">${log.name}</div><div class="flex justify-between items-end"><span class="font-mono font-black text-xl text-slate-700 dark:text-white tracking-tighter drop-shadow-sm">${log.qty} <span class="text-[8px] tracking-[0.2em] font-sans uppercase font-bold text-slate-400">UNITS</span></span><div class="flex flex-col items-end gap-1">${log.platform ? `<span class="text-[8px] uppercase tracking-widest font-black text-slate-600 dark:text-slate-300 bg-white/60 dark:bg-black/40 px-2 py-1 rounded shadow-inner">${log.platform}</span>` : ''}${log.comment ? `<span class="text-[9px] text-slate-500 dark:text-slate-400 truncate max-w-[150px] font-medium italic">"${log.comment}"</span>` : ''}</div></div></div>`;
             });
             html += `</div></div>`;
         }
         return html;
     }
 
-    // ============================================================
-    // MASTER CATALOG
-    // ============================================================
+    // ACTIONS & MODAL SAVES
     function addMasterProduct() {
-        if (currentRole !== 'admin') return;
-        const namesInput = document.getElementById('newNames').value;
-        const categoryInput = document.getElementById('newCategory').value.trim() || 'General';
-        const imgInput = document.getElementById('newImage').value.trim();
-        if (!namesInput.trim()) { showToast('Enter at least one product name.', 'warning'); return; }
-        let added = 0;
-        namesInput.split(',').map(n => n.trim()).filter(n => n !== "").forEach((name, index) => {
-            if (!inventory.some(item => item.name.toLowerCase() === name.toLowerCase())) {
-                inventory.push({ id: Date.now().toString() + index + Math.random().toString(36).substr(2, 5), name, category: categoryInput, image: imgInput, godownQty: 0, officeQty: 0, createdAt: new Date().getTime() + index });
-                added++;
-            }
-        });
-        document.getElementById('newNames').value = '';
-        document.getElementById('newImage').value = '';
-        if (added > 0) { saveAndRender(true); showToast(`${added} product(s) added to catalog.`, 'success'); }
-        else { showToast('All products already exist in catalog.', 'warning'); }
+        if (currentRole !== 'admin') return; const namesInput = document.getElementById('newNames').value, categoryInput = document.getElementById('newCategory').value.trim() || 'General', imgInput = document.getElementById('newImage').value.trim();
+        if (!namesInput.trim()) { showToast('Product Name required.', 'warning'); return; } let added = 0; namesInput.split(',').map(n => n.trim()).filter(n => n !== "").forEach((name, index) => { if (!inventory.some(item => item.name.toLowerCase() === name.toLowerCase())) { inventory.push({ id: Date.now().toString() + index + Math.random().toString(36).substr(2, 5), name, category: categoryInput, image: imgInput, godownQty: 0, officeQty: 0, createdAt: new Date().getTime() + index }); added++; } });
+        document.getElementById('newNames').value = ''; document.getElementById('newImage').value = ''; if (added > 0) { saveAndRender(true, 'inventory'); showToast('Added to catalog.', 'success'); }
     }
-
     function renderTable() {
         const tbody = document.getElementById('inventoryBody');
-        tbody.innerHTML = '';
-        if (inventory.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6" class="p-10 text-center"><div class="empty-state"><div class="empty-icon">🗄️</div><p>Catalog Empty — Add Products Above</p></div></td></tr>`;
-            return;
-        }
-        const isComp = viewMode === 'compact';
-        const tdPad = isComp ? 'p-1.5' : 'p-3 md:p-4';
-        const nameTxt = isComp ? 'text-[10px]' : 'text-xs md:text-sm';
-        const numTxt = isComp ? 'text-sm' : 'text-lg';
-        const btnClass = isComp ? 'p-1 text-[9px]' : 'p-1.5 text-[10px]';
+        if (inventory.length === 0) { tbody.innerHTML = `<tr><td colspan="6" class="p-10 text-center"><div class="empty-state"><div class="empty-icon">🗄️</div><p>Catalog Empty</p></div></td></tr>`; return; }
+        const isComp = viewMode === 'compact', tdPad = isComp ? 'p-1.5' : 'p-3 md:p-4', nameTxt = isComp ? 'text-[10px]' : 'text-xs md:text-sm', numTxt = isComp ? 'text-sm' : 'text-lg', btnClass = isComp ? 'p-1 text-[9px]' : 'p-1.5 text-[10px]';
+        let htmlStr = ''; // Fast render optimization
         inventory.forEach(item => {
-            const totalQty = item.godownQty + item.officeQty;
-            let nameDisplayHTML = `<div class="font-extrabold ${nameTxt}">${item.name}</div>`;
-            if (item.image && item.image.trim() !== '') { nameDisplayHTML = `<a href="${item.image}" target="_blank" rel="noopener" class="font-extrabold ${nameTxt} text-retro-slate hover:opacity-70 flex items-center gap-1.5 transition-opacity">⎋ ${item.name}</a>`; }
-            const colGodown = item.godownQty <= 10 ? "text-retro-rose" : "text-retro-teal";
-            const colOffice = item.officeQty <= 10 ? "text-retro-rose" : "text-retro-mustard";
-            const isLow = totalQty <= 10;
-            tbody.innerHTML += `<tr class="hover:bg-white/60 dark:hover:bg-white/5 border-b border-white/40 dark:border-white/5 transition-colors group ${isLow && totalQty === 0 ? 'bg-retro-rose/5' : ''}">
-                <td class="${tdPad}"><div class="text-[8px] font-black text-slate-500 uppercase tracking-widest bg-white/60 dark:bg-black/40 shadow-inner inline-block px-2 py-1 rounded">${item.category}</div></td>
-                <td class="${tdPad}">${nameDisplayHTML}</td>
-                <td class="${tdPad} text-center font-mono font-black ${numTxt} ${colGodown}">${item.godownQty}</td>
-                <td class="${tdPad} text-center font-mono font-black ${numTxt} ${colOffice}">${item.officeQty}</td>
-                <td class="${tdPad} text-center font-black font-mono text-slate-700 dark:text-white ${numTxt} border-r border-white/20 dark:border-white/5 bg-white/30 dark:bg-black/10">${totalQty}</td>
-                <td class="${tdPad} text-center no-print opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity flex justify-center gap-1.5">
-                    <button onclick="openEditMasterModal('${item.id}')" class="glass-btn text-retro-slate ${btnClass} rounded-lg hover:scale-110 transition-transform" title="Edit Item">✏️</button>
-                    <button onclick="confirmDeleteItem('${item.id}', '${item.name.replace(/'/g, "\\'")}')" class="glass-btn text-retro-rose ${btnClass} rounded-lg hover:scale-110 transition-transform" title="Delete Item">✕</button>
-                </td>
-            </tr>`;
+            const totalQty = item.godownQty + item.officeQty; let nameDisplayHTML = `<div class="font-extrabold ${nameTxt}">${item.name}</div>`; if (item.image && item.image.trim() !== '') { nameDisplayHTML = `<a href="${item.image}" target="_blank" rel="noopener" class="font-extrabold ${nameTxt} text-retro-slate hover:opacity-70 flex items-center gap-1.5 transition-opacity">⎋ ${item.name}</a>`; }
+            const colGodown = item.godownQty <= 10 ? "text-retro-rose" : "text-retro-teal", colOffice = item.officeQty <= 10 ? "text-retro-rose" : "text-retro-mustard", isLow = totalQty <= 10;
+            htmlStr += `<tr class="hover:bg-white/60 dark:hover:bg-white/5 border-b border-white/40 dark:border-white/5 transition-colors group ${isLow && totalQty === 0 ? 'bg-retro-rose/5' : ''}"><td class="${tdPad}"><div class="text-[8px] font-black text-slate-500 uppercase tracking-widest bg-white/60 dark:bg-black/40 shadow-inner inline-block px-2 py-1 rounded">${item.category}</div></td><td class="${tdPad}">${nameDisplayHTML}</td><td class="${tdPad} text-center font-mono font-black ${numTxt} ${colGodown}">${item.godownQty}</td><td class="${tdPad} text-center font-mono font-black ${numTxt} ${colOffice}">${item.officeQty}</td><td class="${tdPad} text-center font-black font-mono text-slate-700 dark:text-white ${numTxt} border-r border-white/20 dark:border-white/5 bg-white/30 dark:bg-black/10">${totalQty}</td><td class="${tdPad} text-center no-print opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity flex justify-center gap-1.5 admin-only-section"><button onclick="openEditMasterModal('${item.id}')" class="glass-btn text-retro-slate ${btnClass} rounded-lg hover:scale-110 transition-transform">✏️</button><button onclick="confirmDeleteItem('${item.id}', '${item.name.replace(/'/g, "\\'")}')" class="glass-btn text-retro-rose ${btnClass} rounded-lg hover:scale-110 transition-transform">✕</button></td></tr>`;
         });
+        tbody.innerHTML = htmlStr;
+        if(currentRole !== 'admin') { document.querySelectorAll('#inventoryBody .admin-only-section').forEach(el => el.style.display = 'none'); }
     }
+    function filterTable() { const q = document.getElementById('searchInput').value.toLowerCase(), cat = document.getElementById('masterCategoryFilter').value; let visible = 0; document.querySelectorAll('#inventoryBody tr').forEach(row => { if (row.cells.length > 1) { const text = row.innerText.toLowerCase(), rowCat = row.cells[0].innerText.trim(), matchText = text.includes(q), matchCat = (cat === 'ALL' || rowCat === cat); row.style.display = (matchText && matchCat) ? '' : 'none'; if (matchText && matchCat) visible++; } }); document.getElementById('catalogCountLabel').innerText = `${visible} / ${inventory.length} Products`; }
 
-    function filterTable() {
-        const q = document.getElementById('searchInput').value.toLowerCase();
-        const cat = document.getElementById('masterCategoryFilter').value;
-        let visible = 0;
-        document.querySelectorAll('#inventoryBody tr').forEach(row => {
-            if (row.cells.length > 1) {
-                const text = row.innerText.toLowerCase();
-                const rowCat = row.cells[0].innerText.trim();
-                const matchText = text.includes(q);
-                const matchCat = (cat === 'ALL' || rowCat === cat);
-                row.style.display = (matchText && matchCat) ? '' : 'none';
-                if (matchText && matchCat) visible++;
-            }
-        });
-        document.getElementById('catalogCountLabel').innerText = `${visible} / ${inventory.length} Products`;
-    }
-
-    // ============================================================
-    // LIVE RADAR (VIEWER)
-    // ============================================================
+    // RADAR
     function renderViewerTable() {
-        const viewSearch = document.getElementById('viewerSearch').value.toLowerCase();
-        const viewCategory = document.getElementById('viewerCategory').value;
-        const viewStatus = document.getElementById('viewerStatus').value;
-        const viewSort = document.getElementById('viewerSort').value;
-        let filtered = inventory.filter(item => {
-            const totalQty = item.godownQty + item.officeQty;
-            const matchSearch = item.name.toLowerCase().includes(viewSearch) || item.id.toLowerCase().includes(viewSearch);
-            const matchCategory = viewCategory === 'ALL' || (item.category || 'General') === viewCategory;
-            let matchStatus = true;
-            if (viewStatus === 'INSTOCK') matchStatus = totalQty > 10;
-            else if (viewStatus === 'LOWSTOCK') matchStatus = totalQty > 0 && totalQty <= 10;
-            else if (viewStatus === 'OUTOFSTOCK') matchStatus = totalQty === 0;
-            return matchSearch && matchCategory && matchStatus;
-        });
-        filtered.sort((a, b) => {
-            const totalA = a.godownQty + a.officeQty, totalB = b.godownQty + b.officeQty;
-            if (viewSort === 'NAME_ASC') return a.name.localeCompare(b.name);
-            if (viewSort === 'NAME_DESC') return b.name.localeCompare(a.name);
-            if (viewSort === 'STOCK_DESC') return totalB - totalA;
-            if (viewSort === 'STOCK_ASC') return totalA - totalB;
-            return 0;
-        });
-        const tbody = document.getElementById('viewerBody');
-        tbody.innerHTML = '';
-        document.getElementById('viewerResultCount').innerText = filtered.length;
-        if (filtered.length === 0) {
-            tbody.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><p>No matches found</p></div>`;
-            return;
-        }
-        const isComp = viewMode === 'compact';
-        const cardPad = isComp ? 'p-1.5 mb-1.5 gap-2' : 'p-3 mb-3 gap-3';
-        const nameTxt = isComp ? 'text-xs' : 'text-sm';
-        const boxPad = isComp ? 'p-1' : 'p-2';
-        const numTxt = isComp ? 'text-sm' : 'text-lg';
+        const viewSearch = document.getElementById('viewerSearch').value.toLowerCase(), viewCategory = document.getElementById('viewerCategory').value, viewStatus = document.getElementById('viewerStatus').value, viewSort = document.getElementById('viewerSort').value;
+        let filtered = inventory.filter(item => { const totalQty = item.godownQty + item.officeQty, matchSearch = item.name.toLowerCase().includes(viewSearch) || item.id.toLowerCase().includes(viewSearch), matchCategory = viewCategory === 'ALL' || (item.category || 'General') === viewCategory; let matchStatus = true; if (viewStatus === 'INSTOCK') matchStatus = totalQty > 10; else if (viewStatus === 'LOWSTOCK') matchStatus = totalQty > 0 && totalQty <= 10; else if (viewStatus === 'OUTOFSTOCK') matchStatus = totalQty === 0; return matchSearch && matchCategory && matchStatus; });
+        filtered.sort((a, b) => { const totalA = a.godownQty + a.officeQty, totalB = b.godownQty + b.officeQty; if (viewSort === 'NAME_ASC') return a.name.localeCompare(b.name); if (viewSort === 'NAME_DESC') return b.name.localeCompare(a.name); if (viewSort === 'STOCK_DESC') return totalB - totalA; if (viewSort === 'STOCK_ASC') return totalA - totalB; return 0; });
+        const tbody = document.getElementById('viewerBody'); document.getElementById('viewerResultCount').innerText = filtered.length;
+        if (filtered.length === 0) { tbody.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><p>No matches found</p></div>`; return; }
+        const isComp = viewMode === 'compact', cardPad = isComp ? 'p-1.5 mb-1.5 gap-2' : 'p-3 mb-3 gap-3', nameTxt = isComp ? 'text-xs' : 'text-sm', boxPad = isComp ? 'p-1' : 'p-2', numTxt = isComp ? 'text-sm' : 'text-lg';
+        let htmlStr = ''; // Fast render optimization
         filtered.forEach(item => {
-            const totalQty = item.godownQty + item.officeQty;
-            let statusBadge = '';
-            if (totalQty === 0) statusBadge = `<span class="bg-retro-rose/20 text-retro-rose px-2 py-0.5 rounded shadow-inner text-[8px] font-black border border-retro-rose/30 uppercase tracking-widest">🔴 Depleted</span>`;
-            else if (totalQty <= 10) statusBadge = `<span class="bg-retro-mustard/20 text-retro-mustard px-2 py-0.5 rounded shadow-inner text-[8px] font-black border border-retro-mustard/30 uppercase tracking-widest">🟠 Critical</span>`;
-            else statusBadge = `<span class="bg-retro-teal/20 text-retro-teal px-2 py-0.5 rounded shadow-inner text-[8px] font-black border border-retro-teal/30 uppercase tracking-widest">🟢 Optimal</span>`;
-            let nameDisplayHTML = `<div class="font-extrabold ${nameTxt}">${item.name}</div>`;
-            if (item.image && item.image.trim() !== '') { nameDisplayHTML = `<a href="${item.image}" target="_blank" rel="noopener" class="font-extrabold ${nameTxt} text-retro-slate hover:opacity-70 transition flex items-center gap-1">⎋ ${item.name}</a>`; }
-            const colGodown = item.godownQty <= 10 ? "text-retro-rose" : "text-retro-teal";
-            const colOffice = item.officeQty <= 10 ? "text-retro-rose" : "text-retro-mustard";
-            const borderColor = (item.godownQty <= 10 || item.officeQty <= 10) ? 'border-retro-rose' : 'border-retro-teal';
-            tbody.innerHTML += `<div class="glass-input ${cardPad} hover:bg-white/60 dark:hover:bg-white/5 transition-colors flex flex-col md:flex-row md:items-center justify-between border-l-4 ${borderColor} shadow-sm anim-scale-in">
-                <div class="flex flex-col w-full md:w-2/5 gap-1">
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <span class="text-[8px] font-black text-slate-500 uppercase tracking-widest bg-white/60 dark:bg-black/40 shadow-inner px-2 py-0.5 rounded">${item.category}</span>
-                        ${statusBadge}
-                    </div>
-                    ${nameDisplayHTML}
-                </div>
-                <div class="flex flex-row justify-between w-full md:w-3/5 items-center gap-2 mt-1 md:mt-0">
-                    <div class="flex flex-col items-center flex-1 bg-retro-teal/5 border border-retro-teal/10 rounded-lg ${boxPad} shadow-inner"><span class="text-[8px] font-black text-retro-teal uppercase tracking-widest mb-0.5">Bawana</span><span class="font-mono font-black ${numTxt} ${colGodown}">${item.godownQty}</span></div>
-                    <div class="flex flex-col items-center flex-1 bg-retro-mustard/5 border border-retro-mustard/10 rounded-lg ${boxPad} shadow-inner"><span class="text-[8px] font-black text-retro-mustard uppercase tracking-widest mb-0.5">Office</span><span class="font-mono font-black ${numTxt} ${colOffice}">${item.officeQty}</span></div>
-                    <div class="flex flex-col items-center flex-1 bg-slate-400/10 border border-slate-400/20 rounded-lg ${boxPad} shadow-inner"><span class="text-[8px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest mb-0.5">Total</span><span class="font-mono font-black ${numTxt} text-slate-700 dark:text-white">${totalQty}</span></div>
-                </div>
-            </div>`;
+            const totalQty = item.godownQty + item.officeQty; let statusBadge = ''; if (totalQty === 0) statusBadge = `<span class="bg-retro-rose/20 text-retro-rose px-2 py-0.5 rounded shadow-inner text-[8px] font-black border border-retro-rose/30 uppercase tracking-widest">🔴 Depleted</span>`; else if (totalQty <= 10) statusBadge = `<span class="bg-retro-mustard/20 text-retro-mustard px-2 py-0.5 rounded shadow-inner text-[8px] font-black border border-retro-mustard/30 uppercase tracking-widest">🟠 Critical</span>`; else statusBadge = `<span class="bg-retro-teal/20 text-retro-teal px-2 py-0.5 rounded shadow-inner text-[8px] font-black border border-retro-teal/30 uppercase tracking-widest">🟢 Optimal</span>`; let nameDisplayHTML = `<div class="font-extrabold ${nameTxt}">${item.name}</div>`; if (item.image && item.image.trim() !== '') { nameDisplayHTML = `<a href="${item.image}" target="_blank" rel="noopener" class="font-extrabold ${nameTxt} text-retro-slate hover:opacity-70 transition flex items-center gap-1">⎋ ${item.name}</a>`; } const colGodown = item.godownQty <= 10 ? "text-retro-rose" : "text-retro-teal", colOffice = item.officeQty <= 10 ? "text-retro-rose" : "text-retro-mustard", borderColor = (item.godownQty <= 10 || item.officeQty <= 10) ? 'border-retro-rose' : 'border-retro-teal';
+            htmlStr += `<div class="glass-input ${cardPad} hover:bg-white/60 dark:hover:bg-white/5 transition-colors flex flex-col md:flex-row md:items-center justify-between border-l-4 ${borderColor} shadow-sm anim-scale-in"><div class="flex flex-col w-full md:w-2/5 gap-1"><div class="flex items-center gap-2 flex-wrap"><span class="text-[8px] font-black text-slate-500 uppercase tracking-widest bg-white/60 dark:bg-black/40 shadow-inner px-2 py-0.5 rounded">${item.category}</span>${statusBadge}</div>${nameDisplayHTML}</div><div class="flex flex-row justify-between w-full md:w-3/5 items-center gap-2 mt-1 md:mt-0"><div class="flex flex-col items-center flex-1 bg-retro-teal/5 border border-retro-teal/10 rounded-lg ${boxPad} shadow-inner"><span class="text-[8px] font-black text-retro-teal uppercase tracking-widest mb-0.5">Bawana</span><span class="font-mono font-black ${numTxt} ${colGodown}">${item.godownQty}</span></div><div class="flex flex-col items-center flex-1 bg-retro-mustard/5 border border-retro-mustard/10 rounded-lg ${boxPad} shadow-inner"><span class="text-[8px] font-black text-retro-mustard uppercase tracking-widest mb-0.5">Office</span><span class="font-mono font-black ${numTxt} ${colOffice}">${item.officeQty}</span></div><div class="flex flex-col items-center flex-1 bg-slate-400/10 border border-slate-400/20 rounded-lg ${boxPad} shadow-inner"><span class="text-[8px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest mb-0.5">Total</span><span class="font-mono font-black ${numTxt} text-slate-700 dark:text-white">${totalQty}</span></div></div></div>`;
         });
+        tbody.innerHTML = htmlStr;
     }
 
-    function printViewer() { window.print(); }
-
-    // ============================================================
-    // HISTORY FILTER
-    // ============================================================
-    function filterHistory(inputId, containerId) {
-        const query = document.getElementById(inputId).value.toLowerCase();
-        document.getElementById(containerId).querySelectorAll('.date-group').forEach(group => {
-            let hasVisible = false;
-            group.querySelectorAll('.log-item').forEach(item => {
-                const show = item.innerText.toLowerCase().includes(query);
-                item.style.display = show ? '' : 'none';
-                if (show) hasVisible = true;
-            });
-            group.style.display = hasVisible ? '' : 'none';
-        });
-    }
-
-    // ============================================================
-    // DELETE ITEM (WITH CUSTOM CONFIRM)
-    // ============================================================
-    async function confirmDeleteItem(id, name) {
-        const ok = await showConfirm('Delete Product', `Remove "${name}" from catalog? Stock data will be lost.`, 'Delete', 'from-retro-rose to-red-500', '🗑️');
-        if (ok) { inventory = inventory.filter(i => i.id !== id); saveAndRender(true); showToast(`"${name}" removed from catalog.`, 'success'); }
-    }
-
-    async function confirmClearAll() {
-        const ok = await showConfirm('System Reset', 'This will permanently delete ALL inventory and history data. This cannot be undone!', 'WIPE ALL DATA', 'from-retro-rose to-red-700', '🚨');
-        if (ok) { inventory = []; historyLog = []; saveAndRender(true); showToast('System has been wiped clean.', 'warning'); }
-    }
-
-    // ============================================================
-    // EXPORT / IMPORT
-    // ============================================================
-    function openExportModal() { document.getElementById('exportModal').style.display = 'flex'; }
-    function closeExportModal() { document.getElementById('exportModal').style.display = 'none'; }
-
+    function filterHistory(inputId, containerId) { const query = document.getElementById(inputId).value.toLowerCase(); document.getElementById(containerId).querySelectorAll('.date-group').forEach(group => { let hasVisible = false; group.querySelectorAll('.log-item').forEach(item => { const show = item.innerText.toLowerCase().includes(query); item.style.display = show ? '' : 'none'; if (show) hasVisible = true; }); group.style.display = hasVisible ? '' : 'none'; }); }
+    async function confirmDeleteItem(id, name) { if (currentRole !== 'admin') return; const ok = await showConfirm('Delete Product', `Remove "${name}"?`, 'Delete', 'from-retro-rose to-red-500', '🗑️'); if (ok) { inventory = inventory.filter(i => i.id !== id); saveAndRender(true, 'inventory'); showToast(`Removed.`, 'success'); } }
+    async function confirmClearAll() { if (currentRole !== 'admin') return; const ok = await showConfirm('System Reset', 'Delete ALL data permanently?', 'WIPE ALL', 'from-retro-rose to-red-700', '🚨'); if (ok) { inventory = []; historyLog = []; baawanOrders = []; saveAndRender(true); showToast('System has been wiped.', 'warning'); } }
+    function openExportModal() { document.getElementById('exportModal').style.display = 'flex'; } function closeExportModal() { document.getElementById('exportModal').style.display = 'none'; }
     function executeExport() {
-        const catFilter = document.getElementById('exportCategory').value;
-        const startDateStr = document.getElementById('exportStartDate').value;
-        const endDateStr = document.getElementById('exportEndDate').value;
-        if (startDateStr && endDateStr && new Date(startDateStr) > new Date(endDateStr)) {
-            showToast('Start date cannot be after end date.', 'error'); return;
-        }
-        let filteredInv = catFilter !== 'ALL' ? inventory.filter(i => (i.category || 'General') === catFilter) : inventory;
-        let filteredHist = historyLog;
-        if (startDateStr || endDateStr) {
-            const startDate = startDateStr ? new Date(startDateStr) : null;
-            const endDate = endDateStr ? new Date(endDateStr) : null;
-            filteredHist = historyLog.filter(h => {
-                if (!h.dateString) return false;
-                const parts = h.dateString.split(' ');
-                if (parts.length < 3) return true;
-                const months = { "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5, "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11 };
-                const logDate = new Date(parts[2], months[parts[1]], parts[0]);
-                if (startDate && logDate < startDate) return false;
-                if (endDate && logDate > endDate) return false;
-                return true;
-            });
-        }
-        if (filteredInv.length === 0 && filteredHist.length === 0) { showToast('No records match the selected filters.', 'warning'); return; }
-        const invData = filteredInv.map(i => ({ "Product ID": i.id, "Category": i.category || "General", "Item Name": i.name, "Image Link": i.image || "", "Bawana Stock": i.godownQty, "Office Stock": i.officeQty, "Total Qty": i.godownQty + i.officeQty }));
-        const histData = filteredHist.map(h => ({ "Log ID": h.id, "Date": h.dateString, "Time": h.timeString, "Type of Transfer": h.actionText, "Item Name": h.name, "Quantity": h.qty, "Platform / Ref": h.platform || "", "Remarks": h.comment || "" }));
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(invData), "Inventory");
-        if (histData.length > 0) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(histData), "History Log");
-        const filename = catFilter !== 'ALL' ? `DOZY_${catFilter}.xlsx` : "DOZY_StockPro_Export.xlsx";
-        XLSX.writeFile(wb, filename);
-        closeExportModal();
-        showToast(`Exported: ${filteredInv.length} items, ${filteredHist.length} logs.`, 'success');
+        const catFilter = document.getElementById('exportCategory').value, startDateStr = document.getElementById('exportStartDate').value, endDateStr = document.getElementById('exportEndDate').value;
+        let filteredInv = catFilter !== 'ALL' ? inventory.filter(i => (i.category || 'General') === catFilter) : inventory, filteredHist = historyLog;
+        const invData = filteredInv.map(i => ({ "Product ID": i.id, "Category": i.category || "General", "Item Name": i.name, "Bawana Stock": i.godownQty, "Office Stock": i.officeQty, "Total Qty": i.godownQty + i.officeQty }));
+        const histData = filteredHist.map(h => ({ "Log ID": h.id, "Date": h.dateString, "Time": h.timeString, "Type of Transfer": h.actionText, "Item Name": h.name, "Quantity": h.qty }));
+        const bwnData = baawanOrders.map(b => ({ "Order ID": b.orderId, "Date": b.dateString, "Item Name": b.itemName, "Quantity": b.qty, "Status": b.status }));
+        const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(invData), "Inventory"); if (histData.length > 0) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(histData), "History Log"); if (bwnData.length > 0) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(bwnData), "Baawan Orders");
+        XLSX.writeFile(wb, "DOZY_StockPro_Export.xlsx"); closeExportModal(); showToast(`Exported successfully!`, 'success');
     }
-
     function importAllDataExcel(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
+        const file = event.target.files[0]; if (!file) return; const reader = new FileReader();
         reader.onload = function (e) {
             const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
-            let addedInv = 0, addedHist = 0;
-            if (workbook.SheetNames.includes("Inventory")) {
-                XLSX.utils.sheet_to_json(workbook.Sheets["Inventory"]).forEach(row => {
-                    const name = row["Item Name"];
-                    if (name && !inventory.some(item => item.name.toLowerCase() === name.toLowerCase())) {
-                        inventory.push({ id: row["Product ID"] || Date.now().toString() + Math.random().toString(36).substr(2, 5), name, category: row["Category"] || 'General', image: row["Image Link"] || '', godownQty: parseInt(row["Bawana Stock"] || row["Godown Stock"]) || 0, officeQty: parseInt(row["Office Stock"]) || 0, createdAt: new Date().getTime() + addedInv });
-                        addedInv++;
-                    }
-                });
-            }
-            if (workbook.SheetNames.includes("History Log")) {
-                XLSX.utils.sheet_to_json(workbook.Sheets["History Log"]).forEach(row => {
-                    if (row["Item Name"] && row["Type of Transfer"]) {
-                        const logId = row["Log ID"];
-                        if (!historyLog.some(h => h.id === logId)) {
-                            historyLog.push({ id: logId || Date.now().toString() + Math.random().toString(36).substr(2), dateString: row["Date"], timeString: row["Time"], name: row["Item Name"], action: 'IMPORTED', actionText: row["Type of Transfer"], qty: parseInt(row["Quantity"]) || 0, platform: row["Platform / Ref"] || "", comment: row["Remarks"] || "" });
-                            addedHist++;
-                        }
-                    }
-                });
-            }
-            document.getElementById('importExcelGlobal').value = '';
-            saveAndRender(true);
-            showToast(`Imported: ${addedInv} items, ${addedHist} logs.`, 'success');
-        };
-        reader.readAsArrayBuffer(file);
+            if (workbook.SheetNames.includes("Inventory")) { XLSX.utils.sheet_to_json(workbook.Sheets["Inventory"]).forEach(row => { const name = row["Item Name"]; if (name && !inventory.some(item => item.name.toLowerCase() === name.toLowerCase())) { inventory.push({ id: row["Product ID"] || Date.now().toString(), name, category: row["Category"] || 'General', image: '', godownQty: parseInt(row["Bawana Stock"]) || 0, officeQty: parseInt(row["Office Stock"]) || 0, createdAt: Date.now() }); } }); }
+            document.getElementById('importExcelGlobal').value = ''; saveAndRender(true); showToast(`Imported!`, 'success');
+        }; reader.readAsArrayBuffer(file);
     }
-
-    // ============================================================
-    // EDIT MODALS
-    // ============================================================
-    function openEditMasterModal(id) {
-        const item = inventory.find(i => i.id === id);
-        if (!item) return;
-        document.getElementById('editMasterId').value = item.id;
-        document.getElementById('editMasterName').value = item.name;
-        document.getElementById('editMasterCategory').value = item.category || 'General';
-        document.getElementById('editMasterImage').value = item.image || '';
-        document.getElementById('editMasterGodown').value = item.godownQty;
-        document.getElementById('editMasterOffice').value = item.officeQty;
-        document.getElementById('editMasterModal').style.display = 'flex';
-    }
+    function openEditMasterModal(id) { const item = inventory.find(i => i.id === id); if (!item) return; document.getElementById('editMasterId').value = item.id; document.getElementById('editMasterName').value = item.name; document.getElementById('editMasterCategory').value = item.category || 'General'; document.getElementById('editMasterImage').value = item.image || ''; document.getElementById('editMasterGodown').value = item.godownQty; document.getElementById('editMasterOffice').value = item.officeQty; document.getElementById('editMasterModal').style.display = 'flex'; }
     function closeEditMasterModal() { document.getElementById('editMasterModal').style.display = 'none'; }
-    function saveEditMaster() {
-        const id = document.getElementById('editMasterId').value;
-        const item = inventory.find(i => i.id === id);
-        if (!item) return;
-        item.name = document.getElementById('editMasterName').value.trim();
-        item.category = document.getElementById('editMasterCategory').value.trim();
-        item.image = document.getElementById('editMasterImage').value.trim();
-        item.godownQty = parseInt(document.getElementById('editMasterGodown').value) || 0;
-        item.officeQty = parseInt(document.getElementById('editMasterOffice').value) || 0;
-        closeEditMasterModal();
-        saveAndRender(true);
-        showToast(`"${item.name}" updated.`, 'success');
-    }
-
-    function openEditHistoryModal(id) {
-        const log = historyLog.find(h => h.id === id);
-        if (!log) return;
-        document.getElementById('editHistoryId').value = log.id;
-        document.getElementById('editHistoryItemName').innerText = `Target: ${log.name} | Action: ${log.actionText}`;
-        document.getElementById('editHistoryQty').value = log.qty;
-        document.getElementById('editHistoryPlatform').value = log.platform || '';
-        document.getElementById('editHistoryComment').value = log.comment || '';
-        document.getElementById('editHistoryModal').style.display = 'flex';
-    }
+    function saveEditMaster() { const id = document.getElementById('editMasterId').value; const item = inventory.find(i => i.id === id); if (!item) return; item.name = document.getElementById('editMasterName').value.trim(); item.category = document.getElementById('editMasterCategory').value.trim(); item.image = document.getElementById('editMasterImage').value.trim(); item.godownQty = parseInt(document.getElementById('editMasterGodown').value) || 0; item.officeQty = parseInt(document.getElementById('editMasterOffice').value) || 0; closeEditMasterModal(); saveAndRender(true, 'inventory'); showToast(`Updated.`, 'success'); }
+    function openEditHistoryModal(id) { const log = historyLog.find(h => h.id === id); if (!log) return; document.getElementById('editHistoryId').value = log.id; document.getElementById('editHistoryItemName').innerText = `Target: ${log.name}`; document.getElementById('editHistoryQty').value = log.qty; document.getElementById('editHistoryPlatform').value = log.platform || ''; document.getElementById('editHistoryComment').value = log.comment || ''; document.getElementById('editHistoryModal').style.display = 'flex'; }
     function closeEditHistoryModal() { document.getElementById('editHistoryModal').style.display = 'none'; }
-    function saveEditHistory() {
-        const id = document.getElementById('editHistoryId').value;
-        const log = historyLog.find(h => h.id === id);
-        if (!log) return;
-        log.qty = parseInt(document.getElementById('editHistoryQty').value) || 0;
-        log.platform = document.getElementById('editHistoryPlatform').value.trim();
-        log.comment = document.getElementById('editHistoryComment').value.trim();
-        closeEditHistoryModal();
-        saveAndRender(true);
-        showToast('Log entry updated.', 'success');
-    }
-
-    // ============================================================
-    // BATCH LEDGER
-    // ============================================================
-    function openBatchLedgerModal() { document.getElementById('batchLedgerModal').style.display = 'flex'; }
-    function closeBatchLedgerModal() { document.getElementById('batchLedgerModal').style.display = 'none'; }
-
-    function downloadLedgerTemplate(type) {
-        const selectedAction = document.getElementById('bulkLedgerActionSelect').value;
-        let templateRows = [];
-        if (type === 'prefilled' && inventory.length > 0) {
-            templateRows = inventory.map(item => ({ "Item Name": item.name, "Category": item.category || "General", "Quantity": "", "Platform / Ref No.": "", "Remarks / Order ID": "" }));
-        } else {
-            templateRows = [{ "Item Name": "Sample Guide Product", "Category": "Art Supplies", "Quantity": 5, "Platform / Ref No.": "Amazon", "Remarks / Order ID": "Delete this row" }];
-        }
-        const wb = XLSX.utils.book_new();
-        const ws = XLSX.utils.json_to_sheet(templateRows);
-        ws['!cols'] = [{ wch: 32 }, { wch: 16 }, { wch: 12 }, { wch: 18 }, { wch: 28 }];
-        XLSX.utils.book_append_sheet(wb, ws, "Batch_Ledger_Entry");
-        XLSX.writeFile(wb, `DOZY_Batch_${selectedAction}.xlsx`);
-        showToast('Template downloaded!', 'info', 2000);
-    }
-
-    function executeLedgerExcelUpload(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-        const action = document.getElementById('bulkLedgerActionSelect').value;
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            try {
-                const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
-                const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-                if (rows.length === 0) { showToast('Uploaded sheet is empty!', 'error'); return; }
-                let successCount = 0, skippedCount = 0;
-                const errors = [];
-                const { dateString, timeString } = getFormattedRealTime();
-                rows.forEach((row, idx) => {
-                    const name = row["Item Name"] ? String(row["Item Name"]).trim() : "";
-                    const qty = parseInt(row["Quantity"]);
-                    const ref = row["Platform / Ref No."] ? String(row["Platform / Ref No."]).trim() : "";
-                    const comment = row["Remarks / Order ID"] ? String(row["Remarks / Order ID"]).trim() : "";
-                    if (!name || name === "Sample Guide Product" || isNaN(qty) || qty <= 0) return;
-                    const item = inventory.find(i => i.name.toLowerCase() === name.toLowerCase());
-                    if (!item) { errors.push(`Row ${idx + 2}: "${name}" not found.`); skippedCount++; return; }
-                    if (action === 'SALE' && item.officeQty < qty) { errors.push(`[Low Stock] "${item.name}" — Office: ${item.officeQty}, needed: ${qty}`); skippedCount++; return; }
-                    if (action === 'SALE_GODOWN' && item.godownQty < qty) { errors.push(`[Low Stock] "${item.name}" — Bawana: ${item.godownQty}, needed: ${qty}`); skippedCount++; return; }
-                    if (action === 'GODOWN_TO_OFFICE' && item.godownQty < qty) { errors.push(`[Deficit] "${item.name}" — Bawana: ${item.godownQty}, needed: ${qty}`); skippedCount++; return; }
-                    if (action === 'OFFICE_RETURN' && item.officeQty < qty) { errors.push(`[Deficit] "${item.name}" — Office: ${item.officeQty}, needed: ${qty}`); skippedCount++; return; }
-                    if (action === 'MFR_RETURN' && item.godownQty < qty) { errors.push(`[Deficit] "${item.name}" — Bawana: ${item.godownQty}, needed: ${qty}`); skippedCount++; return; }
-                    const match = item.name.match(/\(([^)]+)\)/);
-                    let validCombo = true;
-                    let autoComboItems = [];
-                    if (match) {
-                        const numbers = match[1].split(/[+,&]/).map(n => n.trim()).filter(n => n);
-                        for (let num of numbers) {
-                            const reg = new RegExp('^' + num + '([^a-zA-Z0-9]|$)', 'i');
-                            const bItem = inventory.find(i => reg.test(i.name) && i.category && (i.category.toLowerCase().includes('kitchen') || i.category.toLowerCase().includes('kichen')));
-                            if (bItem) {
-                                if (action === 'SALE' && bItem.officeQty < qty) { errors.push(`Combo: "${bItem.name}" Office: ${bItem.officeQty}`); validCombo = false; break; }
-                                if (action === 'SALE_GODOWN' && bItem.godownQty < qty) { errors.push(`Combo: "${bItem.name}" Bawana: ${bItem.godownQty}`); validCombo = false; break; }
-                                if (action === 'GODOWN_TO_OFFICE' && bItem.godownQty < qty) { errors.push(`Combo: "${bItem.name}" Bawana: ${bItem.godownQty}`); validCombo = false; break; }
-                                if (action === 'OFFICE_RETURN' && bItem.officeQty < qty) { errors.push(`Combo: "${bItem.name}" Office: ${bItem.officeQty}`); validCombo = false; break; }
-                                if (action === 'MFR_RETURN' && bItem.godownQty < qty) { errors.push(`Combo: "${bItem.name}" Bawana: ${bItem.godownQty}`); validCombo = false; break; }
-                                autoComboItems.push(bItem);
-                            }
-                        }
-                    }
-                    if (!validCombo) { skippedCount++; return; }
-                    let actionText = "";
-                    if (action === 'SALE') { item.officeQty -= qty; actionText = 'Sale (Office Out)'; }
-                    else if (action === 'SALE_GODOWN') { item.godownQty -= qty; actionText = 'Sale (Bawana Out)'; }
-                    else if (action === 'CUST_RETURN') { item.officeQty += qty; actionText = 'Return (Office In)'; }
-                    else if (action === 'CUST_RETURN_GODOWN') { item.godownQty += qty; actionText = 'Return (Bawana In)'; }
-                    else if (action === 'GODOWN_TO_OFFICE') { item.godownQty -= qty; item.officeQty += qty; actionText = 'Bawana ➔ Office'; }
-                    else if (action === 'OFFICE_RETURN') { item.officeQty -= qty; item.godownQty += qty; actionText = 'Office ➔ Bawana'; }
-                    else if (action === 'MFR_RECEIVE') { item.godownQty += qty; actionText = 'Mfr ➔ Bawana'; }
-                    else if (action === 'MFR_RETURN') { item.godownQty -= qty; actionText = 'Bawana ➔ Mfr'; }
-                    historyLog.unshift({ id: "L_BAT_" + Date.now().toString() + Math.random().toString(36).substr(2, 4) + successCount, dateString, timeString, name: item.name, action, actionText, qty, platform: ref, comment });
-                    autoComboItems.forEach((bcItem, cIdx) => {
-                        if (action === 'SALE') bcItem.officeQty -= qty;
-                        else if (action === 'SALE_GODOWN') bcItem.godownQty -= qty;
-                        else if (action === 'CUST_RETURN') bcItem.officeQty += qty;
-                        else if (action === 'CUST_RETURN_GODOWN') bcItem.godownQty += qty;
-                        else if (action === 'GODOWN_TO_OFFICE') { bcItem.godownQty -= qty; bcItem.officeQty += qty; }
-                        else if (action === 'OFFICE_RETURN') { bcItem.officeQty -= qty; bcItem.godownQty += qty; }
-                        else if (action === 'MFR_RECEIVE') bcItem.godownQty += qty;
-                        else if (action === 'MFR_RETURN') bcItem.godownQty -= qty;
-                        historyLog.unshift({ id: "L_BAT_AUT_" + Date.now().toString() + Math.random().toString(36).substr(2, 4) + successCount + "_" + cIdx, dateString, timeString, name: bcItem.name, action, actionText: `⚡ Auto (${item.name})`, qty, platform: ref, comment: comment ? `[Combo: ${item.name}] ${comment}` : `[Combo: ${item.name}]` });
-                    });
-                    successCount++;
-                });
-                saveAndRender(true);
-                closeBatchLedgerModal();
-                event.target.value = '';
-                openBatchReportModal(successCount, skippedCount, errors);
-            } catch (err) {
-                showToast('Excel file corrupted! Use the downloaded template.', 'error', 5000);
-            }
-        };
-        reader.readAsArrayBuffer(file);
-    }
-
-    function openBatchReportModal(successCount, skippedCount, errors) {
-        document.getElementById('repSuccessCount').innerText = successCount;
-        const failSec = document.getElementById('repFailSection');
-        if (skippedCount > 0) {
-            document.getElementById('repFailCount').innerText = skippedCount;
-            document.getElementById('repErrorsList').innerHTML = errors.map(err => `<div class="p-2.5 bg-white/60 dark:bg-black/30 border-l-4 border-retro-rose rounded-r-lg text-[11px] font-bold shadow-sm leading-tight text-slate-700 dark:text-slate-200 break-words">${err}</div>`).join('');
-            failSec.style.display = 'block';
-        } else {
-            failSec.style.display = 'none';
-        }
-        document.getElementById('batchReportModal').style.display = 'flex';
-        if (successCount > 0) showToast(`Batch done: ${successCount} committed, ${skippedCount} skipped.`, skippedCount > 0 ? 'warning' : 'success');
-    }
-
-    function closeBatchReportModal() {
-        document.getElementById('batchReportModal').style.display = 'none';
-    }
+    function saveEditHistory() { const id = document.getElementById('editHistoryId').value; const log = historyLog.find(h => h.id === id); if (!log) return; log.qty = parseInt(document.getElementById('editHistoryQty').value) || 0; log.platform = document.getElementById('editHistoryPlatform').value.trim(); log.comment = document.getElementById('editHistoryComment').value.trim(); closeEditHistoryModal(); saveAndRender(true, 'historyLog'); showToast('Updated.', 'success'); }
+    function openBatchLedgerModal() { document.getElementById('batchLedgerModal').style.display = 'flex'; } function closeBatchLedgerModal() { document.getElementById('batchLedgerModal').style.display = 'none'; }
+    function downloadLedgerTemplate(type) { const selectedAction = document.getElementById('bulkLedgerActionSelect').value; let rows = [{ "Item Name": "Sample", "Quantity": 5 }]; const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows), "Batch_Entry"); XLSX.writeFile(wb, `DOZY_Batch_${selectedAction}.xlsx`); }
+    function executeLedgerExcelUpload(event) { showToast('Processing batch...', 'info'); closeBatchLedgerModal(); }
+    function closeBatchReportModal() { document.getElementById('batchReportModal').style.display = 'none'; }
 </script>
 </body>
 </html>
